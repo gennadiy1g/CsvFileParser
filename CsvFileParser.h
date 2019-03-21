@@ -5,7 +5,7 @@
 class CsvFileParser
 {
 public:
-    CsvFileParser(std::wstring_view sourceFile); // Constructor
+    explicit CsvFileParser(std::wstring_view sourceFile); // Constructor
     virtual ~CsvFileParser() = default;          // Defaulted virtual destructor
 
     // Disallow assignment and pass-by-value.
