@@ -16,7 +16,7 @@ public:
     CsvFileParser(CsvFileParser&& src) = default;
     CsvFileParser& operator=(CsvFileParser&& rhs) = default;
 
-    void parse(wchar_t separator, wchar_t qoute, wchar_t escape, int numberThreads = 0);
+    void parse(wchar_t separator, wchar_t qoute, wchar_t escape, int numThreads = 0);
 
 private:
     void parseBuffer();
