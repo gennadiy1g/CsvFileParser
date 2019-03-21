@@ -1,4 +1,5 @@
 #include "CsvFileParser.h"
+#include <algorithm>
 #include <string_view>
 #include <thread>
 #include <vector>
@@ -18,14 +19,10 @@ void CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t escape, unsi
 
     // Launch threads
     std::vector<std::thread> threads(numThreads);
-    for (auto& t : threads) {
-        t = std::thread{ &CsvFileParser::parseBuffer, this };
-    }
+    std::generate(threads.begin(), threads.end(), [this] { return std::thread{ &CsvFileParser::parseBuffer, this }; });
 
     // Join on all threads
-    for (auto& t : threads) {
-        t.join();
-    }
+    std::for_each(threads.begin(), threads.end(), [](auto& t) { t.join(); });
 }
 
 void CsvFileParser::parseBuffer()
