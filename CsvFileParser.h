@@ -6,7 +6,7 @@ class CsvFileParser
 {
 public:
     explicit CsvFileParser(std::wstring_view sourceFile); // Constructor
-    virtual ~CsvFileParser() = default;          // Defaulted virtual destructor
+    virtual ~CsvFileParser() = default;                   // Defaulted virtual destructor
 
     // Disallow assignment and pass-by-value.
     CsvFileParser(const CsvFileParser& src) = delete;
@@ -16,7 +16,7 @@ public:
     CsvFileParser(CsvFileParser&& src) = default;
     CsvFileParser& operator=(CsvFileParser&& rhs) = default;
 
-    void parse(wchar_t separator, wchar_t qoute, wchar_t escape, int numThreads = 0);
+    void parse(wchar_t separator, wchar_t qoute, wchar_t escape, unsigned int numThreads = 0);
 
 private:
     void parseBuffer();

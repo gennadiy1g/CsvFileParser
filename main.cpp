@@ -1,7 +1,9 @@
-#include <stdio.h>
+#include <iostream>
+#include <thread>
 
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
-	printf("hello world\n");
-	return 0;
+    unsigned int n = std::thread::hardware_concurrency();
+    std::cout << n << " concurrent threads are supported.\n";
+    return 0;
 }
