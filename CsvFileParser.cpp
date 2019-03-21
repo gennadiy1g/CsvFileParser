@@ -10,12 +10,7 @@ CsvFileParser::CsvFileParser(std::wstring_view sourceFile)
 
 void CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t escape, unsigned int numThreads_)
 {
-    int numThreads;
-    if (numThreads_ == 0) {
-        numThreads = std::thread::hardware_concurrency();
-    } else {
-        numThreads = numThreads_;
-    }
+    int numThreads = numThreads_ > 0 ? numThreads_ : std::thread::hardware_concurrency();
 
     // Launch threads
     std::vector<std::thread> threads(numThreads);
