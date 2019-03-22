@@ -23,7 +23,7 @@ void initLogging()
 {
     logging::add_file_log(
         keywords::file_name = "trace.log",
-        keywords::format = "[%TimeStamp%]: %Message%");
+        keywords::format = "%TimeStamp% %ThreadID% %Message%");
     logging::add_common_attributes();
 }
 
