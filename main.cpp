@@ -24,7 +24,7 @@ void initLogging()
     lgg::add_file_log(
         kwr::file_name = "trace.log",
         kwr::format = (expr::stream
-            << expr::attr<unsigned int>("LineID") << " <" << lgg::trivial::severity << "> "
+            << expr::attr<unsigned int>("LineID") << ' ' << lgg::trivial::severity << ' '
             << expr::format_date_time<boost::posix_time::ptime>("TimeStamp", " %Y-%m-%d %H:%M:%S:%f ")
             << expr::attr<boost::log::thread_id>("ThreadID") << ' ' << expr::message));
     lgg::add_common_attributes();
