@@ -1,3 +1,7 @@
+#include "app.h"
+#include <iostream>
+#include <thread>
+
 #include <boost/log/attributes/attribute.hpp>
 #include <boost/log/attributes/current_thread_id.hpp>
 #include <boost/log/expressions.hpp>
@@ -8,9 +12,6 @@
 #include <boost/log/utility/setup/common_attributes.hpp>
 #include <boost/log/utility/setup/file.hpp>
 
-#include <iostream>
-#include <thread>
-
 namespace logg = boost::log;
 namespace src = boost::log::sources;
 namespace keyw = boost::log::keywords;
@@ -18,8 +19,6 @@ namespace triv = boost::log::trivial;
 namespace expr = boost::log::expressions;
 
 BOOST_LOG_INLINE_GLOBAL_LOGGER_DEFAULT(gLogger, src::severity_logger_mt<triv::severity_level>)
-
-#define FUNCTION_FILE_LINE __FUNCTION__ << " (" << __FILE__ << ", " << __LINE__ << ')'
 
 void initLogging()
 {
