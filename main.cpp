@@ -1,7 +1,4 @@
 #include "app.h"
-#include <iostream>
-#include <thread>
-
 #include <boost/locale/generator.hpp>
 #include <boost/log/expressions.hpp>
 #include <boost/log/sources/global_logger_storage.hpp>
@@ -9,6 +6,8 @@
 #include <boost/log/trivial.hpp>
 #include <boost/log/utility/setup/common_attributes.hpp>
 #include <boost/log/utility/setup/file.hpp>
+#include <iostream>
+#include <thread>
 
 namespace logg = boost::log;
 namespace src = boost::log::sources;
