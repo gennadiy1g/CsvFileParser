@@ -19,6 +19,8 @@ namespace expr = boost::log::expressions;
 
 BOOST_LOG_INLINE_GLOBAL_LOGGER_DEFAULT(gLogger, src::severity_logger_mt<triv::severity_level>)
 
+#define FUNCTION_FILE_LINE __FUNCTION__ << " (" << __FILE__ << ", " << __LINE__ << ')'
+
 void initLogging()
 {
     logg::add_file_log(
@@ -34,10 +36,10 @@ int main(int argc, char** argv)
 {
     initLogging();
     src::severity_logger_mt<triv::severity_level>& slg = gLogger::get();
-    BOOST_LOG_SEV(slg, triv::trace) << "->" << __FUNCTION__ << " (" << __FILE__ << ", " << __LINE__ << ')';
+    BOOST_LOG_SEV(slg, triv::trace) << "->" << FUNCTION_FILE_LINE;
 
     unsigned int n = std::thread::hardware_concurrency();
     std::cout << n << " concurrent threads are supported.\n";
-    BOOST_LOG_SEV(slg, triv::trace) << "<-" << __FUNCTION__ << " (" << __FILE__ << ", " << __LINE__ << ')';
+    BOOST_LOG_SEV(slg, triv::trace) << "<-" << FUNCTION_FILE_LINE;
     return 0;
 }
