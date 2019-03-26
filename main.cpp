@@ -1,3 +1,4 @@
+#include "CsvFileParser.h"
 #include "app.h"
 #include <boost/locale/generator.hpp>
 
@@ -27,6 +28,10 @@ int main(int argc, char** argv)
 
     unsigned int n = std::thread::hardware_concurrency();
     std::cout << n << " concurrent threads are supported.\n";
+
+    CsvFileParser parser(L"");
+    parser.parse(L',', L'"', L'\\');
+
     BOOST_LOG_SEV(gLogger, triv::trace) << "<-" << FUNCTION_FILE_LINE;
     return 0;
 }
