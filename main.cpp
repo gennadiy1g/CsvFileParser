@@ -29,6 +29,9 @@ void initLogging()
             << expr::format_date_time<boost::posix_time::ptime>("TimeStamp", " %Y-%m-%d %H:%M:%S:%f ")
             << expr::attr<logg::thread_id>("ThreadID") << ' ' << expr::message));
     logg::add_common_attributes();
+#ifdef NDEBUG
+    logg::core::get()->set_filter(triv::severity >= triv::info);
+#endif
 }
 
 int main(int argc, char** argv)
