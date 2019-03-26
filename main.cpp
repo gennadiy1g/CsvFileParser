@@ -3,11 +3,7 @@
 #include <thread>
 
 #include <boost/locale/generator.hpp>
-#include <boost/log/attributes/attribute.hpp>
-#include <boost/log/attributes/current_thread_id.hpp>
 #include <boost/log/expressions.hpp>
-#include <boost/log/expressions/formatters/date_time.hpp>
-#include <boost/log/sinks/text_file_backend.hpp>
 #include <boost/log/sources/global_logger_storage.hpp>
 #include <boost/log/support/date_time.hpp>
 #include <boost/log/trivial.hpp>
