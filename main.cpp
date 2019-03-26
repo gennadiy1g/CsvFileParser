@@ -18,7 +18,7 @@ namespace keyw = boost::log::keywords;
 namespace triv = boost::log::trivial;
 namespace expr = boost::log::expressions;
 
-BOOST_LOG_INLINE_GLOBAL_LOGGER_DEFAULT(gLogger, src::severity_logger_mt<triv::severity_level>)
+BOOST_LOG_INLINE_GLOBAL_LOGGER_DEFAULT(GlobalLogger, src::severity_logger_mt<triv::severity_level>)
 
 void initLogging()
 {
@@ -34,11 +34,11 @@ void initLogging()
 int main(int argc, char** argv)
 {
     initLogging();
-    src::severity_logger_mt<triv::severity_level>& slg = gLogger::get();
-    BOOST_LOG_SEV(slg, triv::trace) << "->" << FUNCTION_FILE_LINE;
+    src::severity_logger_mt<triv::severity_level>& gLogger = GlobalLogger::get();
+    BOOST_LOG_SEV(gLogger, triv::trace) << "->" << FUNCTION_FILE_LINE;
 
     unsigned int n = std::thread::hardware_concurrency();
     std::cout << n << " concurrent threads are supported.\n";
-    BOOST_LOG_SEV(slg, triv::trace) << "<-" << FUNCTION_FILE_LINE;
+    BOOST_LOG_SEV(gLogger, triv::trace) << "<-" << FUNCTION_FILE_LINE;
     return 0;
 }
