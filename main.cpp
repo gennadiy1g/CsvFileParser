@@ -34,9 +34,10 @@ int main(int argc, char** argv)
 {
     initLogging();
     src::severity_logger_mt<triv::severity_level>& slg = gLogger::get();
-    BOOST_LOG_SEV(slg, triv::trace) << "Greetings from the global logger!";
+    BOOST_LOG_SEV(slg, triv::trace) << "->" << __FUNCTION__ << " (" << __FILE__ << ", " << __LINE__ << ')';
 
     unsigned int n = std::thread::hardware_concurrency();
     std::cout << n << " concurrent threads are supported.\n";
+    BOOST_LOG_SEV(slg, triv::trace) << "<-" << __FUNCTION__ << " (" << __FILE__ << ", " << __LINE__ << ')';
     return 0;
 }
