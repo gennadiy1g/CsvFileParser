@@ -26,7 +26,7 @@ void initLogging()
         keyw::format = (expr::stream
             << expr::attr<unsigned int>("LineID") << ' ' << logg::trivial::severity << ' '
             << expr::format_date_time<boost::posix_time::ptime>("TimeStamp", " %Y-%m-%d %H:%M:%S:%f ")
-            << expr::attr<boost::log::thread_id>("ThreadID") << ' ' << expr::message));
+            << expr::attr<logg::thread_id>("ThreadID") << ' ' << expr::message));
     logg::add_common_attributes();
 }
 
