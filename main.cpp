@@ -37,7 +37,8 @@ void initLogging()
 int main(int argc, char** argv)
 {
     initLogging();
-    src::wseverity_logger_mt<triv::severity_level>& gLogger = GlobalLogger::get();
+
+    auto& gLogger = GlobalLogger::get();
     BOOST_LOG_SEV(gLogger, triv::trace) << "->" << FUNCTION_FILE_LINE;
     BOOST_LOG_SEV(gLogger, triv::trace) << L"Привіт Світ! " << FUNCTION_FILE_LINE;
 
