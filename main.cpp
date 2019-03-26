@@ -25,7 +25,7 @@ void initLogging()
     logg::add_file_log(
         keyw::file_name = "trace.log",
         keyw::format = (expr::stream
-            << expr::attr<unsigned int>("LineID") << ' ' << logg::trivial::severity << ' '
+            << expr::attr<unsigned int>("LineID") << ' ' << triv::severity << ' '
             << expr::format_date_time<boost::posix_time::ptime>("TimeStamp", " %Y-%m-%d %H:%M:%S:%f ")
             << expr::attr<logg::thread_id>("ThreadID") << ' ' << expr::message));
     logg::add_common_attributes();
