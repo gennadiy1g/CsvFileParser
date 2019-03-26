@@ -1,22 +1,5 @@
 #include "app.h"
 #include <boost/locale/generator.hpp>
-#include <boost/log/expressions.hpp>
-#include <boost/log/sources/global_logger_storage.hpp>
-#include <boost/log/support/date_time.hpp>
-#include <boost/log/trivial.hpp>
-#include <boost/log/utility/setup/common_attributes.hpp>
-#include <boost/log/utility/setup/file.hpp>
-#include <iostream>
-#include <thread>
-
-namespace logg = boost::log;
-namespace src = boost::log::sources;
-namespace keyw = boost::log::keywords;
-namespace triv = boost::log::trivial;
-namespace expr = boost::log::expressions;
-namespace sink = boost::log::sinks;
-
-BOOST_LOG_INLINE_GLOBAL_LOGGER_DEFAULT(GlobalLogger, src::wseverity_logger_mt<triv::severity_level>)
 
 void initLogging()
 {
