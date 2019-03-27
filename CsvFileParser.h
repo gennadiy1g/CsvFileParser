@@ -1,6 +1,21 @@
 #pragma once
 
 #include <string_view>
+#include <vector>
+
+class ParserBuffer {
+public:
+    explicit ParserBuffer(); // Constructor
+    virtual ~ParserBuffer(); // Defaulted virtual destructor
+
+    // Disallow assignment and pass-by-value.
+    ParserBuffer(const ParserBuffer& src) = delete;
+    ParserBuffer& operator=(const ParserBuffer& rhs) = delete;
+
+    // Explicitly default move constructor and move assignment operator.
+    ParserBuffer(ParserBuffer&& src) = default;
+    ParserBuffer& operator=(ParserBuffer&& rhs) = default;
+};
 
 class CsvFileParser {
 public:
@@ -19,4 +34,5 @@ public:
 
 private:
     void parseBuffer();
+    std::vector<ParserBuffer> mBuffers;
 };
