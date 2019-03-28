@@ -1,5 +1,6 @@
 #pragma once
 
+#include <queue>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -55,4 +56,6 @@ public:
 private:
     void worker();
     std::vector<ParserBuffer> mBuffers;
+    std::queue<unsigned int> mEmptyBuffers;
+    std::queue<unsigned int> mFullBuffers;
 };
