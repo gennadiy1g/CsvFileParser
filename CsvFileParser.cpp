@@ -17,7 +17,7 @@ CsvFileParser::CsvFileParser(std::wstring_view sourceFile)
 {
 }
 
-void CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t escape, unsigned int numThreads_or_0)
+ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t escape, unsigned int numThreads_or_0)
 {
     auto& gLogger = GlobalLogger::get();
     BOOST_LOG_SEV(gLogger, triv::trace) << "->" << FUNCTION_FILE_LINE;
@@ -33,6 +33,8 @@ void CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t escape, unsi
     std::for_each(threads.begin(), threads.end(), [](auto& t) { t.join(); });
 
     BOOST_LOG_SEV(gLogger, triv::trace) << "<-" << FUNCTION_FILE_LINE;
+
+    return std::move(mResults);
 }
 
 void CsvFileParser::worker()
