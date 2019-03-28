@@ -18,7 +18,7 @@ void CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t escape, unsi
 
     // Launch threads
     std::vector<std::thread> threads(numThreads);
-    std::generate(threads.begin(), threads.end(), [this] { return std::thread{ &CsvFileParser::parseBuffer, this }; });
+    std::generate(threads.begin(), threads.end(), [this] { return std::thread{ &CsvFileParser::worker, this }; });
 
     // Join on all threads
     std::for_each(threads.begin(), threads.end(), [](auto& t) { t.join(); });
@@ -26,7 +26,7 @@ void CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t escape, unsi
     BOOST_LOG_SEV(gLogger, triv::trace) << "<-" << FUNCTION_FILE_LINE;
 }
 
-void CsvFileParser::parseBuffer()
+void CsvFileParser::worker()
 {
     auto& gLogger = GlobalLogger::get();
     BOOST_LOG_SEV(gLogger, triv::trace) << "->" << FUNCTION_FILE_LINE;

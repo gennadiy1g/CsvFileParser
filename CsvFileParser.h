@@ -33,6 +33,6 @@ public:
     void parse(wchar_t separator, wchar_t qoute, wchar_t escape, unsigned int numThreads_ = 0);
 
 private:
-    void parseBuffer();
+    void worker();
     std::vector<ParserBuffer> mBuffers;
 };
