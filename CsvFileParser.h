@@ -58,6 +58,8 @@ public:
 private:
     void worker();
 
+    std::string_view mInputFile;
+
     std::vector<ParserBuffer> mBuffers;
 
     std::queue<unsigned int> mEmptyBuffers;

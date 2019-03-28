@@ -1,6 +1,7 @@
 #include "CsvFileParser.h"
 #include "app.h"
 #include <algorithm>
+#include <fstream>
 #include <string_view>
 #include <thread>
 #include <vector>
@@ -14,6 +15,7 @@ ParserBuffer::ParserBuffer()
 }
 
 CsvFileParser::CsvFileParser(std::string_view inputFile)
+    : mInputFile(inputFile)
 {
 }
 
@@ -29,6 +31,9 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
     for (unsigned int i = 0; i < numThreads; ++i) {
         mEmptyBuffers.push(i);
     }
+
+    std::wifstream inputFile(mInputFile.data());
+
     // Launch threads
     std::vector<std::thread> threads(numThreads);
     std::generate(threads.begin(), threads.end(), [this] { return std::thread{ &CsvFileParser::worker, this }; });
