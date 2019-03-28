@@ -13,7 +13,7 @@ ParserBuffer::ParserBuffer()
 {
 }
 
-CsvFileParser::CsvFileParser(std::wstring_view sourceFile)
+CsvFileParser::CsvFileParser(std::string_view inputFile)
 {
 }
 
