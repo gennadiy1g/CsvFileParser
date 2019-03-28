@@ -6,7 +6,7 @@
 
 class ParserBuffer {
 public:
-    explicit ParserBuffer(); // Constructor
+    ParserBuffer(); // Constructor
     virtual ~ParserBuffer(); // Defaulted virtual destructor
 
     // Disallow assignment and pass-by-value.
