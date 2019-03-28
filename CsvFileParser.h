@@ -10,7 +10,7 @@
 class ParserBuffer {
 public:
     ParserBuffer(); // Constructor
-    virtual ~ParserBuffer(); // Defaulted virtual destructor
+    virtual ~ParserBuffer() = default; // Defaulted virtual destructor
 
     // Disallow assignment and pass-by-value.
     ParserBuffer(const ParserBuffer& src) = delete;
