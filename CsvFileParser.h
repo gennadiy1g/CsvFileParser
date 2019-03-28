@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include <string_view>
 #include <vector>
 
@@ -15,6 +16,9 @@ public:
     // Explicitly default move constructor and move assignment operator.
     ParserBuffer(ParserBuffer&& src) = default;
     ParserBuffer& operator=(ParserBuffer&& rhs) = default;
+
+private:
+    std::vector<std::wstring> mLines;
 };
 
 class CsvFileParser {
