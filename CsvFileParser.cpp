@@ -22,9 +22,13 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
     auto& gLogger = GlobalLogger::get();
     BOOST_LOG_SEV(gLogger, triv::trace) << "->" << FUNCTION_FILE_LINE;
 
-    int numThreads = numThreads_or_0 > 0 ? numThreads_or_0 : std::thread::hardware_concurrency();
+    auto numThreads = numThreads_or_0 > 0 ? numThreads_or_0 : std::thread::hardware_concurrency();
+
     mBuffers.resize(numThreads);
 
+    for (unsigned int i = 0; i < numThreads; ++i) {
+        mEmptyBuffers.push(i);
+    }
     // Launch threads
     std::vector<std::thread> threads(numThreads);
     std::generate(threads.begin(), threads.end(), [this] { return std::thread{ &CsvFileParser::worker, this }; });
