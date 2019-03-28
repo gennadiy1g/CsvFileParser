@@ -5,6 +5,10 @@
 #include <thread>
 #include <vector>
 
+ParsingResults::ParsingResults()
+{
+}
+
 CsvFileParser::CsvFileParser(std::wstring_view sourceFile)
 {
 }

@@ -68,4 +68,5 @@ private:
     std::mutex mFullBuffMutex;
     std::condition_variable mFullBuffCondVar;
 
+    ParsingResults results;
 };
