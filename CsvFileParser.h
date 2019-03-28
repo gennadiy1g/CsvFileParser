@@ -21,6 +21,22 @@ private:
     std::vector<std::wstring> mLines;
 };
 
+class ParsingResults {
+public:
+    ParsingResults(); // Constructor
+    virtual ~ParsingResults() = default; // Defaulted virtual destructor
+
+    // Disallow assignment and pass-by-value.
+    ParsingResults(const ParsingResults& src) = delete;
+    ParsingResults& operator=(const ParsingResults& rhs) = delete;
+
+    // Explicitly default move constructor and move assignment operator.
+    ParsingResults(ParsingResults&& src) = default;
+    ParsingResults& operator=(ParsingResults&& rhs) = default;
+
+private:
+};
+
 class CsvFileParser {
 public:
     explicit CsvFileParser(std::wstring_view sourceFile); // Constructor
