@@ -1,6 +1,7 @@
 #include "CsvFileParser.h"
 #include "app.h"
 #include <algorithm>
+#include <boost/locale/generator.hpp>
 #include <fstream>
 #include <string_view>
 #include <thread>
@@ -33,6 +34,9 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
     }
 
     std::wifstream inputFile(mInputFile.data());
+    inputFile.imbue(boost::locale::generator()("en_US.UTF-8"));
+    for (std::wstring line; std::getline(inputFile, line);) {
+    }
 
     // Launch threads
     std::vector<std::thread> threads(numThreads);
