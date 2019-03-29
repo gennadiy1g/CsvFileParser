@@ -10,8 +10,7 @@ void initLogging()
             << expr::attr<unsigned int>("LineID") << ' ' << triv::severity << ' '
             << expr::format_date_time<boost::posix_time::ptime>("TimeStamp", " %Y-%m-%d %H:%M:%S.%f ")
             << expr::attr<logg::thread_id>("ThreadID") << ' ' << expr::message));
-    std::locale loc = boost::locale::generator()("en_US.UTF-8");
-    sink->imbue(loc);
+    sink->imbue(boost::locale::generator()("en_US.UTF-8"));
     logg::add_common_attributes();
 #ifdef NDEBUG
     logg::core::get()->set_filter(triv::severity >= triv::info);
