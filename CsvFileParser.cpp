@@ -35,7 +35,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
 
     BOOST_LOG_SEV(gLogger, triv::debug) << mInputFile.data();
     std::wifstream inputFile(mInputFile.data());
-//    inputFile.imbue(boost::locale::generator()("en_US.ISO-8859-1"));
+    inputFile.imbue(boost::locale::generator()("en_US.UTF-8"));
     for (std::wstring line; std::getline(inputFile, line);) {
         BOOST_LOG_SEV(gLogger, triv::debug) << line;
     }

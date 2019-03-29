@@ -31,7 +31,7 @@ int main(int argc, char** argv)
 
     BOOST_LOG_SEV(gLogger, triv::info) << std::thread::hardware_concurrency() << " concurrent threads are supported.";
 
-    CsvFileParser parser(R"^(C:\Users\genna_000\Documents\Experiments\test data\ZX0training.csv)^");
+    CsvFileParser parser(R"^(C:\Users\genna_000\Documents\Experiments\test data\russian.csv)^");
     parser.parse(L',', L'"', L'\\');
 
     BOOST_LOG_SEV(gLogger, triv::trace) << "<-" << FUNCTION_FILE_LINE;
