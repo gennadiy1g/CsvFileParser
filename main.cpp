@@ -19,6 +19,10 @@ void initLogging()
 
 int main(int argc, char** argv)
 {
+    // Enable option to cache all generated locales
+    boost::locale::generator gen;
+    gen.locale_cache_enabled(true);
+
     initLogging();
 
     auto& gLogger = GlobalLogger::get();
