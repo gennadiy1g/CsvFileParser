@@ -19,21 +19,26 @@ void initLogging()
 
 int main(int argc, char** argv)
 {
-    // Enable option to cache all generated locales
-    boost::locale::generator gen;
-    gen.locale_cache_enabled(true);
+    try {
+        // Enable option to cache all generated locales
+        boost::locale::generator gen;
+        gen.locale_cache_enabled(true);
 
-    initLogging();
+        initLogging();
 
-    auto& gLogger = GlobalLogger::get();
-    BOOST_LOG_SEV(gLogger, triv::trace) << "->" << FUNCTION_FILE_LINE;
-    BOOST_LOG_SEV(gLogger, triv::trace) << L"Привіт Світ! " << FUNCTION_FILE_LINE;
+        auto& gLogger = GlobalLogger::get();
+        BOOST_LOG_SEV(gLogger, triv::trace) << "->" << FUNCTION_FILE_LINE;
+        BOOST_LOG_SEV(gLogger, triv::trace) << L"Привіт Світ! " << FUNCTION_FILE_LINE;
 
-    BOOST_LOG_SEV(gLogger, triv::info) << std::thread::hardware_concurrency() << " concurrent threads are supported.";
+        BOOST_LOG_SEV(gLogger, triv::info) << std::thread::hardware_concurrency() << " concurrent threads are supported.";
 
-    CsvFileParser parser(R"^(C:\Users\genna_000\Documents\Experiments\test data\russian.csv)^");
-    parser.parse(L',', L'"', L'\\');
+        CsvFileParser parser(R"^(C:\Users\genna_000\Documents\Experiments\test data\ZX0training_CP-863.csv)^");
+        parser.parse(L',', L'"', L'\\');
 
-    BOOST_LOG_SEV(gLogger, triv::trace) << "<-" << FUNCTION_FILE_LINE;
-    return 0;
+        BOOST_LOG_SEV(gLogger, triv::trace) << "<-" << FUNCTION_FILE_LINE;
+        return 0;
+    } catch (const std::exception& e) {
+        std::cerr << e.what() << std::endl;
+        return 1;
+    }
 }

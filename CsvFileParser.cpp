@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <boost/locale/generator.hpp>
 #include <fstream>
+#include <sstream>
 #include <string_view>
 #include <thread>
 #include <vector>
@@ -35,10 +36,21 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
 
     BOOST_LOG_SEV(gLogger, triv::debug) << mInputFile.data();
     std::wifstream inputFile(mInputFile.data());
-    inputFile.imbue(boost::locale::generator()("en_US.UTF-8"));
-    for (std::wstring line; std::getline(inputFile, line);) {
-        BOOST_LOG_SEV(gLogger, triv::debug) << line;
+    inputFile.imbue(boost::locale::generator()("en_US.cp863"));
+    std::wstring line;
+    unsigned int numLines{ 0 };
+    while (inputFile) {
+        std::getline(inputFile, line);
+        ++numLines;
+        if (inputFile.fail()) {
+            std::stringstream message;
+            message << "Character set conversions error! File: " << mInputFile.data() << ", line: " << numLines << ", column: " << line.length() + 1 << '.';
+            BOOST_LOG_SEV(gLogger, triv::error) << message.str();
+            BOOST_LOG_SEV(gLogger, triv::debug) << line;
+            throw std::runtime_error(message.str());
+        }
     }
+    BOOST_LOG_SEV(gLogger, triv::debug) << "All" << numLines << " lines processed.";
 
     // Launch threads
     std::vector<std::thread> threads(numThreads);
