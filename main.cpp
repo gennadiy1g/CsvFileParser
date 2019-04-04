@@ -20,6 +20,11 @@ void initLogging()
 int main(int argc, char** argv)
 {
     try {
+        // This is needed to prevent C library to
+        // convert strings to narrow
+        // instead of C++ on some platforms
+        std::ios_base::sync_with_stdio(false);
+
         // Enable option to cache all generated locales
         boost::locale::generator gen;
         gen.locale_cache_enabled(true);

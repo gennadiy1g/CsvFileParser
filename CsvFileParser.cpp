@@ -40,19 +40,19 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
     inputFile.imbue(loc);
     inputFile.open(mInputFile.data());
     std::wstring line;
-    unsigned int numLines{ 0 };
-    while (inputFile) {
-        std::getline(inputFile, line);
-        ++numLines;
-        if (inputFile.fail()) {
-            std::stringstream message;
-            message << "Character set conversions error! File: " << mInputFile.data() << ", line: " << numLines << ", column: " << line.length() + 1 << '.';
-            BOOST_LOG_SEV(gLogger, triv::error) << message.str();
-            BOOST_LOG_SEV(gLogger, triv::debug) << line;
-            throw std::runtime_error(message.str());
-        }
+    unsigned int numLines;
+    for (numLines = 1; std::getline(inputFile, line); ++numLines) {
     }
-    BOOST_LOG_SEV(gLogger, triv::debug) << "All" << numLines << " lines processed.";
+    if (!inputFile.eof()) {
+        std::stringstream message;
+        message << "Character set conversions error! File: " << mInputFile.data() << ", line: " << numLines << ", column: " << line.length() + 1 << '.';
+        BOOST_LOG_SEV(gLogger, triv::error) << message.str();
+        BOOST_LOG_SEV(gLogger, triv::debug) << line;
+        BOOST_LOG_SEV(gLogger, triv::debug) << "First " << numLines << " lines processed.";
+        throw std::runtime_error(message.str());
+    } else {
+        BOOST_LOG_SEV(gLogger, triv::debug) << "All" << numLines << " lines processed.";
+    }
 
     // Launch threads
     std::vector<std::thread> threads(numThreads);
