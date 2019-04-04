@@ -35,13 +35,15 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
     }
 
     BOOST_LOG_SEV(gLogger, triv::debug) << mInputFile.data();
-    std::locale loc = boost::locale::generator().generate("fr_CA.CP-863");
+    std::locale loc = boost::locale::generator().generate("fr_CA.cp863");
     std::ifstream inputFile;
     inputFile.imbue(loc);
     inputFile.open(mInputFile.data());
     std::string line;
-    unsigned int numLines;
-    for (numLines = 1; std::getline(inputFile, line); ++numLines) {
+    unsigned int numLines{ 0 };
+    while (std::getline(inputFile, line)) {
+        ++numLines;
+        BOOST_LOG_SEV(gLogger, triv::debug) << numLines << ' ' << line;
     }
     if (!inputFile.eof()) {
         std::stringstream message;
@@ -51,7 +53,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
         BOOST_LOG_SEV(gLogger, triv::debug) << "First " << numLines << " lines processed.";
         throw std::runtime_error(message.str());
     } else {
-        BOOST_LOG_SEV(gLogger, triv::debug) << "All" << numLines << " lines processed.";
+        BOOST_LOG_SEV(gLogger, triv::debug) << "All " << numLines << " lines processed.";
     }
 
     // Launch threads
