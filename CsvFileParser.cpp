@@ -41,7 +41,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
     unsigned int numLines{ 0 };
     while (std::getline(inputFile, line)) {
         ++numLines;
-        BOOST_LOG_SEV(gLogger, triv::debug) << numLines << ' ' << line;
+        //        BOOST_LOG_SEV(gLogger, triv::debug) << numLines << ' ' << line;
     }
     if (!inputFile.eof()) {
         std::stringstream message;
