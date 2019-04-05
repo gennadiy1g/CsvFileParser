@@ -6,9 +6,9 @@
 
 using namespace std::string_literals;
 
-namespace logg = boost::log;
-namespace keyw = boost::log::keywords;
-namespace expr = boost::log::expressions;
+namespace logging = boost::log;
+namespace keyword = boost::log::keywords;
+namespace express = boost::log::expressions;
 
 void initLocalization()
 {
@@ -35,15 +35,15 @@ void initLocalization()
 
 void initLogging()
 {
-    auto sink = logg::add_file_log(
-        keyw::file_name = "trace.log",
-        keyw::format = (expr::stream
-            << expr::attr<unsigned int>("LineID") << ' ' << triv::severity << ' '
-            << expr::format_date_time<boost::posix_time::ptime>("TimeStamp", " %Y-%m-%d %H:%M:%S.%f ")
-            << expr::attr<logg::thread_id>("ThreadID") << ' ' << expr::message));
-    logg::add_common_attributes();
+    auto sink = logging::add_file_log(
+        keyword::file_name = "trace.log",
+        keyword::format = (express::stream
+            << express::attr<unsigned int>("LineID") << ' ' << trivia::severity << ' '
+            << express::format_date_time<boost::posix_time::ptime>("TimeStamp", " %Y-%m-%d %H:%M:%S.%f ")
+            << express::attr<logging::thread_id>("ThreadID") << ' ' << express::message));
+    logging::add_common_attributes();
 #ifdef NDEBUG
-    logg::core::get()->set_filter(triv::severity >= triv::info);
+    logging::core::get()->set_filter(trivia::severity >= trivia::info);
 #endif
 }
 
@@ -55,15 +55,15 @@ int main(int argc, char** argv)
         initLogging();
 
         auto& gLogger = GlobalLogger::get();
-        BOOST_LOG_SEV(gLogger, triv::trace) << "->" << FUNCTION_FILE_LINE;
-        BOOST_LOG_SEV(gLogger, triv::trace) << L"Привіт Світ! " << FUNCTION_FILE_LINE;
+        BOOST_LOG_SEV(gLogger, trivia::trace) << "->" << FUNCTION_FILE_LINE;
+        BOOST_LOG_SEV(gLogger, trivia::trace) << L"Привіт Світ! " << FUNCTION_FILE_LINE;
 
         auto backends = boost::locale::localization_backend_manager::global().get_all_backends();
         std::string backendsList = std::accumulate(backends.cbegin(), backends.cend(), ""s,
             [](const std::string& a, const std::string& b) { return a + (a == "" ? "" : ", ") + b; });
-        BOOST_LOG_SEV(gLogger, triv::debug) << "Localization backends: " << backendsList << '.';
+        BOOST_LOG_SEV(gLogger, trivia::debug) << "Localization backends: " << backendsList << '.';
 
-        BOOST_LOG_SEV(gLogger, triv::info) << std::thread::hardware_concurrency() << " concurrent threads are supported.";
+        BOOST_LOG_SEV(gLogger, trivia::info) << std::thread::hardware_concurrency() << " concurrent threads are supported.";
 
         {
             CsvFileParser parser(R"^(C:\Users\genna_000\Documents\Experiments\test data\ZX0training_UTF-8.csv)^");
@@ -79,7 +79,7 @@ int main(int argc, char** argv)
             parser.parse(L',', L'"', L'\\');
         }
 
-        BOOST_LOG_SEV(gLogger, triv::trace) << "<-" << FUNCTION_FILE_LINE;
+        BOOST_LOG_SEV(gLogger, trivia::trace) << "<-" << FUNCTION_FILE_LINE;
         return 0;
     } catch (const std::exception& e) {
         std::cerr << e.what() << std::endl;

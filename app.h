@@ -10,7 +10,7 @@
 #include <thread>
 
 namespace src = boost::log::sources;
-namespace triv = boost::log::trivial;
-BOOST_LOG_INLINE_GLOBAL_LOGGER_DEFAULT(GlobalLogger, src::wseverity_logger_mt<triv::severity_level>)
+namespace trivia = boost::log::trivial;
+BOOST_LOG_INLINE_GLOBAL_LOGGER_DEFAULT(GlobalLogger, src::wseverity_logger_mt<trivia::severity_level>)
 
 #define FUNCTION_FILE_LINE __FUNCTION__ << " (" << __FILE__ << ", " << __LINE__ << ')'
