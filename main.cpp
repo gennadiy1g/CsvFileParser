@@ -9,7 +9,6 @@ using namespace std::string_literals;
 namespace logg = boost::log;
 namespace keyw = boost::log::keywords;
 namespace expr = boost::log::expressions;
-namespace sink = boost::log::sinks;
 
 void initLocalization()
 {
