@@ -35,9 +35,9 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
     }
 
     BOOST_LOG_SEV(gLogger, triv::debug) << mInputFile.data();
-    std::locale loc = boost::locale::generator().generate("fr_CA.cp863");
+//    std::locale loc = boost::locale::generator().generate("fr_CA.cp863");
     std::ifstream inputFile;
-    inputFile.imbue(loc);
+//    inputFile.imbue(loc);
     inputFile.open(mInputFile.data());
     std::string line;
     unsigned int numLines{ 0 };

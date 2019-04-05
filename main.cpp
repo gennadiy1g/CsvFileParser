@@ -19,6 +19,9 @@ void initLocalization()
     // convert strings to narrow
     // instead of C++ on some platforms
     std::ios_base::sync_with_stdio(false);
+
+    // Create and install global locale
+    std::locale::global(gen.generate("en_US.UTF-8"));
 }
 
 void initLogging()
@@ -29,7 +32,7 @@ void initLogging()
             << expr::attr<unsigned int>("LineID") << ' ' << triv::severity << ' '
             << expr::format_date_time<boost::posix_time::ptime>("TimeStamp", " %Y-%m-%d %H:%M:%S.%f ")
             << expr::attr<logg::thread_id>("ThreadID") << ' ' << expr::message));
-    sink->imbue(boost::locale::generator()("en_US.UTF-8"));
+    //    sink->imbue(boost::locale::generator()("en_US.UTF-8"));
     logg::add_common_attributes();
 #ifdef NDEBUG
     logg::core::get()->set_filter(triv::severity >= triv::info);
