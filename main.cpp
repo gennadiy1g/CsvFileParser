@@ -15,17 +15,13 @@ void initLocalization()
     // Get global backend, and select winapi backend as default for all categories
     boost::locale::localization_backend_manager::global().select("winapi");
 
-    // Enable option to cache all generated locales
-    boost::locale::generator gen;
-    gen.locale_cache_enabled(true);
-
     /* Create and install global locale. Non UTF-8 encodings are not supported by winapi backend.
      * See https://www.boost.org/doc/libs/1_69_0/libs/locale/doc/html/using_localization_backends.html
      *
      * GCC supports localization only under Linux. On all other platforms, attempting to create locales
      * other than "C" or "POSIX" would fail.
      * See https://www.boost.org/doc/libs/1_69_0/libs/locale/doc/html/std_locales.html */
-    std::locale::global(gen.generate("en_US.UTF-8"));
+    std::locale::global(boost::locale::generator().generate("en_US.UTF-8"));
 
     // This is needed to prevent C library to
     // convert strings to narrow
