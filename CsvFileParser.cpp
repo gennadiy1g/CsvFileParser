@@ -50,7 +50,6 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
         message << "Character set conversions error! File: " << mInputFile.data() << ", line: " << numLines + 1 << ", column: " << line.length() + 1 << '.';
         BOOST_LOG_SEV(gLogger, triv::error) << message.str();
         BOOST_LOG_SEV(gLogger, triv::debug) << line;
-        BOOST_LOG_SEV(gLogger, triv::debug) << "First " << numLines << " lines processed.";
         throw std::runtime_error(message.str());
     } else {
         BOOST_LOG_SEV(gLogger, triv::debug) << "All " << numLines << " lines processed.";
