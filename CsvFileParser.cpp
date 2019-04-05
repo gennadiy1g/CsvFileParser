@@ -1,7 +1,7 @@
 #include "CsvFileParser.h"
 #include "app.h"
 #include <algorithm>
-#include <boost/locale/generator.hpp>
+#include <boost/locale.hpp>
 #include <fstream>
 #include <sstream>
 #include <string_view>

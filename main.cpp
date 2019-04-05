@@ -1,6 +1,6 @@
 #include "CsvFileParser.h"
 #include "app.h"
-#include <boost/locale/generator.hpp>
+#include <boost/locale.hpp>
 
 void initLogging()
 {
