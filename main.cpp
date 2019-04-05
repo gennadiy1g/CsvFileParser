@@ -15,13 +15,18 @@ void initLocalization()
     boost::locale::generator gen;
     gen.locale_cache_enabled(true);
 
+    /* Create and install global locale. Non UTF-8 encodings are not supported by winapi backend.
+     * See https://www.boost.org/doc/libs/1_69_0/libs/locale/doc/html/using_localization_backends.html
+     *
+     * GCC supports localization only under Linux. On all other platforms, attempting to create locales
+     * other than "C" or "POSIX" would fail.
+     * See https://www.boost.org/doc/libs/1_69_0/libs/locale/doc/html/std_locales.html */
+    std::locale::global(gen.generate("en_US.UTF-8"));
+
     // This is needed to prevent C library to
     // convert strings to narrow
     // instead of C++ on some platforms
     std::ios_base::sync_with_stdio(false);
-
-    // Create and install global locale
-    std::locale::global(gen.generate("en_US.UTF-8"));
 }
 
 void initLogging()
@@ -32,7 +37,6 @@ void initLogging()
             << expr::attr<unsigned int>("LineID") << ' ' << triv::severity << ' '
             << expr::format_date_time<boost::posix_time::ptime>("TimeStamp", " %Y-%m-%d %H:%M:%S.%f ")
             << expr::attr<logg::thread_id>("ThreadID") << ' ' << expr::message));
-    //    sink->imbue(boost::locale::generator()("en_US.UTF-8"));
     logg::add_common_attributes();
 #ifdef NDEBUG
     logg::core::get()->set_filter(triv::severity >= triv::info);
