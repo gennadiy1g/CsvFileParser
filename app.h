@@ -9,13 +9,8 @@
 #include <iostream>
 #include <thread>
 
-namespace logg = boost::log;
 namespace src = boost::log::sources;
-namespace keyw = boost::log::keywords;
 namespace triv = boost::log::trivial;
-namespace expr = boost::log::expressions;
-namespace sink = boost::log::sinks;
-
 BOOST_LOG_INLINE_GLOBAL_LOGGER_DEFAULT(GlobalLogger, src::wseverity_logger_mt<triv::severity_level>)
 
 #define FUNCTION_FILE_LINE __FUNCTION__ << " (" << __FILE__ << ", " << __LINE__ << ')'

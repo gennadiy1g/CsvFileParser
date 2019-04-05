@@ -6,6 +6,11 @@
 
 using namespace std::string_literals;
 
+namespace logg = boost::log;
+namespace keyw = boost::log::keywords;
+namespace expr = boost::log::expressions;
+namespace sink = boost::log::sinks;
+
 void initLocalization()
 {
     // Get global backend, and select winapi backend as default for all categories
