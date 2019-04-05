@@ -6,6 +6,21 @@
 
 using namespace std::string_literals;
 
+void initLocalization()
+{
+    // Get global backend, and select winapi backend as default for all categories
+    boost::locale::localization_backend_manager::global().select("winapi");
+
+    // Enable option to cache all generated locales
+    boost::locale::generator gen;
+    gen.locale_cache_enabled(true);
+
+    // This is needed to prevent C library to
+    // convert strings to narrow
+    // instead of C++ on some platforms
+    std::ios_base::sync_with_stdio(false);
+}
+
 void initLogging()
 {
     auto sink = logg::add_file_log(
@@ -24,14 +39,7 @@ void initLogging()
 int main(int argc, char** argv)
 {
     try {
-        // This is needed to prevent C library to
-        // convert strings to narrow
-        // instead of C++ on some platforms
-        std::ios_base::sync_with_stdio(false);
-
-        // Enable option to cache all generated locales
-        boost::locale::generator gen;
-        gen.locale_cache_enabled(true);
+        initLocalization();
 
         initLogging();
 
