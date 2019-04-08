@@ -63,14 +63,14 @@ private:
     std::vector<ParserBuffer> mBuffers;
 
     std::queue<unsigned int> mEmptyBuffers;
-    std::mutex mEmpBuffMutex;
-    std::condition_variable mEmpBuffCondVar;
+    std::mutex mMutexEmptyBuffers;
+    std::condition_variable mConditionVarEmptyBuffers;
 
     std::queue<unsigned int> mFullBuffers;
-    std::mutex mFullBuffMutex;
-    std::condition_variable mFullBuffCondVar;
+    std::mutex mMutexFullBuffers;
+    std::condition_variable mConditionVarFullBuffers;
 
     ParsingResults mResults;
-    std::mutex mResultsMutex;
-    std::condition_variable mResultsCondVar;
+    std::mutex mMutexResults;
+    std::condition_variable mConditionVarResults;
 };
