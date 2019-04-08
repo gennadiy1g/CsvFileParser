@@ -6,8 +6,6 @@
 #include <boost/log/trivial.hpp>
 #include <boost/log/utility/setup/common_attributes.hpp>
 #include <boost/log/utility/setup/file.hpp>
-#include <iostream>
-#include <thread>
 
 namespace src = boost::log::sources;
 namespace trivia = boost::log::trivial;

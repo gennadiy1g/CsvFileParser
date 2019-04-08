@@ -1,5 +1,5 @@
 #include "CsvFileParser.h"
-#include "app.h"
+#include "log.h"
 #include <boost/locale.hpp>
 #include <fstream>
 #include <sstream>
