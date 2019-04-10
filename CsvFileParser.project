@@ -15,11 +15,8 @@
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>
-      <Compiler Options="-std=c++17" C_Options="" Assembler="">
-        <IncludePath Value="."/>
-      </Compiler>
+      <Compiler Options="-std=c++17" C_Options="" Assembler=""/>
       <Linker Options="">
-        <LibraryPath Value="."/>
         <Library Value="libboost_log_setup.a"/>
         <Library Value="libboost_log.a"/>
         <Library Value="libboost_thread.a"/>
