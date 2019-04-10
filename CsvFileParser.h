@@ -53,7 +53,7 @@ public:
     CsvFileParser(CsvFileParser&& src) = default;
     CsvFileParser& operator=(CsvFileParser&& rhs) = default;
 
-    ParsingResults parse(wchar_t separator, wchar_t qoute, wchar_t escape, unsigned int numThreads_or_0 = 0);
+    ParsingResults parse(wchar_t separator, wchar_t qoute, wchar_t escape, unsigned int numThreadsOpt = 0);
 
 private:
     void worker();
