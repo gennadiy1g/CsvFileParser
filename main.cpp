@@ -32,7 +32,7 @@ void initLocalization()
 
 void initLogging()
 {
-    auto sink = logging::add_file_log(
+    logging::add_file_log(
         keyword::file_name = "trace.log",
         keyword::format = (express::stream
             << express::attr<unsigned int>("LineID") << ' ' << trivia::severity << ' '
