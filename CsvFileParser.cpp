@@ -47,7 +47,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
     std::wifstream inputFile;
     inputFile.open(mInputFile.data());
     std::wstring line;
-    unsigned int numInputFileLines{ 0 };
+    std::size_t numInputFileLines{ 0 };
     while (std::getline(inputFile, line)) {
         ++numInputFileLines;
         //        BOOST_LOG_SEV(gLogger, trivia::debug) << numInputFileLines << ' ' << line;
