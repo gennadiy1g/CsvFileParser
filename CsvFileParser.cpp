@@ -20,6 +20,11 @@ void ParserBuffer::addLine(std::wstring&& line)
     mLines.push_back(std::move(line));
 }
 
+std::size_t ParserBuffer::getSize()
+{
+    return mLines.size();
+}
+
 CsvFileParser::CsvFileParser(std::string_view inputFile)
     : mInputFile(inputFile)
 {
