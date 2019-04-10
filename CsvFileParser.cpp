@@ -37,19 +37,19 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
     std::wifstream inputFile;
     inputFile.open(mInputFile.data());
     std::wstring line;
-    unsigned int numLines{ 0 };
+    unsigned int numInputFileLines{ 0 };
     while (std::getline(inputFile, line)) {
-        ++numLines;
-        //        BOOST_LOG_SEV(gLogger, trivia::debug) << numLines << ' ' << line;
+        ++numInputFileLines;
+        //        BOOST_LOG_SEV(gLogger, trivia::debug) << numInputFileLines << ' ' << line;
     }
     if (!inputFile.eof()) {
         std::stringstream message;
-        message << "Character set conversions error! File: " << mInputFile.data() << ", line: " << numLines + 1 << ", column: " << line.length() + 1 << '.';
+        message << "Character set conversions error! File: " << mInputFile.data() << ", line: " << numInputFileLines + 1 << ", column: " << line.length() + 1 << '.';
         BOOST_LOG_SEV(gLogger, trivia::error) << message.str();
         BOOST_LOG_SEV(gLogger, trivia::debug) << line;
         throw std::runtime_error(message.str());
     } else {
-        BOOST_LOG_SEV(gLogger, trivia::debug) << "All " << numLines << " lines processed.";
+        BOOST_LOG_SEV(gLogger, trivia::debug) << "All " << numInputFileLines << " lines processed.";
     }
 
     // Launch threads
