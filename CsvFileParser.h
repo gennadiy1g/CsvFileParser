@@ -20,6 +20,8 @@ public:
     ParserBuffer(ParserBuffer&& src) = default;
     ParserBuffer& operator=(ParserBuffer&& rhs) = default;
 
+    void addLine(std::wstring&& line);
+
 private:
     std::vector<std::wstring> mLines;
 };

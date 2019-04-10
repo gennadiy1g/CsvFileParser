@@ -15,6 +15,11 @@ ParserBuffer::ParserBuffer()
 {
 }
 
+void ParserBuffer::addLine(std::wstring&& line)
+{
+    mLines.push_back(std::move(line));
+}
+
 CsvFileParser::CsvFileParser(std::string_view inputFile)
     : mInputFile(inputFile)
 {
