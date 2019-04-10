@@ -72,5 +72,5 @@ private:
 
     ParsingResults mResults;
     std::mutex mMutexResults;
-    std::condition_variable mConditionVarResults;
+//    std::condition_variable mConditionVarResults;
 };
