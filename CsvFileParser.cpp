@@ -104,11 +104,11 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
     }
     BOOST_LOG_SEV(gLogger, trivia::debug) << "All " << numInputFileLines << " lines processed.";
 
-    // Launch threads
+    // Launch worker/parser threads
     std::vector<std::thread> threads(numThreads);
     std::generate(threads.begin(), threads.end(), [this] { return std::thread{ &CsvFileParser::worker, this }; });
 
-    // Join on all threads
+    // Join all threads
     std::for_each(threads.begin(), threads.end(), [](auto& t) { t.join(); });
 
     BOOST_LOG_SEV(gLogger, trivia::trace) << "<-" << FUNCTION_FILE_LINE;
