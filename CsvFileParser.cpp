@@ -83,7 +83,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
         }
 
         mBuffers.at(numBufferToFill.value()).addLine(std::move(line));
-        if (mBuffers.at(numBufferToFill.value()).getSize() == kMaxBufferLines) {
+        if (mBuffers[numBufferToFill.value()].getSize() == kMaxBufferLines) {
             // The buffer is full
             addToFullBuffers();
             numBufferToFill = std::nullopt;
@@ -97,7 +97,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
         BOOST_LOG_SEV(gLogger, trivia::error) << message.str() << std::flush;
         throw std::runtime_error(message.str());
     } else {
-        if (mBuffers.at(numBufferToFill.value()).getSize() > 0) {
+        if (mBuffers[numBufferToFill.value()].getSize() > 0) {
             // The last, partially filled, buffer
             addToFullBuffers();
         }
