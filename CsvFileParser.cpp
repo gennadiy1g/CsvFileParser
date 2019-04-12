@@ -64,6 +64,8 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
 
     };
 
+    mNoMoreBuffers = false;
+
     while (std::getline(inputFile, line)) {
         ++numInputFileLines;
         BOOST_LOG_SEV(gLogger, trivia::debug) << numInputFileLines << ' ' << line;
@@ -89,6 +91,8 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
             numBufferToFill = std::nullopt;
         }
     }
+
+    mNoMoreBuffers = true;
 
     if (!inputFile.eof()) {
         std::stringstream message;

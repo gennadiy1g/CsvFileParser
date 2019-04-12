@@ -1,5 +1,6 @@
 #pragma once
 
+#include <atomic>
 #include <condition_variable>
 #include <mutex>
 #include <queue>
@@ -63,6 +64,7 @@ private:
 
     std::string_view mInputFile;
 
+    std::atomic_bool mNoMoreBuffers;
     std::vector<ParserBuffer> mBuffers;
 
     std::queue<unsigned int> mEmptyBuffers;
