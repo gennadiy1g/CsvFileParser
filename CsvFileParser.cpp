@@ -55,6 +55,15 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
     std::optional<unsigned int> numBufferToFill{ std::nullopt };
     const std::size_t kMaxBufferLines{ 100 };
 
+    auto addToFullBuffers = [this, numBufferToFill, &gLogger]() {
+        std::lock_guard<std::mutex> lock(mMutexFullBuffers);
+        mFullBuffers.push(numBufferToFill.value());
+        BOOST_LOG_SEV(gLogger, trivia::trace) << "Buffer #" << numBufferToFill.value() << " is added into the queue of full buffers.";
+        mMutexFullBuffers.unlock();
+        mConditionVarFullBuffers.notify_one();
+
+    };
+
     while (std::getline(inputFile, line)) {
         ++numInputFileLines;
         //        BOOST_LOG_SEV(gLogger, trivia::debug) << numInputFileLines << ' ' << line;
@@ -75,8 +84,9 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
 
         mBuffers.at(numBufferToFill.value()).addLine(std::move(line));
         if (mBuffers.at(numBufferToFill.value()).getSize() == kMaxBufferLines) {
-            std::lock_guard<std::mutex> lock(mMutexFullBuffers);
-            mFullBuffers.push(numBufferToFill.value());
+            // The buffer is full
+            addToFullBuffers();
+            numBufferToFill = std::nullopt;
         }
     }
 
@@ -88,7 +98,8 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
         throw std::runtime_error(message.str());
     } else {
         if (mBuffers.at(numBufferToFill.value()).getSize() > 0) {
-            // This is the last, partially filled, buffer.
+            // The last, partially filled, buffer
+            addToFullBuffers();
         }
         BOOST_LOG_SEV(gLogger, trivia::debug) << "All " << numInputFileLines << " lines processed.";
     }
