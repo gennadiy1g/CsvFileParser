@@ -66,6 +66,10 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
 
     mNoMoreBuffers = false;
 
+    // Launch worker/parser threads
+    std::vector<std::thread> threads(numThreads);
+    std::generate(threads.begin(), threads.end(), [this] { return std::thread{ &CsvFileParser::worker, this }; });
+
     while (std::getline(inputFile, line)) {
         ++numInputFileLines;
         BOOST_LOG_SEV(gLogger, trivia::debug) << numInputFileLines << ' ' << line;
@@ -94,6 +98,9 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
 
     mNoMoreBuffers = true;
 
+    // Wait for all worker/parser threads to finish
+    std::for_each(threads.begin(), threads.end(), [](auto& t) { t.join(); });
+
     if (!inputFile.eof()) {
         std::stringstream message;
         message << "Character set conversions error! File: " << mInputFile.data() << ", line: " << numInputFileLines + 1 << ", column: " << line.length() + 1 << '.';
@@ -107,14 +114,6 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
         addToFullBuffers();
     }
     BOOST_LOG_SEV(gLogger, trivia::debug) << "All " << numInputFileLines << " lines processed.";
-
-    // Launch worker/parser threads
-    std::vector<std::thread> threads(numThreads);
-    std::generate(threads.begin(), threads.end(), [this] { return std::thread{ &CsvFileParser::worker, this }; });
-
-    // Join all threads
-    std::for_each(threads.begin(), threads.end(), [](auto& t) { t.join(); });
-
     BOOST_LOG_SEV(gLogger, trivia::trace) << "<-" << FUNCTION_FILE_LINE;
 
     return std::move(mResults);
