@@ -66,7 +66,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
 
     while (std::getline(inputFile, line)) {
         ++numInputFileLines;
-        //        BOOST_LOG_SEV(gLogger, trivia::debug) << numInputFileLines << ' ' << line;
+        BOOST_LOG_SEV(gLogger, trivia::debug) << numInputFileLines << ' ' << line;
 
         if (!numBufferToFill.has_value()) {
             BOOST_LOG_SEV(gLogger, trivia::trace) << "Buffer to fill is not set.";
@@ -78,8 +78,8 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
             }
             assert(mEmptyBuffers.size() > 0);
             numBufferToFill = mEmptyBuffers.front();
-            BOOST_LOG_SEV(gLogger, trivia::trace) << "Buffer #" << numBufferToFill.value() << " is set to be filled.";
             mEmptyBuffers.pop();
+            BOOST_LOG_SEV(gLogger, trivia::trace) << "Buffer #" << numBufferToFill.value() << " is removed from the queue of empty buffers, and is set to be filled.";
         }
 
         mBuffers.at(numBufferToFill.value()).addLine(std::move(line));
@@ -93,8 +93,8 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
     if (!inputFile.eof()) {
         std::stringstream message;
         message << "Character set conversions error! File: " << mInputFile.data() << ", line: " << numInputFileLines + 1 << ", column: " << line.length() + 1 << '.';
-        BOOST_LOG_SEV(gLogger, trivia::error) << message.str();
         BOOST_LOG_SEV(gLogger, trivia::debug) << line;
+        BOOST_LOG_SEV(gLogger, trivia::error) << message.str() << std::flush;
         throw std::runtime_error(message.str());
     } else {
         if (mBuffers.at(numBufferToFill.value()).getSize() > 0) {
