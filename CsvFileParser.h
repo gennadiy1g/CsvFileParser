@@ -61,6 +61,7 @@ public:
 
 private:
     void worker();
+    void parseBuffer(unsigned int numBufferToParse);
 
     std::string_view mInputFile;
 
