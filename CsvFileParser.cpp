@@ -96,13 +96,13 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
         BOOST_LOG_SEV(gLogger, trivia::debug) << line;
         BOOST_LOG_SEV(gLogger, trivia::error) << message.str() << std::flush;
         throw std::runtime_error(message.str());
-    } else {
-        if (mBuffers[numBufferToFill.value()].getSize() > 0) {
-            // The last, partially filled, buffer
-            addToFullBuffers();
-        }
-        BOOST_LOG_SEV(gLogger, trivia::debug) << "All " << numInputFileLines << " lines processed.";
     }
+
+    if (mBuffers[numBufferToFill.value()].getSize() > 0) {
+        // The last, partially filled, buffer
+        addToFullBuffers();
+    }
+    BOOST_LOG_SEV(gLogger, trivia::debug) << "All " << numInputFileLines << " lines processed.";
 
     // Launch threads
     std::vector<std::thread> threads(numThreads);
