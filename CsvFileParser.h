@@ -64,7 +64,7 @@ private:
 
     std::string_view mInputFile;
 
-    std::atomic_bool mNoMoreBuffers;
+    std::atomic_bool mNoMoreFullBuffers;
     std::vector<ParserBuffer> mBuffers;
 
     std::queue<unsigned int> mEmptyBuffers;

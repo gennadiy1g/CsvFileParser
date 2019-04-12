@@ -64,7 +64,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
 
     };
 
-    mNoMoreBuffers = false;
+    mNoMoreFullBuffers = false;
 
     // Launch worker/parser threads
     std::vector<std::thread> threads(numThreads);
@@ -96,7 +96,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
         }
     }
 
-    mNoMoreBuffers = true;
+    mNoMoreFullBuffers = true;
 
     // Wait for all worker/parser threads to finish
     std::for_each(threads.begin(), threads.end(), [](auto& t) { t.join(); });
