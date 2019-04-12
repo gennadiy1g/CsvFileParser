@@ -79,7 +79,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
             assert(mEmptyBuffers.size() > 0);
             numBufferToFill = mEmptyBuffers.front();
             mEmptyBuffers.pop();
-            BOOST_LOG_SEV(gLogger, trivia::trace) << "Buffer #" << numBufferToFill.value() << " is removed from the queue of empty buffers, and is set to be filled.";
+            BOOST_LOG_SEV(gLogger, trivia::trace) << "Buffer #" << numBufferToFill.value() << " is removed from the queue of empty buffers to be filled.";
         }
 
         mBuffers.at(numBufferToFill.value()).addLine(std::move(line));
