@@ -70,6 +70,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
     std::vector<std::thread> threads(numThreads);
     std::generate(threads.begin(), threads.end(), [this] { return std::thread{ &CsvFileParser::worker, this }; });
 
+    // The main/reader loop
     while (std::getline(inputFile, line)) {
         ++numInputFileLines;
         BOOST_LOG_SEV(gLogger, trivia::debug) << numInputFileLines << ' ' << line;
@@ -96,7 +97,9 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
         }
     }
 
+    BOOST_LOG_SEV(gLogger, trivia::trace) << "The main/reader loop is done, notifying all worker/parser threads.";
     mNoMoreFullBuffers = true;
+    mConditionVarFullBuffers.notify_all();
 
     // Wait for all worker/parser threads to finish
     std::for_each(threads.begin(), threads.end(), [](auto& t) { t.join(); });
@@ -113,6 +116,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
         // The last, partially filled, buffer
         addToFullBuffers();
     }
+
     BOOST_LOG_SEV(gLogger, trivia::debug) << "All " << numInputFileLines << " lines processed.";
     BOOST_LOG_SEV(gLogger, trivia::trace) << "<-" << FUNCTION_FILE_LINE;
 
@@ -124,5 +128,24 @@ void CsvFileParser::worker()
     auto& gLogger = GlobalLogger::get();
     BOOST_LOG_SEV(gLogger, trivia::trace) << "->" << FUNCTION_FILE_LINE;
 
+    while (!mNoMoreFullBuffers) {
+        unsigned int numBufferToParse;
+        {
+            BOOST_LOG_SEV(gLogger, trivia::trace) << "Starting to wait for a full buffer.";
+            std::unique_lock<std::mutex> lock(mMutexFullBuffers);
+            mConditionVarFullBuffers.wait(lock, [this] { return mFullBuffers.size() > 0; });
+            BOOST_LOG_SEV(gLogger, trivia::trace) << "Finished waiting.";
+
+            if (mNoMoreFullBuffers) {
+                BOOST_LOG_SEV(gLogger, trivia::trace) << "Exiting the worker/parser loop.";
+                break;
+            }
+
+            assert(mFullBuffers.size() > 0);
+            numBufferToParse = mFullBuffers.front();
+            mFullBuffers.pop();
+            BOOST_LOG_SEV(gLogger, trivia::trace) << "Buffer #" << numBufferToParse << " is removed from the queue of full buffers to be parsed.";
+        }
+    }
     BOOST_LOG_SEV(gLogger, trivia::trace) << "<-" << FUNCTION_FILE_LINE;
 }
