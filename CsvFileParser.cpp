@@ -55,6 +55,10 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
     std::optional<unsigned int> numBufferToFill{ 0 };
     const std::size_t kMaxBufferLines{ 100 };
 
+    // Launch worker/parser threads
+    std::vector<std::thread> threads(numThreads);
+    std::generate(threads.begin(), threads.end(), [this] { return std::thread{ &CsvFileParser::worker, this }; });
+
     auto addToFullBuffers = [this, numBufferToFill, &gLogger]() {
         {
             std::lock_guard<std::mutex> lock(mMutexFullBuffers);
@@ -66,10 +70,6 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
     };
 
     mMainLoopIsDone = false;
-
-    // Launch worker/parser threads
-    std::vector<std::thread> threads(numThreads);
-    std::generate(threads.begin(), threads.end(), [this] { return std::thread{ &CsvFileParser::worker, this }; });
 
     // The main/reader loop
     while (std::getline(inputFile, line)) {
