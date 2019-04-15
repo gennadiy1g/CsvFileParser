@@ -147,7 +147,15 @@ void CsvFileParser::worker()
             mFullBuffers.pop();
             BOOST_LOG_SEV(gLogger, trivia::trace) << "Buffer #" << numBufferToParse << " is removed from the queue of full buffers to be parsed.";
         }
+
         parseBuffer(numBufferToParse);
+
+        {
+            std::lock_guard<std::mutex> lock(mMutexEmptyBuffers);
+            mEmptyBuffers.push(numBufferToParse);
+            BOOST_LOG_SEV(gLogger, trivia::trace) << "Buffer #" << numBufferToParse << " is added into the queue of empty buffers.";
+        }
+        mConditionVarEmptyBuffers.notify_one();
     }
     BOOST_LOG_SEV(gLogger, trivia::trace) << "<-" << FUNCTION_FILE_LINE;
 }
