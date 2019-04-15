@@ -64,7 +64,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
 
     };
 
-    mNoMoreFullBuffers = false;
+    mMainLoopIsDone = false;
 
     // Launch worker/parser threads
     std::vector<std::thread> threads(numThreads);
@@ -98,7 +98,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
     }
 
     BOOST_LOG_SEV(gLogger, trivia::trace) << "The main/reader loop is done, notifying all worker/parser threads.";
-    mNoMoreFullBuffers = true;
+    mMainLoopIsDone = true;
     mConditionVarFullBuffers.notify_all();
 
     // Wait for all worker/parser threads to finish
@@ -128,7 +128,7 @@ void CsvFileParser::worker()
     auto& gLogger = GlobalLogger::get();
     BOOST_LOG_SEV(gLogger, trivia::trace) << "->" << FUNCTION_FILE_LINE;
 
-    while (!mNoMoreFullBuffers) {
+    while (!mMainLoopIsDone) {
         unsigned int numBufferToParse;
         {
             BOOST_LOG_SEV(gLogger, trivia::trace) << "Starting to wait for a full buffer.";
@@ -136,7 +136,7 @@ void CsvFileParser::worker()
             mConditionVarFullBuffers.wait(lock, [this] { return mFullBuffers.size() > 0; });
             BOOST_LOG_SEV(gLogger, trivia::trace) << "Finished waiting.";
 
-            if (mNoMoreFullBuffers) {
+            if (mMainLoopIsDone) {
                 BOOST_LOG_SEV(gLogger, trivia::trace) << "Exiting the worker/parser loop.";
                 break;
             }
