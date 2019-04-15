@@ -52,7 +52,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
     inputFile.open(mInputFile.data());
     std::wstring line;
     std::size_t numInputFileLines{ 0 };
-    std::optional<unsigned int> numBufferToFill{ std::nullopt };
+    std::optional<unsigned int> numBufferToFill{ 0 };
     const std::size_t kMaxBufferLines{ 100 };
 
     auto addToFullBuffers = [this, numBufferToFill, &gLogger]() {
