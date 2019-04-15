@@ -56,10 +56,11 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
     const std::size_t kMaxBufferLines{ 100 };
 
     auto addToFullBuffers = [this, numBufferToFill, &gLogger]() {
-        std::lock_guard<std::mutex> lock(mMutexFullBuffers);
-        mFullBuffers.push(numBufferToFill.value());
-        BOOST_LOG_SEV(gLogger, trivia::trace) << "Buffer #" << numBufferToFill.value() << " is added into the queue of full buffers.";
-        mMutexFullBuffers.unlock();
+        {
+            std::lock_guard<std::mutex> lock(mMutexFullBuffers);
+            mFullBuffers.push(numBufferToFill.value());
+            BOOST_LOG_SEV(gLogger, trivia::trace) << "Buffer #" << numBufferToFill.value() << " is added into the queue of full buffers.";
+        }
         mConditionVarFullBuffers.notify_one();
 
     };
