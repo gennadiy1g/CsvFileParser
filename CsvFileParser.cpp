@@ -162,4 +162,6 @@ void CsvFileParser::worker()
 
 void CsvFileParser::parseBuffer(unsigned int numBufferToParse)
 {
+    auto& gLogger = GlobalLogger::get();
+    BOOST_LOG_SEV(gLogger, trivia::trace) << "Buffer #" << numBufferToParse << " is parsed." << FUNCTION_FILE_LINE;
 }
