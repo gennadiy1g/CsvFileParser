@@ -23,6 +23,7 @@ public:
 
     void addLine(std::wstring&& line);
     std::size_t getSize();
+    void clear();
 
 private:
     std::vector<std::wstring> mLines;
