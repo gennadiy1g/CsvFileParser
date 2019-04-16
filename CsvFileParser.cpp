@@ -69,6 +69,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
     };
 
     mMainLoopIsDone = false;
+    mCharSetConversionError = false;
 
     // Launch worker/parser threads
     std::vector<std::thread> threads(numThreads);
@@ -102,9 +103,14 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
 
     std::stringstream message;
     if (!inputFile.eof()) {
-        message << "Character set conversions error! File: " << mInputFile.data() << ", line: " << numInputFileLines + 1 << ", column: " << line.length() + 1 << '.';
+        message << "Character set conversion error! File: " << mInputFile.data() << ", line: " << numInputFileLines + 1 << ", column: " << line.length() + 1 << '.';
         BOOST_LOG_SEV(gLogger, trivia::debug) << line;
         BOOST_LOG_SEV(gLogger, trivia::error) << message.str() << std::flush;
+
+        // Even if the shared variable is atomic, it must be modified under the mutex in order to correctly publish
+        // the modification to the waiting thread (https://en.cppreference.com/w/cpp/thread/condition_variable).
+        std::lock_guard<std::mutex> lock(mMutexFullBuffers);
+        mCharSetConversionError = true;
     } else {
         if (mBuffers[numBufferToFill].getSize() > 0) {
             // The last buffer is partially filled, add it into the queue of full buffers.
@@ -141,15 +147,21 @@ void CsvFileParser::worker()
     auto& gLogger = GlobalLogger::get();
     BOOST_LOG_SEV(gLogger, trivia::trace) << "->" << FUNCTION_FILE_LINE;
 
-    while (!mMainLoopIsDone) {
+    auto pred = [this] { return (mMainLoopIsDone && (mFullBuffers.size() == 0)) || mCharSetConversionError; };
+
+    // The worker/parser loop
+    while (!pred()) {
         unsigned int numBufferToParse;
         {
-            BOOST_LOG_SEV(gLogger, trivia::trace) << "Starting to wait for a full buffer.";
+            // Get the number of the next full buffer to parse.
             std::unique_lock<std::mutex> lock(mMutexFullBuffers);
-            mConditionVarFullBuffers.wait(lock, [this] { return (mFullBuffers.size() > 0) || mMainLoopIsDone; });
-            BOOST_LOG_SEV(gLogger, trivia::trace) << "Finished waiting.";
+            if (mFullBuffers.size() == 0) {
+                BOOST_LOG_SEV(gLogger, trivia::trace) << "Starting to wait for a full buffer.";
+                mConditionVarFullBuffers.wait(lock, [this] { return (mFullBuffers.size() > 0) || mMainLoopIsDone || mCharSetConversionError; });
+                BOOST_LOG_SEV(gLogger, trivia::trace) << "Finished waiting.";
+            }
 
-            if (mMainLoopIsDone) {
+            if (pred()) {
                 BOOST_LOG_SEV(gLogger, trivia::trace) << "Exiting the worker/parser loop.";
                 break;
             }
@@ -171,6 +183,12 @@ void CsvFileParser::worker()
             BOOST_LOG_SEV(gLogger, trivia::trace) << "The buffer #" << numBufferToParse << " is added into the queue of empty buffers.";
         }
         mConditionVarEmptyBuffers.notify_one();
+
+#ifndef NDEBUG
+        if (pred()) {
+            BOOST_LOG_SEV(gLogger, trivia::trace) << "Exiting the worker/parser loop.";
+        }
+#endif
     }
     BOOST_LOG_SEV(gLogger, trivia::trace) << "<-" << FUNCTION_FILE_LINE;
 }

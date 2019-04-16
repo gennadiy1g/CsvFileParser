@@ -67,6 +67,8 @@ private:
     std::string_view mInputFile;
 
     std::atomic_bool mMainLoopIsDone;
+    std::atomic_bool mCharSetConversionError;
+
     std::vector<ParserBuffer> mBuffers;
 
     std::queue<unsigned int> mEmptyBuffers;
