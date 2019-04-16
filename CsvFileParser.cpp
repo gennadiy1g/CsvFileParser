@@ -181,7 +181,7 @@ void CsvFileParser::parseBuffer(unsigned int numBufferToParse)
     BOOST_LOG_SEV(gLogger, trivia::trace) << "->" << FUNCTION_FILE_LINE;
     assert(mBuffers[numBufferToParse].getSize() > 0);
     BOOST_LOG_SEV(gLogger, trivia::trace) << "Starting to parse the buffer #" << numBufferToParse << ".";
-    //    std::this_thread::sleep_for(std::chrono::seconds(1));
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
     BOOST_LOG_SEV(gLogger, trivia::trace) << "The buffer #" << numBufferToParse << " is parsed.";
     BOOST_LOG_SEV(gLogger, trivia::trace) << "<-" << FUNCTION_FILE_LINE;
 }
