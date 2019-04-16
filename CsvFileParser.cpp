@@ -68,11 +68,11 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
         mConditionVarFullBuffers.notify_one();
     };
 
+    mMainLoopIsDone = false;
+
     // Launch worker/parser threads
     std::vector<std::thread> threads(numThreads);
     std::generate(threads.begin(), threads.end(), [this] { return std::thread{ &CsvFileParser::worker, this }; });
-
-    mMainLoopIsDone = false;
 
     // The main/reader loop
     while (std::getline(inputFile, line)) {
@@ -115,11 +115,15 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
     }
 
     BOOST_LOG_SEV(gLogger, trivia::trace) << "The main/reader loop is done, notifying all worker/parser threads.";
-    mMainLoopIsDone = true;
+    {
+        std::lock_guard<std::mutex> lock(mMutexFullBuffers);
+        mMainLoopIsDone = true;
+    }
     mConditionVarFullBuffers.notify_all();
 
-    // Wait for all worker/parser threads to finish
+    BOOST_LOG_SEV(gLogger, trivia::trace) << "Starting to wait for all worker/parser threads to finish." << std::flush;
     std::for_each(threads.begin(), threads.end(), [](auto& t) { t.join(); });
+    BOOST_LOG_SEV(gLogger, trivia::trace) << "Finished waiting. All worker/parser threads finished." << std::flush;
 
     BOOST_LOG_SEV(gLogger, trivia::debug) << "All " << numInputFileLines << " lines processed.";
     BOOST_LOG_SEV(gLogger, trivia::trace) << "<-" << FUNCTION_FILE_LINE;
@@ -137,7 +141,7 @@ void CsvFileParser::worker()
         {
             BOOST_LOG_SEV(gLogger, trivia::trace) << "Starting to wait for a full buffer.";
             std::unique_lock<std::mutex> lock(mMutexFullBuffers);
-            mConditionVarFullBuffers.wait(lock, [this] { return mFullBuffers.size() > 0; });
+            mConditionVarFullBuffers.wait(lock, [this] { return (mFullBuffers.size() > 0) || mMainLoopIsDone; });
             BOOST_LOG_SEV(gLogger, trivia::trace) << "Finished waiting.";
 
             if (mMainLoopIsDone) {
