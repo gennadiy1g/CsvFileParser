@@ -5,7 +5,6 @@
 #include <condition_variable>
 #include <fstream>
 #include <mutex>
-#include <optional>
 #include <sstream>
 #include <string_view>
 #include <thread>
@@ -101,13 +100,6 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
         }
     }
 
-    BOOST_LOG_SEV(gLogger, trivia::trace) << "The main/reader loop is done, notifying all worker/parser threads.";
-    mMainLoopIsDone = true;
-    mConditionVarFullBuffers.notify_all();
-
-    // Wait for all worker/parser threads to finish
-    std::for_each(threads.begin(), threads.end(), [](auto& t) { t.join(); });
-
     if (!inputFile.eof()) {
         std::stringstream message;
         message << "Character set conversions error! File: " << mInputFile.data() << ", line: " << numInputFileLines + 1 << ", column: " << line.length() + 1 << '.';
@@ -119,7 +111,15 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
     if (mBuffers[numBufferToFill].getSize() > 0) {
         // The last buffer is partially filled, add it into the queue of full buffers.
         addToFullBuffers();
+        BOOST_LOG_SEV(gLogger, trivia::trace) << "It has been the last buffer.";
     }
+
+    BOOST_LOG_SEV(gLogger, trivia::trace) << "The main/reader loop is done, notifying all worker/parser threads.";
+    mMainLoopIsDone = true;
+    mConditionVarFullBuffers.notify_all();
+
+    // Wait for all worker/parser threads to finish
+    std::for_each(threads.begin(), threads.end(), [](auto& t) { t.join(); });
 
     BOOST_LOG_SEV(gLogger, trivia::debug) << "All " << numInputFileLines << " lines processed.";
     BOOST_LOG_SEV(gLogger, trivia::trace) << "<-" << FUNCTION_FILE_LINE;
@@ -172,7 +172,7 @@ void CsvFileParser::parseBuffer(unsigned int numBufferToParse)
     BOOST_LOG_SEV(gLogger, trivia::trace) << "->" << FUNCTION_FILE_LINE;
     assert(mBuffers[numBufferToParse].getSize() > 0);
     BOOST_LOG_SEV(gLogger, trivia::trace) << "Starting to parse the buffer #" << numBufferToParse << ".";
-    std::this_thread::sleep_for(std::chrono::seconds(1));
+    //    std::this_thread::sleep_for(std::chrono::seconds(1));
     BOOST_LOG_SEV(gLogger, trivia::trace) << "The buffer #" << numBufferToParse << " is parsed.";
     BOOST_LOG_SEV(gLogger, trivia::trace) << "<-" << FUNCTION_FILE_LINE;
 }
