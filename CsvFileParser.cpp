@@ -100,17 +100,16 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
         }
     }
 
+    std::stringstream message;
     if (!inputFile.eof()) {
-        std::stringstream message;
         message << "Character set conversions error! File: " << mInputFile.data() << ", line: " << numInputFileLines + 1 << ", column: " << line.length() + 1 << '.';
         BOOST_LOG_SEV(gLogger, trivia::debug) << line;
         BOOST_LOG_SEV(gLogger, trivia::error) << message.str() << std::flush;
-        throw std::runtime_error(message.str());
-    }
-
-    if (mBuffers[numBufferToFill].getSize() > 0) {
-        // The last buffer is partially filled, add it into the queue of full buffers.
-        addToFullBuffers();
+    } else {
+        if (mBuffers[numBufferToFill].getSize() > 0) {
+            // The last buffer is partially filled, add it into the queue of full buffers.
+            addToFullBuffers();
+        }
         BOOST_LOG_SEV(gLogger, trivia::trace) << "It has been the last buffer.";
     }
 
@@ -127,10 +126,14 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
     std::for_each(threads.begin(), threads.end(), [](auto& t) { t.join(); });
     BOOST_LOG_SEV(gLogger, trivia::trace) << "Finished waiting. All worker/parser threads finished." << std::flush;
 
-    BOOST_LOG_SEV(gLogger, trivia::debug) << "All " << numInputFileLines << " lines processed.";
-    BOOST_LOG_SEV(gLogger, trivia::trace) << "<-" << FUNCTION_FILE_LINE;
-
-    return std::move(mResults);
+    if (!inputFile.eof()) {
+        BOOST_LOG_SEV(gLogger, trivia::error) << "Throwing exception @" << FUNCTION_FILE_LINE << std::flush;
+        throw std::runtime_error(message.str());
+    } else {
+        BOOST_LOG_SEV(gLogger, trivia::debug) << "All " << numInputFileLines << " lines processed.";
+        BOOST_LOG_SEV(gLogger, trivia::trace) << "<-" << FUNCTION_FILE_LINE;
+        return std::move(mResults);
+    }
 }
 
 void CsvFileParser::worker()
