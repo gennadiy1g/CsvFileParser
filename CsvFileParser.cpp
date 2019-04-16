@@ -116,6 +116,8 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
 
     BOOST_LOG_SEV(gLogger, trivia::trace) << "The main/reader loop is done, notifying all worker/parser threads.";
     {
+        // Even if the shared variable is atomic, it must be modified under the mutex in order to correctly publish
+        // the modification to the waiting thread (https://en.cppreference.com/w/cpp/thread/condition_variable).
         std::lock_guard<std::mutex> lock(mMutexFullBuffers);
         mMainLoopIsDone = true;
     }
