@@ -73,7 +73,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
 
     // Launch worker/parser threads
     std::vector<std::thread> threads(numThreads);
-    std::generate(threads.begin(), threads.end(), [this] { return std::thread{ &CsvFileParser::worker, this }; });
+    std::generate(threads.begin(), threads.end(), [this] { return std::thread{ &CsvFileParser::parser, this }; });
 
     // The main/reader loop
     while (std::getline(inputFile, line)) {
@@ -142,7 +142,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
     }
 }
 
-void CsvFileParser::worker()
+void CsvFileParser::parser()
 {
     auto& gLogger = GlobalLogger::get();
     BOOST_LOG_SEV(gLogger, trivia::trace) << "->" << FUNCTION_FILE_LINE;

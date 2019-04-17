@@ -61,7 +61,7 @@ public:
     ParsingResults parse(wchar_t separator, wchar_t qoute, wchar_t escape, unsigned int numThreadsOpt = 0);
 
 private:
-    void worker();
+    void parser();
     void parseBuffer(unsigned int numBufferToParse);
 
     std::string_view mInputFile;
