@@ -10,6 +10,8 @@
 #include <thread>
 #include <vector>
 
+using namespace std::string_literals;
+
 ParsingResults::ParsingResults()
 {
 }
@@ -48,8 +50,11 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
     mBuffers.resize(numThreads);
 
     BOOST_LOG_SEV(gLogger, trivia::debug) << mInputFile.data();
-    std::wifstream inputFile;
-    inputFile.open(mInputFile.data());
+    std::wifstream inputFile(mInputFile.data());
+    if (inputFile.fail()) {
+        BOOST_LOG_SEV(gLogger, trivia::error) << "Throwing exception @" << FUNCTION_FILE_LINE << std::flush;
+        throw std::runtime_error("Unable to open file "s + mInputFile.data() + " for reading!"s);
+    }
     std::wstring line;
     std::size_t numInputFileLines{ 0 };
     const std::size_t kMaxBufferLines{ 10 };
