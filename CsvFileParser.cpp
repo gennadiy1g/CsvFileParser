@@ -71,11 +71,11 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
     mMainLoopIsDone = false;
     mCharSetConversionError = false;
 
-    // Launch worker/parser threads
+    // Launch parser threads
     std::vector<std::thread> threads(numThreads);
     std::generate(threads.begin(), threads.end(), [this] { return std::thread{ &CsvFileParser::parser, this }; });
 
-    // The main/reader loop
+    // Reader loop
     while (std::getline(inputFile, line)) {
         ++numInputFileLines;
         BOOST_LOG_SEV(gLogger, trivia::trace) << numInputFileLines << ' ' << line;
@@ -119,7 +119,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
         BOOST_LOG_SEV(gLogger, trivia::trace) << "It has been the last buffer.";
     }
 
-    BOOST_LOG_SEV(gLogger, trivia::trace) << "The main/reader loop is done, notifying all worker/parser threads.";
+    BOOST_LOG_SEV(gLogger, trivia::trace) << "The reader loop is done, notifying all parser threads.";
     {
         // Even if the shared variable is atomic, it must be modified under the mutex in order to correctly publish
         // the modification to the waiting thread (https://en.cppreference.com/w/cpp/thread/condition_variable).
@@ -128,9 +128,9 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
     }
     mConditionVarFullBuffers.notify_all();
 
-    BOOST_LOG_SEV(gLogger, trivia::trace) << "Starting to wait for all worker/parser threads to finish." << std::flush;
+    BOOST_LOG_SEV(gLogger, trivia::trace) << "Starting to wait for all parser threads to finish." << std::flush;
     std::for_each(threads.begin(), threads.end(), [](auto& t) { t.join(); });
-    BOOST_LOG_SEV(gLogger, trivia::trace) << "Finished waiting. All worker/parser threads finished." << std::flush;
+    BOOST_LOG_SEV(gLogger, trivia::trace) << "Finished waiting. All parser threads finished." << std::flush;
 
     if (!inputFile.eof()) {
         BOOST_LOG_SEV(gLogger, trivia::error) << "Throwing exception @" << FUNCTION_FILE_LINE << std::flush;
@@ -149,7 +149,7 @@ void CsvFileParser::parser()
 
     auto pred = [this] { return (mMainLoopIsDone && (mFullBuffers.size() == 0)) || mCharSetConversionError; };
 
-    // The worker/parser loop
+    // Parser loop
     while (!pred()) {
         unsigned int numBufferToParse;
         {
@@ -162,7 +162,7 @@ void CsvFileParser::parser()
             }
 
             if (pred()) {
-                BOOST_LOG_SEV(gLogger, trivia::trace) << "Exiting the worker/parser loop.";
+                BOOST_LOG_SEV(gLogger, trivia::trace) << "Exiting the parser loop.";
                 break;
             }
 
@@ -186,7 +186,7 @@ void CsvFileParser::parser()
 
 #ifndef NDEBUG
         if (pred()) {
-            BOOST_LOG_SEV(gLogger, trivia::trace) << "Exiting the worker/parser loop.";
+            BOOST_LOG_SEV(gLogger, trivia::trace) << "Exiting the parser loop.";
         }
 #endif
     }
