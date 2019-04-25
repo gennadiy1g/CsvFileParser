@@ -1,12 +1,11 @@
 #include "CsvFileParser.h"
 #include "log.h"
+#include <boost/filesystem/fstream.hpp>
 #include <boost/locale.hpp>
 #include <cassert>
 #include <condition_variable>
-#include <fstream>
 #include <mutex>
 #include <sstream>
-#include <string_view>
 #include <thread>
 #include <vector>
 
@@ -35,7 +34,7 @@ void ParserBuffer::clear()
     mLines.clear();
 }
 
-CsvFileParser::CsvFileParser(std::string_view inputFile)
+CsvFileParser::CsvFileParser(boost::filesystem::path inputFile)
     : mInputFile(inputFile)
 {
 }
@@ -49,11 +48,11 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
 
     mBuffers.resize(numThreads);
 
-    BOOST_LOG_SEV(gLogger, trivia::debug) << mInputFile.data();
-    std::wifstream inputFile(mInputFile.data());
+    BOOST_LOG_SEV(gLogger, trivia::debug) << mInputFile.native();
+    boost::filesystem::wifstream inputFile(mInputFile);
     if (inputFile.fail()) {
         BOOST_LOG_SEV(gLogger, trivia::error) << "Throwing exception @" << FUNCTION_FILE_LINE << std::flush;
-        throw std::runtime_error("Unable to open file "s + mInputFile.data() + " for reading!"s);
+        throw std::runtime_error("Unable to open file "s + boost::locale::conv::utf_to_utf<char>(mInputFile.native()) + " for reading!"s);
     }
     std::wstring line;
     std::size_t numInputFileLines{ 0 };
@@ -108,7 +107,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
 
     std::stringstream message;
     if (!inputFile.eof()) {
-        message << "Character set conversion error! File: " << mInputFile.data() << ", line: " << numInputFileLines + 1 << ", column: " << line.length() + 1 << '.';
+        message << "Character set conversion error! File: " << boost::locale::conv::utf_to_utf<char>(mInputFile.native()) << ", line: " << numInputFileLines + 1 << ", column: " << line.length() + 1 << '.';
         BOOST_LOG_SEV(gLogger, trivia::debug) << line;
         BOOST_LOG_SEV(gLogger, trivia::error) << message.str() << std::flush;
 

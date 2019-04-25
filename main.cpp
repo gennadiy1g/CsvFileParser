@@ -63,16 +63,16 @@ int main(int argc, char** argv)
         BOOST_LOG_SEV(gLogger, trivia::info) << std::thread::hardware_concurrency() << " concurrent threads are supported.";
 
         {
-            CsvFileParser parser(R"^(C:\Users\genna_000\Documents\Experiments\test data\ZX0training_UTF-8.csv)^");
+            CsvFileParser parser(LR"^(C:\Users\genna_000\Documents\Experiments\test data\ZX0training_UTF-8.csv)^");
             parser.parse(L',', L'"', L'\\');
         }
         {
-            CsvFileParser parser(R"^(C:\Users\genna_000\Documents\Experiments\test data\russian_UTF-8.csv)^");
+            CsvFileParser parser(LR"^(C:\Users\genna_000\Documents\Experiments\test data\russian_UTF-8.csv)^");
             parser.parse(L',', L'"', L'\\');
         }
         {
             // Processing of this file causes an exception to be thrown
-            CsvFileParser parser(R"^(C:\Users\genna_000\Documents\Experiments\test data\ZX0training_CP-863.csv)^");
+            CsvFileParser parser(LR"^(C:\Users\genna_000\Documents\Experiments\test data\ZX0training_CP-863.csv)^");
             parser.parse(L',', L'"', L'\\');
         }
 

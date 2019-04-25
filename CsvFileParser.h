@@ -2,6 +2,7 @@
 
 #include <atomic>
 #include <condition_variable>
+#include <boost/filesystem.hpp>
 #include <mutex>
 #include <queue>
 #include <string>
@@ -47,7 +48,7 @@ private:
 
 class CsvFileParser {
 public:
-    explicit CsvFileParser(std::string_view inputFile); // Constructor
+    explicit CsvFileParser(boost::filesystem::path inputFile); // Constructor
     virtual ~CsvFileParser() = default; // Defaulted virtual destructor
 
     // Disallow assignment and pass-by-value.
@@ -64,7 +65,7 @@ private:
     void parser();
     void parseBuffer(unsigned int numBufferToParse);
 
-    std::string_view mInputFile;
+    boost::filesystem::path mInputFile;
 
     std::atomic_bool mMainLoopIsDone;
     std::atomic_bool mCharSetConversionError;
