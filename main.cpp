@@ -14,7 +14,7 @@ namespace blexpressions = boost::log::expressions;
 void initLocalization()
 {
     // Get global backend, and select winapi backend as default for all categories
-    boost::locale::localization_backend_manager::global().select("winapi");
+    blocale::localization_backend_manager::global().select("winapi");
 
     /* Create and install global locale. Non UTF-8 encodings are not supported by winapi backend.
      * See https://www.boost.org/doc/libs/1_69_0/libs/locale/doc/html/using_localization_backends.html
@@ -22,7 +22,7 @@ void initLocalization()
      * GCC supports localization only under Linux. On all other platforms, attempting to create locales
      * other than "C" or "POSIX" would fail.
      * See https://www.boost.org/doc/libs/1_69_0/libs/locale/doc/html/std_locales.html */
-    std::locale::global(boost::locale::generator().generate("en_US.UTF-8"));
+    std::locale::global(blocale::generator().generate("en_US.UTF-8"));
 
     // This is needed to prevent C library to
     // convert strings to narrow
@@ -55,7 +55,7 @@ int main(int argc, char** argv)
         BOOST_LOG_SEV(gLogger, bltrivial::trace) << "->" << FUNCTION_FILE_LINE;
         BOOST_LOG_SEV(gLogger, bltrivial::trace) << L"Привіт Світ! " << FUNCTION_FILE_LINE;
 
-        auto backends = boost::locale::localization_backend_manager::global().get_all_backends();
+        auto backends = blocale::localization_backend_manager::global().get_all_backends();
         std::string backendsList = std::accumulate(backends.cbegin(), backends.cend(), ""s,
             [](const std::string& a, const std::string& b) { return a + (a == "" ? "" : ", ") + b; });
         BOOST_LOG_SEV(gLogger, bltrivial::debug) << "Localization backends: " << backendsList << '.';
