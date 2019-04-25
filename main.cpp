@@ -17,11 +17,7 @@ void initLocalization()
     blocale::localization_backend_manager::global().select("winapi");
 
     /* Create and install global locale. Non UTF-8 encodings are not supported by winapi backend.
-     * See https://www.boost.org/doc/libs/1_69_0/libs/locale/doc/html/using_localization_backends.html
-     *
-     * GCC supports localization only under Linux. On all other platforms, attempting to create locales
-     * other than "C" or "POSIX" would fail.
-     * See https://www.boost.org/doc/libs/1_69_0/libs/locale/doc/html/std_locales.html */
+     * https://www.boost.org/doc/libs/1_69_0/libs/locale/doc/html/using_localization_backends.html */
     std::locale::global(blocale::generator().generate("en_US.UTF-8"));
 
     // This is needed to prevent C library to
