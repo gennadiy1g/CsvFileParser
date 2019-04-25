@@ -1,8 +1,10 @@
 #pragma once
 
 #include <atomic>
-#include <condition_variable>
 #include <boost/filesystem.hpp>
+#include <boost/filesystem/fstream.hpp>
+#include <boost/locale.hpp>
+#include <condition_variable>
 #include <mutex>
 #include <queue>
 #include <string>

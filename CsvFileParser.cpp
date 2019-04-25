@@ -1,13 +1,8 @@
 #include "CsvFileParser.h"
 #include "log.h"
-#include <boost/filesystem/fstream.hpp>
-#include <boost/locale.hpp>
 #include <cassert>
-#include <condition_variable>
-#include <mutex>
 #include <sstream>
 #include <thread>
-#include <vector>
 
 using namespace std::string_literals;
 
