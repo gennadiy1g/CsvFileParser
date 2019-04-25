@@ -29,7 +29,7 @@ void ParserBuffer::clear()
     mLines.clear();
 }
 
-CsvFileParser::CsvFileParser(bfilesystem::path inputFile)
+CsvFileParser::CsvFileParser(bfs::path inputFile)
     : mInputFile(inputFile)
 {
 }
@@ -44,7 +44,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
     mBuffers.resize(numThreads);
 
     BOOST_LOG_SEV(gLogger, bltrivial::debug) << mInputFile.native();
-    bfilesystem::wifstream inputFile(mInputFile);
+    bfs::wifstream inputFile(mInputFile);
     if (inputFile.fail()) {
         BOOST_LOG_SEV(gLogger, bltrivial::error) << "Throwing exception @" << FUNCTION_FILE_LINE << std::flush;
         throw std::runtime_error("Unable to open file "s + blocale::conv::utf_to_utf<char>(mInputFile.native()) + " for reading!"s);

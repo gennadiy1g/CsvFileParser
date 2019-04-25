@@ -11,7 +11,7 @@
 #include <string_view>
 #include <vector>
 
-namespace bfilesystem = boost::filesystem;
+namespace bfs = boost::filesystem;
 namespace blocale = boost::locale;
 
 class ParserBuffer {
@@ -53,7 +53,7 @@ private:
 
 class CsvFileParser {
 public:
-    explicit CsvFileParser(bfilesystem::path inputFile); // Constructor
+    explicit CsvFileParser(bfs::path inputFile); // Constructor
     virtual ~CsvFileParser() = default; // Defaulted virtual destructor
 
     // Disallow assignment and pass-by-value.
@@ -70,7 +70,7 @@ private:
     void parser();
     void parseBuffer(unsigned int numBufferToParse);
 
-    bfilesystem::path mInputFile;
+    bfs::path mInputFile;
 
     std::atomic_bool mMainLoopIsDone;
     std::atomic_bool mCharSetConversionError;
