@@ -69,6 +69,7 @@ public:
 private:
     void parser();
     void parseBuffer(unsigned int numBufferToParse);
+    void checkInputFile();
 
     bfs::path mInputFile;
 

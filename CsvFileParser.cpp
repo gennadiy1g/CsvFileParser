@@ -34,8 +34,17 @@ CsvFileParser::CsvFileParser(bfs::path inputFile)
 {
 }
 
+void CsvFileParser::checkInputFile()
+{
+    if (!bfs::exists(mInputFile)) {
+        throw std::runtime_error("File "s + blocale::conv::utf_to_utf<char>(mInputFile.native()) + " does not exist!"s);
+    }
+};
+
 ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t escape, unsigned int numThreadsOpt)
 {
+    checkInputFile();
+
     auto& gLogger = GlobalLogger::get();
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "->" << FUNCTION_FILE_LINE;
 
