@@ -37,7 +37,7 @@ CsvFileParser::CsvFileParser(bfs::path inputFile)
 void CsvFileParser::checkInputFile()
 {
     if (!bfs::exists(mInputFile)) {
-        throw std::runtime_error("File "s + blocale::conv::utf_to_utf<char>(mInputFile.native()) + " does not exist!"s);
+        throw std::runtime_error("File \""s + blocale::conv::utf_to_utf<char>(mInputFile.native()) + "\" does not exist!"s);
     }
 };
 
@@ -56,7 +56,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
     bfs::wifstream inputFile(mInputFile);
     if (inputFile.fail()) {
         BOOST_LOG_SEV(gLogger, bltrivial::error) << "Throwing exception @" << FUNCTION_FILE_LINE << std::flush;
-        throw std::runtime_error("Unable to open file "s + blocale::conv::utf_to_utf<char>(mInputFile.native()) + " for reading!"s);
+        throw std::runtime_error("Unable to open file \""s + blocale::conv::utf_to_utf<char>(mInputFile.native()) + "\" for reading!"s);
     }
     std::wstring line;
     std::size_t numInputFileLines{ 0 };
@@ -111,8 +111,8 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
 
     std::stringstream message;
     if (!inputFile.eof()) {
-        message << "Character set conversion error! File: " << blocale::conv::utf_to_utf<char>(mInputFile.native())
-                << ", line: " << numInputFileLines + 1 << ", column: " << line.length() + 1 << '.';
+        message << "Character set conversion error! File: \"" << blocale::conv::utf_to_utf<char>(mInputFile.native())
+                << "\", line: " << numInputFileLines + 1 << ", column: " << line.length() + 1 << '.';
         BOOST_LOG_SEV(gLogger, bltrivial::debug) << line;
         BOOST_LOG_SEV(gLogger, bltrivial::error) << message.str() << std::flush;
 
