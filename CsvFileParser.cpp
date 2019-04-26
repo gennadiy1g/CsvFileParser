@@ -41,6 +41,14 @@ void CsvFileParser::checkInputFile()
     if (!bfs::exists(inputFileStatus)) {
         throw std::runtime_error("File \""s + blocale::conv::utf_to_utf<char>(mInputFile.native()) + "\" does not exist!"s);
     }
+
+    if (!bfs::is_regular_file(inputFileStatus)) {
+        throw std::runtime_error("File \""s + blocale::conv::utf_to_utf<char>(mInputFile.native()) + "\" is not a regular file!"s);
+    }
+
+    if (bfs::file_size(mInputFile) == 0) {
+        throw std::runtime_error("File \""s + blocale::conv::utf_to_utf<char>(mInputFile.native()) + "\" is empty!"s);
+    }
 };
 
 ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t escape, unsigned int numThreadsOpt)
