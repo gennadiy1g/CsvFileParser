@@ -36,7 +36,9 @@ CsvFileParser::CsvFileParser(bfs::path inputFile)
 
 void CsvFileParser::checkInputFile()
 {
-    if (!bfs::exists(mInputFile)) {
+    bfs::file_status inputFileStatus = bfs::status(mInputFile);
+
+    if (!bfs::exists(inputFileStatus)) {
         throw std::runtime_error("File \""s + blocale::conv::utf_to_utf<char>(mInputFile.native()) + "\" does not exist!"s);
     }
 };
