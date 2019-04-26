@@ -102,7 +102,8 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
 
     std::stringstream message;
     if (!inputFile.eof()) {
-        message << "Character set conversion error! File: " << blocale::conv::utf_to_utf<char>(mInputFile.native()) << ", line: " << numInputFileLines + 1 << ", column: " << line.length() + 1 << '.';
+        message << "Character set conversion error! File: " << blocale::conv::utf_to_utf<char>(mInputFile.native())
+                << ", line: " << numInputFileLines + 1 << ", column: " << line.length() + 1 << '.';
         BOOST_LOG_SEV(gLogger, bltrivial::debug) << line;
         BOOST_LOG_SEV(gLogger, bltrivial::error) << message.str() << std::flush;
 
