@@ -52,12 +52,36 @@ int main(int argc, char** argv)
 #define BOOST_TEST_MODULE fixture_04
 #include <boost/test/included/unit_test.hpp>
 
+#include "CsvFileParser.h"
+#include "log.h"
+#include "utilities.h"
+#include <numeric>
+#include <string>
+#include <thread>
+
+using namespace std::string_literals;
+
 struct MyGlobalFixture {
     MyGlobalFixture() {}
+
     ~MyGlobalFixture() {}
 
     void setup()
     {
+        initLocalization();
+
+        initLogging();
+
+        auto& gLogger = GlobalLogger::get();
+        BOOST_LOG_SEV(gLogger, bltrivial::trace) << "->" << FUNCTION_FILE_LINE;
+        BOOST_LOG_SEV(gLogger, bltrivial::trace) << L"Привіт Світ! " << FUNCTION_FILE_LINE;
+
+        auto backends = blocale::localization_backend_manager::global().get_all_backends();
+        std::string backendsList = std::accumulate(backends.cbegin(), backends.cend(), ""s,
+            [](const std::string& a, const std::string& b) { return a + (a == "" ? "" : ", ") + b; });
+        BOOST_LOG_SEV(gLogger, bltrivial::debug) << "Localization backends: " << backendsList << '.';
+
+        BOOST_LOG_SEV(gLogger, bltrivial::info) << std::thread::hardware_concurrency() << " concurrent threads are supported.";
     }
 
     void teardown()
