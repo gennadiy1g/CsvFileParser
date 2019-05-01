@@ -1,9 +1,6 @@
 #include "log.h"
 #include <boost/locale.hpp>
 
-namespace blog = boost::log;
-namespace blkeywords = boost::log::keywords;
-namespace blexpressions = boost::log::expressions;
 namespace blocale = boost::locale;
 
 void initLocalization()
