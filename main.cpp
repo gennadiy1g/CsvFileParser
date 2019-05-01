@@ -91,10 +91,14 @@ struct GlobalFixture {
 
 BOOST_TEST_GLOBAL_FIXTURE(GlobalFixture);
 
-BOOST_AUTO_TEST_CASE(test_case1)
+BOOST_AUTO_TEST_CASE(ZX0training_UTF8)
 {
+    CsvFileParser parser(LR"^(C:\Users\genna_000\Documents\Experiments\test data\ZX0training_UTF-8.csv)^");
+    BOOST_REQUIRE_NO_THROW(parser.parse(L',', L'"', L'\\'));
 }
 
-BOOST_AUTO_TEST_CASE(test_case2)
+BOOST_AUTO_TEST_CASE(russian_UTF8)
 {
+    CsvFileParser parser(LR"^(C:\Users\genna_000\Documents\Experiments\test data\russian_UTF-8.csv)^");
+    BOOST_REQUIRE_NO_THROW(parser.parse(L',', L'"', L'\\'));
 }
