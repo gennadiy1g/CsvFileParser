@@ -49,7 +49,7 @@ int main(int argc, char** argv)
 }
 */
 
-#define BOOST_TEST_MODULE fixture_04
+#define BOOST_TEST_MODULE CsvFileParser
 #include <boost/test/included/unit_test.hpp>
 
 #include "CsvFileParser.h"
