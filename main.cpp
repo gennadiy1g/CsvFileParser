@@ -1,3 +1,4 @@
+/*
 #include "CsvFileParser.h"
 #include "log.h"
 #include "utilities.h"
@@ -45,4 +46,31 @@ int main(int argc, char** argv)
         std::cerr << e.what() << std::endl;
         return 1;
     }
+}
+*/
+
+#define BOOST_TEST_MODULE fixture_04
+#include <boost/test/included/unit_test.hpp>
+
+struct MyGlobalFixture {
+    MyGlobalFixture() {}
+    ~MyGlobalFixture() {}
+
+    void setup()
+    {
+    }
+
+    void teardown()
+    {
+    }
+};
+
+BOOST_TEST_GLOBAL_FIXTURE(MyGlobalFixture);
+
+BOOST_AUTO_TEST_CASE(test_case1)
+{
+}
+
+BOOST_AUTO_TEST_CASE(test_case2)
+{
 }
