@@ -61,10 +61,10 @@ int main(int argc, char** argv)
 
 using namespace std::string_literals;
 
-struct MyGlobalFixture {
-    MyGlobalFixture() {}
+struct GlobalFixture {
+    GlobalFixture() {}
 
-    ~MyGlobalFixture() {}
+    ~GlobalFixture() {}
 
     void setup()
     {
@@ -89,7 +89,7 @@ struct MyGlobalFixture {
     }
 };
 
-BOOST_TEST_GLOBAL_FIXTURE(MyGlobalFixture);
+BOOST_TEST_GLOBAL_FIXTURE(GlobalFixture);
 
 BOOST_AUTO_TEST_CASE(test_case1)
 {
