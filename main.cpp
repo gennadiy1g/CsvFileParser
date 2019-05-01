@@ -1,7 +1,6 @@
 #include "CsvFileParser.h"
 #include "log.h"
 #include "utilities.h"
-#include <boost/locale.hpp>
 #include <numeric>
 #include <string>
 #include <thread>
