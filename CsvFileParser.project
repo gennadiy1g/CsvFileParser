@@ -24,6 +24,7 @@
         <Library Value="libboost_thread.a"/>
         <Library Value="libboost_filesystem.a"/>
         <Library Value="libboost_locale.a"/>
+        <Library Value="libboost_unit_test_framework.a"/>
       </Linker>
       <ResourceCompiler Options=""/>
     </GlobalSettings>

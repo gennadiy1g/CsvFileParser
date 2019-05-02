@@ -1,5 +1,5 @@
-#define BOOST_TEST_MODULE CsvFileParser
-#include <boost/test/included/unit_test.hpp>
+#define BOOST_TEST_MODULE Test Module CsvFileParser
+#include <boost/test/unit_test.hpp>
 
 #include "CsvFileParser.h"
 #include "log.h"
