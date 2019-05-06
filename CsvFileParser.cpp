@@ -72,7 +72,11 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
     std::size_t numInputFileLines{ 0 }; // Counter of lines in the file.
 
     // Maximum number of lines in one buffer.
+#ifdef NDEBUG
+    const std::size_t kMaxBufferLines{ 1000 };
+#else
     const std::size_t kMaxBufferLines{ 10 };
+#endif
 
     unsigned int numBufferToFill{ 0 }; // The buffer #0 is going to be filled first.
     for (unsigned int i = 1; i < numThreads; ++i) { // Do not add the buffer #0 into the queue of empty buffers.
