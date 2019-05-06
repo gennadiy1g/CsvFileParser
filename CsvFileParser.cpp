@@ -69,11 +69,13 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
         throw std::runtime_error("Unable to open file \""s + blocale::conv::utf_to_utf<char>(mInputFile.native()) + "\" for reading!"s);
     }
     std::wstring line;
-    std::size_t numInputFileLines{ 0 };
-    const std::size_t kMaxBufferLines{ 10 };
-    unsigned int numBufferToFill{ 0 }; // The buffer #0 is going to be filled first.
+    std::size_t numInputFileLines{ 0 }; // Counter of lines in the file.
 
-    for (unsigned int i = 1; i < numThreads; ++i) { // Do not add the buffer #0 into the queue of empty buffers to be filled.
+    // Maximum number of lines in one buffer.
+    const std::size_t kMaxBufferLines{ 10 };
+
+    unsigned int numBufferToFill{ 0 }; // The buffer #0 is going to be filled first.
+    for (unsigned int i = 1; i < numThreads; ++i) { // Do not add the buffer #0 into the queue of empty buffers.
         mEmptyBuffers.push(i);
     }
 
