@@ -4,7 +4,7 @@
 #include "CsvFileParser.h"
 #include "log.h"
 #include "utilities.h"
-#include <algorithm>
+#include <boost/algorithm/string.hpp>
 #include <numeric>
 #include <string>
 #include <thread>
@@ -39,12 +39,6 @@ struct GlobalFixture {
     }
 };
 
-bool stringContains(const std::string_view s, const std::string_view pattern)
-{
-    auto it = std::search(s.cbegin(), s.cend(), pattern.cbegin(), pattern.cend());
-    return it != s.cend();
-};
-
 BOOST_TEST_GLOBAL_FIXTURE(GlobalFixture);
 
 BOOST_AUTO_TEST_CASE(ZX0training_UTF8)
@@ -62,7 +56,7 @@ BOOST_AUTO_TEST_CASE(russian_UTF8)
 BOOST_AUTO_TEST_CASE(ZX0training_CP863)
 {
     auto pred = [](const std::exception& e) {
-        return stringContains(e.what(), "Character set conversion error!"s) && stringContains(e.what(), "line: 111, column: 144."s);
+        return boost::contains(e.what(), "Character set conversion error!"s) && boost::contains(e.what(), "line: 111, column: 144."s);
     };
 
     // Processing of this file causes an exception to be thrown
