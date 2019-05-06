@@ -175,7 +175,7 @@ void CsvFileParser::parser()
     auto pred = [this] { return (mMainLoopIsDone && (mFullBuffers.size() == 0)) || mCharSetConversionError; };
 
     // Parser loop
-    while (!pred()) {
+    while (true) {
         unsigned int numBufferToParse;
         {
             // Get the number of the next full buffer to parse.
@@ -209,11 +209,13 @@ void CsvFileParser::parser()
         }
         mConditionVarEmptyBuffers.notify_one();
 
-#ifndef NDEBUG
-        if (pred()) {
-            BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Exiting the parser loop.";
+        {
+            std::lock_guard<std::mutex> lock(mMutexFullBuffers);
+            if (pred()) {
+                BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Exiting the parser loop.";
+                break;
+            }
         }
-#endif
     }
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "<-" << FUNCTION_FILE_LINE;
 }
