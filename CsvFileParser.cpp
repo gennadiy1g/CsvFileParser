@@ -85,7 +85,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
 
     auto addToFullBuffers = [this, &numBufferToFill, &gLogger]() {
         {
-            std::lock_guard<std::mutex> lock(mMutexFullBuffers);
+            std::lock_guard lock(mMutexFullBuffers);
             mFullBuffers.push(numBufferToFill);
             BOOST_LOG_SEV(gLogger, bltrivial::trace) << "The buffer #" << numBufferToFill << " is added into the queue of full buffers.";
         }
@@ -111,7 +111,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
             addToFullBuffers();
 
             // Get the number of the next empty buffer to fill.
-            std::unique_lock<std::mutex> lock(mMutexEmptyBuffers);
+            std::unique_lock lock(mMutexEmptyBuffers);
             if (mEmptyBuffers.size() == 0) {
                 BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Starting to wait for an empty buffer.";
                 mConditionVarEmptyBuffers.wait(lock, [this] { return mEmptyBuffers.size() > 0; });
@@ -134,7 +134,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
 
         // Even if the shared variable is atomic, it must be modified under the mutex in order to correctly publish
         // the modification to the waiting thread (https://en.cppreference.com/w/cpp/thread/condition_variable).
-        std::lock_guard<std::mutex> lock(mMutexFullBuffers);
+        std::lock_guard lock(mMutexFullBuffers);
         mCharSetConversionError = true;
     } else {
         if (mBuffers[numBufferToFill].getSize() > 0) {
@@ -148,7 +148,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
     {
         // Even if the shared variable is atomic, it must be modified under the mutex in order to correctly publish
         // the modification to the waiting thread (https://en.cppreference.com/w/cpp/thread/condition_variable).
-        std::lock_guard<std::mutex> lock(mMutexFullBuffers);
+        std::lock_guard lock(mMutexFullBuffers);
         mMainLoopIsDone = true;
     }
     mConditionVarFullBuffers.notify_all();
@@ -179,7 +179,7 @@ void CsvFileParser::parser()
         unsigned int numBufferToParse;
         {
             // Get the number of the next full buffer to parse.
-            std::unique_lock<std::mutex> lock(mMutexFullBuffers);
+            std::unique_lock lock(mMutexFullBuffers);
             if (mFullBuffers.size() == 0) {
                 BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Starting to wait for a full buffer.";
                 mConditionVarFullBuffers.wait(lock, [this] { return (mFullBuffers.size() > 0) || mMainLoopIsDone || mCharSetConversionError; });
@@ -202,7 +202,7 @@ void CsvFileParser::parser()
         mBuffers[numBufferToParse].clear();
 
         {
-            std::lock_guard<std::mutex> lock(mMutexEmptyBuffers);
+            std::lock_guard lock(mMutexEmptyBuffers);
             assert(mBuffers[numBufferToParse].getSize() == 0);
             mEmptyBuffers.push(numBufferToParse);
             BOOST_LOG_SEV(gLogger, bltrivial::trace) << "The buffer #" << numBufferToParse << " is added into the queue of empty buffers.";
@@ -210,7 +210,7 @@ void CsvFileParser::parser()
         mConditionVarEmptyBuffers.notify_one();
 
         {
-            std::lock_guard<std::mutex> lock(mMutexFullBuffers);
+            std::lock_guard lock(mMutexFullBuffers);
             if (pred()) {
                 BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Exiting the parser loop.";
                 break;
