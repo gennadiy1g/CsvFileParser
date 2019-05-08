@@ -85,7 +85,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
 
     auto addToFullBuffers = [this, &numBufferToFill, &gLogger]() {
         {
-            std::lock_guard lock(mMutexFullBuffers);
+            std::unique_lock lock(mMutexFullBuffers);
             mFullBuffers.push(numBufferToFill);
             BOOST_LOG_SEV(gLogger, bltrivial::trace) << "The buffer #" << numBufferToFill << " is added into the queue of full buffers.";
         }
@@ -134,7 +134,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
 
         // Even if the shared variable is atomic, it must be modified under the mutex in order to correctly publish
         // the modification to the waiting thread (https://en.cppreference.com/w/cpp/thread/condition_variable).
-        std::lock_guard lock(mMutexFullBuffers);
+        std::unique_lock lock(mMutexFullBuffers);
         mCharSetConversionError = true;
     } else {
         if (mBuffers[numBufferToFill].getSize() > 0) {
@@ -148,7 +148,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
     {
         // Even if the shared variable is atomic, it must be modified under the mutex in order to correctly publish
         // the modification to the waiting thread (https://en.cppreference.com/w/cpp/thread/condition_variable).
-        std::lock_guard lock(mMutexFullBuffers);
+        std::unique_lock lock(mMutexFullBuffers);
         mMainLoopIsDone = true;
     }
     mConditionVarFullBuffers.notify_all();
