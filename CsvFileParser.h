@@ -7,6 +7,7 @@
 #include <condition_variable>
 #include <mutex>
 #include <queue>
+#include <shared_mutex>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -83,8 +84,8 @@ private:
     std::condition_variable mConditionVarEmptyBuffers;
 
     std::queue<unsigned int> mFullBuffers;
-    std::mutex mMutexFullBuffers;
-    std::condition_variable mConditionVarFullBuffers;
+    std::shared_mutex mMutexFullBuffers;
+    std::condition_variable_any mConditionVarFullBuffers;
 
     ParsingResults mResults;
     std::mutex mMutexResults;

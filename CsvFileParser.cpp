@@ -210,7 +210,7 @@ void CsvFileParser::parser()
         mConditionVarEmptyBuffers.notify_one();
 
         {
-            std::lock_guard lock(mMutexFullBuffers);
+            std::shared_lock lock(mMutexFullBuffers);
             if (pred()) {
                 BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Exiting the parser loop.";
                 break;
