@@ -203,7 +203,7 @@ void CsvFileParser::parser()
             std::shared_lock lock(mMutexResults);
             results = mResults;
         }
-        parseBuffer(numBufferToParse);
+        parseBuffer(numBufferToParse, results);
         {
             std::unique_lock lock(mMutexResults);
             mResults.Update(results);
@@ -230,7 +230,7 @@ void CsvFileParser::parser()
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "<-" << FUNCTION_FILE_LINE;
 }
 
-void CsvFileParser::parseBuffer(unsigned int numBufferToParse)
+void CsvFileParser::parseBuffer(unsigned int numBufferToParse, ParsingResults& results)
 {
     auto& gLogger = GlobalLogger::get();
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "->" << FUNCTION_FILE_LINE;
