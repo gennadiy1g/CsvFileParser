@@ -38,7 +38,7 @@ private:
 
 class ParsingResults {
 public:
-    ParsingResults(); // Constructor
+    ParsingResults() = default; // Constructor
     virtual ~ParsingResults() = default; // Defaulted virtual destructor
 
     // Explicitly default copy constructor and copy assignment operator.

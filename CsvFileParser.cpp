@@ -6,7 +6,6 @@
 
 using namespace std::string_literals;
 
-ParsingResults::ParsingResults()
 {
 }
 
