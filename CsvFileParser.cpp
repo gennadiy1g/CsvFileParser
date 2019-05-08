@@ -6,6 +6,7 @@
 
 using namespace std::string_literals;
 
+void ParsingResults::Update(const ParsingResults& results)
 {
 }
 
@@ -205,7 +206,7 @@ void CsvFileParser::parser()
         parseBuffer(numBufferToParse);
         {
             std::unique_lock lock(mMutexResults);
-            mResults = results;
+            mResults.Update(results);
         }
 
         mBuffers[numBufferToParse].clear();

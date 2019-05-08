@@ -49,6 +49,8 @@ public:
     ParsingResults(ParsingResults&& src) = default;
     ParsingResults& operator=(ParsingResults&& rhs) = default;
 
+    void Update(const ParsingResults& results);
+
 private:
 };
 
