@@ -41,9 +41,9 @@ public:
     ParsingResults(); // Constructor
     virtual ~ParsingResults() = default; // Defaulted virtual destructor
 
-    // Disallow assignment and pass-by-value.
-    ParsingResults(const ParsingResults& src) = delete;
-    ParsingResults& operator=(const ParsingResults& rhs) = delete;
+    // Explicitly default copy constructor and copy assignment operator.
+    ParsingResults(const ParsingResults& src) = default;
+    ParsingResults& operator=(const ParsingResults& rhs) = default;
 
     // Explicitly default move constructor and move assignment operator.
     ParsingResults(ParsingResults&& src) = default;
@@ -88,5 +88,5 @@ private:
     std::condition_variable_any mConditionVarFullBuffers;
 
     ParsingResults mResults;
-    std::mutex mMutexResults;
+    std::shared_mutex mMutexResults;
 };

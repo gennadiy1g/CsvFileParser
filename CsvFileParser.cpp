@@ -198,7 +198,17 @@ void CsvFileParser::parser()
             BOOST_LOG_SEV(gLogger, bltrivial::trace) << "The buffer #" << numBufferToParse << " is removed from the queue of full buffers.";
         }
 
+        ParsingResults results;
+        {
+            std::shared_lock lock(mMutexResults);
+            results = mResults;
+        }
         parseBuffer(numBufferToParse);
+        {
+            std::unique_lock lock(mMutexResults);
+            mResults = results;
+        }
+
         mBuffers[numBufferToParse].clear();
 
         {
