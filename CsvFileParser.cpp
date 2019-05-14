@@ -19,7 +19,7 @@ void ParserBuffer::addLine(std::wstring&& line)
     mLines.push_back(std::move(line));
 }
 
-std::size_t ParserBuffer::getSize()
+std::size_t ParserBuffer::size()
 {
     return mLines.size();
 }
@@ -106,7 +106,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
 
         mBuffers.at(numBufferToFill).addLine(std::move(line));
 
-        if (mBuffers[numBufferToFill].getSize() == kMaxBufferLines) {
+        if (mBuffers[numBufferToFill].size() == kMaxBufferLines) {
             // The buffer is full, add it into the queue of full buffers.
             addToFullBuffers();
 
@@ -119,7 +119,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
                 assert(mEmptyBuffers.size() > 0);
             }
             numBufferToFill = mEmptyBuffers.front();
-            assert(mBuffers[numBufferToFill].getSize() == 0);
+            assert(mBuffers[numBufferToFill].size() == 0);
             mEmptyBuffers.pop();
             BOOST_LOG_SEV(gLogger, bltrivial::trace) << "The buffer #" << numBufferToFill << " is removed from the queue of empty buffers.";
         }
@@ -137,7 +137,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
         std::unique_lock lock(mMutexFullBuffers);
         mCharSetConversionError = true;
     } else {
-        if (mBuffers[numBufferToFill].getSize() > 0) {
+        if (mBuffers[numBufferToFill].size() > 0) {
             // The last buffer is partially filled, add it into the queue of full buffers.
             addToFullBuffers();
         }
@@ -193,7 +193,7 @@ void CsvFileParser::parser()
 
             assert(mFullBuffers.size() > 0);
             numBufferToParse = mFullBuffers.front();
-            assert(mBuffers[numBufferToParse].getSize() > 0);
+            assert(mBuffers[numBufferToParse].size() > 0);
             mFullBuffers.pop();
             BOOST_LOG_SEV(gLogger, bltrivial::trace) << "The buffer #" << numBufferToParse << " is removed from the queue of full buffers.";
         }
@@ -213,7 +213,7 @@ void CsvFileParser::parser()
 
         {
             std::lock_guard lock(mMutexEmptyBuffers);
-            assert(mBuffers[numBufferToParse].getSize() == 0);
+            assert(mBuffers[numBufferToParse].size() == 0);
             mEmptyBuffers.push(numBufferToParse);
             BOOST_LOG_SEV(gLogger, bltrivial::trace) << "The buffer #" << numBufferToParse << " is added into the queue of empty buffers.";
         }
@@ -234,7 +234,7 @@ void CsvFileParser::parseBuffer(unsigned int numBufferToParse, ParsingResults& r
 {
     auto& gLogger = GlobalLogger::get();
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "->" << FUNCTION_FILE_LINE;
-    assert(mBuffers[numBufferToParse].getSize() > 0);
+    assert(mBuffers[numBufferToParse].size() > 0);
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Starting to parse the buffer #" << numBufferToParse << ".";
     std::this_thread::sleep_for(std::chrono::milliseconds(10));
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "The buffer #" << numBufferToParse << " is parsed.";

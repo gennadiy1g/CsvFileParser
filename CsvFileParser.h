@@ -29,7 +29,7 @@ public:
     ParserBuffer& operator=(ParserBuffer&& rhs) = default;
 
     void addLine(std::wstring&& line);
-    std::size_t getSize();
+    std::size_t size();
     void clear();
 
 private:
