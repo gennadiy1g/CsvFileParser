@@ -6,6 +6,11 @@
 
 using namespace std::string_literals;
 
+ColumnInfo::ColumnInfo(std::wstring_view name)
+    : mName(name)
+{
+}
+
 void ParsingResults::Update(const ParsingResults& results)
 {
 }

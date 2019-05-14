@@ -6,6 +6,7 @@
 #include <boost/locale.hpp>
 #include <condition_variable>
 #include <mutex>
+#include <optional>
 #include <queue>
 #include <shared_mutex>
 #include <string>
@@ -36,6 +37,36 @@ private:
     std::vector<std::wstring> mLines;
 };
 
+class ColumnInfo {
+public:
+    explicit ColumnInfo(std::wstring_view name); // Constructor
+    virtual ~ColumnInfo() = default; // Defaulted virtual destructor
+
+    //  Explicitly default assignment and pass-by-value.
+    ColumnInfo(const ColumnInfo& src) = default;
+    ColumnInfo& operator=(const ColumnInfo& rhs) = default;
+
+    // Explicitly default move constructor and move assignment operator.
+    ColumnInfo(ColumnInfo&& src) = default;
+    ColumnInfo& operator=(ColumnInfo&& rhs) = default;
+
+protected:
+    std::wstring mName;
+    bool mIsFloat{ true };
+    bool mIsDecimal{ true };
+    bool mIsInt{ true };
+    bool mIsBool{ true };
+    bool mIsDate{ true };
+    bool mIsTime{ true };
+    bool mIsTimeStamp{ true };
+    bool mIsNull{ false };
+    std::optional<unsigned short> mPrec;
+    std::optional<unsigned short> mScale;
+    unsigned short mLength{ 0 };
+    std::optional<long long> mMinVal;
+    std::optional<long long> mMaxVal;
+};
+
 class ParsingResults {
 public:
     ParsingResults() = default; // Constructor
@@ -52,6 +83,7 @@ public:
     void Update(const ParsingResults& results);
 
 private:
+    std::vector<ColumnInfo> mColumns;
 };
 
 class CsvFileParser {
