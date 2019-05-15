@@ -109,6 +109,11 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t es
         ++numInputFileLines;
         BOOST_LOG_SEV(gLogger, bltrivial::trace) << numInputFileLines << ' ' << line;
 
+        if (numInputFileLines == 1) {
+            parseColumnNames(line);
+            continue;
+        }
+
         mBuffers.at(numBufferToFill).addLine(std::move(line));
 
         if (mBuffers[numBufferToFill].size() == kMaxBufferLines) {
@@ -244,4 +249,8 @@ void CsvFileParser::parseBuffer(unsigned int numBufferToParse, ParsingResults& r
     std::this_thread::sleep_for(std::chrono::milliseconds(10));
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "The buffer #" << numBufferToParse << " is parsed.";
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "<-" << FUNCTION_FILE_LINE;
+}
+
+void CsvFileParser::parseColumnNames(std::wstring_view line)
+{
 }

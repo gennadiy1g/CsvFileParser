@@ -105,6 +105,7 @@ private:
     void parser();
     void parseBuffer(unsigned int numBufferToParse, ParsingResults& results);
     void checkInputFile();
+    void parseColumnNames(std::wstring_view line);
 
     bfs::path mInputFile;
 
