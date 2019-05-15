@@ -100,6 +100,10 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t quote, wchar_t es
     mMainLoopIsDone = false;
     mCharSetConversionError = false;
 
+    mSeparator = separator;
+    mQuote = quote;
+    mEscape = escape;
+
     // Launch parser threads
     std::vector<std::thread> threads(numThreads);
     std::generate(threads.begin(), threads.end(), [this] { return std::thread{ &CsvFileParser::parser, this }; });

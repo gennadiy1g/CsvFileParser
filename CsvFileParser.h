@@ -124,4 +124,8 @@ private:
 
     ParsingResults mResults;
     std::shared_mutex mMutexResults;
+
+    wchar_t mSeparator;
+    wchar_t mQuote;
+    wchar_t mEscape;
 };
