@@ -56,7 +56,7 @@ void CsvFileParser::checkInputFile()
     }
 };
 
-ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t qoute, wchar_t escape, unsigned int numThreadsOpt)
+ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t quote, wchar_t escape, unsigned int numThreadsOpt)
 {
     checkInputFile();
 
