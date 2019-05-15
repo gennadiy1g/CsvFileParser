@@ -4,6 +4,7 @@
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
 #include <boost/locale.hpp>
+#include <boost/tokenizer.hpp>
 #include <condition_variable>
 #include <mutex>
 #include <optional>
@@ -15,6 +16,9 @@
 
 namespace bfs = boost::filesystem;
 namespace blocale = boost::locale;
+
+typedef boost::escaped_list_separator<wchar_t, std::char_traits<wchar_t>> CsvSeparator;
+typedef boost::tokenizer<CsvSeparator, std::wstring::const_iterator, std::wstring> CsvTokenizer;
 
 class ParserBuffer {
 public:
@@ -81,6 +85,7 @@ public:
     ParsingResults& operator=(ParsingResults&& rhs) = default;
 
     void Update(const ParsingResults& results);
+    void addColumn(std::wstring_view name);
 
 private:
     std::vector<ColumnInfo> mColumns;

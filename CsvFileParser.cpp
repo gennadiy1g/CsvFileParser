@@ -1,5 +1,6 @@
 #include "CsvFileParser.h"
 #include "log.h"
+#include <boost/algorithm/string.hpp>
 #include <cassert>
 #include <sstream>
 #include <thread>
@@ -13,6 +14,11 @@ ColumnInfo::ColumnInfo(std::wstring_view name)
 
 void ParsingResults::Update(const ParsingResults& results)
 {
+}
+
+void ParsingResults::addColumn(std::wstring_view name)
+{
+    mColumns.emplace_back(name);
 }
 
 ParserBuffer::ParserBuffer()
@@ -257,4 +263,14 @@ void CsvFileParser::parseBuffer(unsigned int numBufferToParse, ParsingResults& r
 
 void CsvFileParser::parseColumnNames(std::wstring_view line, wchar_t separator, wchar_t quote, wchar_t escape)
 {
+    auto& gLogger = GlobalLogger::get();
+    BOOST_LOG_SEV(gLogger, bltrivial::trace) << line << FUNCTION_FILE_LINE;
+    CsvSeparator sep(escape, separator, quote);
+    CsvTokenizer tok(line, sep);
+    for (auto beg = tok.begin(); beg != tok.end(); ++beg) {
+        BOOST_LOG_SEV(gLogger, bltrivial::trace) << *beg;
+        auto name = *beg;
+        boost::trim(name);
+        mResults.addColumn(name);
+    }
 }
