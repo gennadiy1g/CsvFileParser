@@ -14,4 +14,4 @@ namespace blexpressions = boost::log::expressions;
 
 BOOST_LOG_INLINE_GLOBAL_LOGGER_DEFAULT(GlobalLogger, boost::log::sources::wseverity_logger_mt<bltrivial::severity_level>)
 
-#define FUNCTION_FILE_LINE __FUNCTION__ << " (" << __FILE__ << ", " << __LINE__ << ')'
+#define FUNCTION_FILE_LINE __FUNCTION__ << " " << __FILE__ << ":" << __LINE__
