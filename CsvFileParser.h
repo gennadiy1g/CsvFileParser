@@ -84,7 +84,7 @@ public:
     ParsingResults(ParsingResults&& src) = default;
     ParsingResults& operator=(ParsingResults&& rhs) = default;
 
-    void Update(const ParsingResults& results);
+    void update(const ParsingResults& results);
     void addColumn(std::wstring_view name);
 
 private:

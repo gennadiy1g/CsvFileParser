@@ -12,7 +12,7 @@ ColumnInfo::ColumnInfo(std::wstring_view name)
 {
 }
 
-void ParsingResults::Update(const ParsingResults& results)
+void ParsingResults::update(const ParsingResults& results)
 {
 }
 
@@ -226,7 +226,7 @@ void CsvFileParser::parser()
         parseBuffer(numBufferToParse, results);
         {
             std::unique_lock lock(mMutexResults);
-            mResults.Update(results);
+            mResults.update(results);
         }
 
         mBuffers[numBufferToParse].clear();
