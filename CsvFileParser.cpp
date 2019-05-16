@@ -103,7 +103,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t quote, wchar_t es
         mConditionVarFullBuffers.notify_one();
     };
 
-    mMainLoopIsDone = false;
+    mReaderLoopIsDone = false;
     mCharSetConversionError = false;
 
     mSeparator = separator;
@@ -169,7 +169,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t quote, wchar_t es
         // Even if the shared variable is atomic, it must be modified under the mutex in order to correctly publish
         // the modification to the waiting thread (https://en.cppreference.com/w/cpp/thread/condition_variable).
         std::unique_lock lock(mMutexFullBuffers);
-        mMainLoopIsDone = true;
+        mReaderLoopIsDone = true;
     }
     mConditionVarFullBuffers.notify_all();
 
@@ -192,7 +192,7 @@ void CsvFileParser::parser()
     auto& gLogger = GlobalLogger::get();
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "->" << FUNCTION_FILE_LINE;
 
-    auto pred = [this] { return (mMainLoopIsDone && (mFullBuffers.size() == 0)) || mCharSetConversionError; };
+    auto pred = [this] { return (mReaderLoopIsDone && (mFullBuffers.size() == 0)) || mCharSetConversionError; };
 
     // Parser loop
     while (true) {
@@ -202,7 +202,7 @@ void CsvFileParser::parser()
             std::unique_lock lock(mMutexFullBuffers);
             if (mFullBuffers.size() == 0) {
                 BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Starting to wait for a full buffer.";
-                mConditionVarFullBuffers.wait(lock, [this] { return (mFullBuffers.size() > 0) || mMainLoopIsDone || mCharSetConversionError; });
+                mConditionVarFullBuffers.wait(lock, [this] { return (mFullBuffers.size() > 0) || mReaderLoopIsDone || mCharSetConversionError; });
                 BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Finished waiting.";
             }
 
