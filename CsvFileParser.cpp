@@ -200,15 +200,26 @@ void CsvFileParser::parser()
         {
             // Get the number of the next full buffer to parse.
             std::unique_lock lock(mMutexFullBuffers);
-            if (mFullBuffers.size() == 0) {
-                BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Starting to wait for a full buffer.";
-                mConditionVarFullBuffers.wait(lock, [this] { return (mFullBuffers.size() > 0) || mReaderLoopIsDone || mCharSetConversionError; });
-                BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Finished waiting.";
-            }
 
             if (exitParserLoop()) {
                 BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Exiting the parser loop.";
                 break;
+            }
+
+            if (!mReaderLoopIsDone) {
+                BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Starting to wait for a full buffer.";
+                while (true) {
+                    mConditionVarFullBuffers.wait(lock);
+                    if ((mFullBuffers.size() > 0) || exitParserLoop()) {
+                        break;
+                    }
+                }
+                BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Finished waiting.";
+
+                if (exitParserLoop()) {
+                    BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Exiting the parser loop.";
+                    break;
+                }
             }
 
             assert(mFullBuffers.size() > 0);
@@ -238,14 +249,6 @@ void CsvFileParser::parser()
             BOOST_LOG_SEV(gLogger, bltrivial::trace) << "The buffer #" << numBufferToParse << " is added into the queue of empty buffers.";
         }
         mConditionVarEmptyBuffers.notify_one();
-
-        {
-            std::shared_lock lock(mMutexFullBuffers);
-            if (exitParserLoop()) {
-                BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Exiting the parser loop.";
-                break;
-            }
-        }
     }
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "<-" << FUNCTION_FILE_LINE;
 }
