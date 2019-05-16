@@ -192,7 +192,7 @@ void CsvFileParser::parser()
     auto& gLogger = GlobalLogger::get();
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "->" << FUNCTION_FILE_LINE;
 
-    auto pred = [this] { return (mReaderLoopIsDone && (mFullBuffers.size() == 0)) || mCharSetConversionError; };
+    auto exitParserLoop = [this] { return (mReaderLoopIsDone && (mFullBuffers.size() == 0)) || mCharSetConversionError; };
 
     // Parser loop
     while (true) {
@@ -206,7 +206,7 @@ void CsvFileParser::parser()
                 BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Finished waiting.";
             }
 
-            if (pred()) {
+            if (exitParserLoop()) {
                 BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Exiting the parser loop.";
                 break;
             }
@@ -241,7 +241,7 @@ void CsvFileParser::parser()
 
         {
             std::shared_lock lock(mMutexFullBuffers);
-            if (pred()) {
+            if (exitParserLoop()) {
                 BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Exiting the parser loop.";
                 break;
             }
