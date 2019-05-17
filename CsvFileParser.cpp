@@ -194,21 +194,16 @@ void CsvFileParser::parser()
     // Parser loop
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Starting the parser loop." << FUNCTION_FILE_LINE << std::flush;
     while (true) {
+        unsigned int numBufferToParse;
         {
             BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Lock" << FUNCTION_FILE_LINE;
-            std::shared_lock lock(mMutexFullBuffers);
+            std::unique_lock lock(mMutexFullBuffers);
             if (exitParserLoop()) {
                 BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Exiting the parser loop." << FUNCTION_FILE_LINE;
                 break;
             }
-        }
 
-        unsigned int numBufferToParse;
-
-        {
-            BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Lock" << FUNCTION_FILE_LINE;
-            std::unique_lock lock(mMutexFullBuffers);
-            if (!mReaderLoopIsDone) {
+            if (mFullBuffers.size() == 0) {
                 BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Starting to wait for a full buffer." << FUNCTION_FILE_LINE;
                 while (true) {
                     mConditionVarFullBuffers.wait(lock);
@@ -226,14 +221,12 @@ void CsvFileParser::parser()
             }
 
             // Get the number of the next full buffer to parse.
-            {
-                assert(mFullBuffers.size() > 0);
-                numBufferToParse = mFullBuffers.front();
-                assert(mBuffers[numBufferToParse].size() > 0);
-                mFullBuffers.pop();
-                BOOST_LOG_SEV(gLogger, bltrivial::trace) << "The buffer #" << numBufferToParse << " is removed from the queue of full buffers."
-                                                         << FUNCTION_FILE_LINE;
-            }
+            assert(mFullBuffers.size() > 0);
+            numBufferToParse = mFullBuffers.front();
+            assert(mBuffers[numBufferToParse].size() > 0);
+            mFullBuffers.pop();
+            BOOST_LOG_SEV(gLogger, bltrivial::trace) << "The buffer #" << numBufferToParse << " is removed from the queue of full buffers."
+                                                     << FUNCTION_FILE_LINE;
         }
 
         ParsingResults results;
