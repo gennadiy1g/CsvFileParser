@@ -213,6 +213,8 @@ void CsvFileParser::parser()
             }
         }
 
+        unsigned int numBufferToParse;
+
         {
             BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Lock" << FUNCTION_FILE_LINE;
             std::unique_lock lock(mMutexFullBuffers);
@@ -232,20 +234,16 @@ void CsvFileParser::parser()
                     break;
                 }
             }
-        }
 
-        // Get the number of the next full buffer to parse.
-        unsigned int numBufferToParse;
-        {
-            BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Lock" << FUNCTION_FILE_LINE;
-            std::unique_lock lock(mMutexFullBuffers);
-
-            assert(mFullBuffers.size() > 0);
-            numBufferToParse = mFullBuffers.front();
-            assert(mBuffers[numBufferToParse].size() > 0);
-            mFullBuffers.pop();
-            BOOST_LOG_SEV(gLogger, bltrivial::trace) << "The buffer #" << numBufferToParse << " is removed from the queue of full buffers."
-                                                     << FUNCTION_FILE_LINE;
+            // Get the number of the next full buffer to parse.
+            {
+                assert(mFullBuffers.size() > 0);
+                numBufferToParse = mFullBuffers.front();
+                assert(mBuffers[numBufferToParse].size() > 0);
+                mFullBuffers.pop();
+                BOOST_LOG_SEV(gLogger, bltrivial::trace) << "The buffer #" << numBufferToParse << " is removed from the queue of full buffers."
+                                                         << FUNCTION_FILE_LINE;
+            }
         }
 
         ParsingResults results;
