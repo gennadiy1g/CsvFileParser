@@ -145,7 +145,10 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t quote, wchar_t es
                 assert(mEmptyBuffers.size() > 0);
             }
             numBufferToFill = mEmptyBuffers.front();
-            assert(mBuffers.at(numBufferToFill).size() == 0);
+            // assert(mBuffers.at(numBufferToFill).size() == 0);
+            if (mBuffers.at(numBufferToFill).size() != 0) {
+                BOOST_LOG_SEV(gLogger, bltrivial::error) << "Buffer " << numBufferToFill << " is not empty!" << FUNCTION_FILE_LINE << std::flush;
+            }
             mEmptyBuffers.pop();
             BOOST_LOG_SEV(gLogger, bltrivial::trace) << "The buffer #" << numBufferToFill << " is removed from the queue of empty buffers."
                                                      << FUNCTION_FILE_LINE;
@@ -212,7 +215,10 @@ void CsvFileParser::parser()
             if (mFullBuffers.size() > 0) {
                 // Get the number of the next full buffer to parse.
                 numBufferToParse = mFullBuffers.front();
-                assert(mBuffers.at(numBufferToParse).size() > 0);
+                // assert(mBuffers.at(numBufferToParse).size() > 0);
+                if (mBuffers.at(numBufferToParse).size() == 0) {
+                    BOOST_LOG_SEV(gLogger, bltrivial::error) << "Buffer " << numBufferToParse << " is empty!" << FUNCTION_FILE_LINE << std::flush;
+                }
                 mFullBuffers.pop();
                 BOOST_LOG_SEV(gLogger, bltrivial::trace) << "The buffer #" << numBufferToParse << " is removed from the queue of full buffers."
                                                          << FUNCTION_FILE_LINE;
@@ -238,7 +244,10 @@ void CsvFileParser::parser()
         {
             BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Lock" << FUNCTION_FILE_LINE;
             std::unique_lock lock(mMutexEmptyBuffers);
-            assert(mBuffers.at(numBufferToParse).size() == 0);
+            // assert(mBuffers.at(numBufferToParse).size() == 0);
+            if (mBuffers.at(numBufferToParse).size() != 0) {
+                BOOST_LOG_SEV(gLogger, bltrivial::error) << "Buffer " << numBufferToParse << " is not empty!" << FUNCTION_FILE_LINE << std::flush;
+            }
             mEmptyBuffers.push(numBufferToParse);
             BOOST_LOG_SEV(gLogger, bltrivial::trace) << "The buffer #" << numBufferToParse << " is added into the queue of empty buffers."
                                                      << FUNCTION_FILE_LINE;
@@ -252,7 +261,10 @@ void CsvFileParser::parseBuffer(unsigned int numBufferToParse, ParsingResults& r
 {
     auto& gLogger = GlobalLogger::get();
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "->" << FUNCTION_FILE_LINE;
-    assert(mBuffers.at(numBufferToParse).size() > 0);
+    // assert(mBuffers.at(numBufferToParse).size() > 0);
+    if (mBuffers.at(numBufferToParse).size() == 0) {
+        BOOST_LOG_SEV(gLogger, bltrivial::error) << "Buffer " << numBufferToParse << " is empty!" << FUNCTION_FILE_LINE << std::flush;
+    }
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Starting to parse the buffer #" << numBufferToParse << "." << FUNCTION_FILE_LINE;
     std::this_thread::sleep_for(std::chrono::milliseconds(10));
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "The buffer #" << numBufferToParse << " is parsed." << FUNCTION_FILE_LINE;
