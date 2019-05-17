@@ -73,7 +73,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t quote, wchar_t es
 
     mBuffers.resize(numThreads);
 
-    BOOST_LOG_SEV(gLogger, bltrivial::debug) << mInputFile.native();
+    BOOST_LOG_SEV(gLogger, bltrivial::debug) << mInputFile.native() << FUNCTION_FILE_LINE;
     bfs::wifstream inputFile(mInputFile);
     if (inputFile.fail()) {
         BOOST_LOG_SEV(gLogger, bltrivial::error) << "Throwing exception @" << FUNCTION_FILE_LINE << std::flush;
@@ -96,9 +96,11 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t quote, wchar_t es
 
     auto addToFullBuffers = [this, &numBufferToFill, &gLogger]() {
         {
+            BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Lock" << FUNCTION_FILE_LINE;
             std::unique_lock lock(mMutexFullBuffers);
             mFullBuffers.push(numBufferToFill);
-            BOOST_LOG_SEV(gLogger, bltrivial::trace) << "The buffer #" << numBufferToFill << " is added into the queue of full buffers.";
+            BOOST_LOG_SEV(gLogger, bltrivial::trace) << "The buffer #" << numBufferToFill << " is added into the queue of full buffers."
+                                                     << FUNCTION_FILE_LINE;
         }
         mConditionVarFullBuffers.notify_one();
     };
@@ -118,7 +120,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t quote, wchar_t es
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Starting the reader loop." << FUNCTION_FILE_LINE << std::flush;
     while (std::getline(inputFile, line)) {
         ++numInputFileLines;
-        BOOST_LOG_SEV(gLogger, bltrivial::trace) << numInputFileLines << ' ' << line;
+        BOOST_LOG_SEV(gLogger, bltrivial::trace) << numInputFileLines << ' ' << line << FUNCTION_FILE_LINE;
 
         if (numInputFileLines == 1) {
             parseColumnNames(line, separator, quote, escape);
@@ -132,6 +134,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t quote, wchar_t es
             addToFullBuffers();
 
             // Get the number of the next empty buffer to fill.
+            BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Lock" << FUNCTION_FILE_LINE;
             std::unique_lock lock(mMutexEmptyBuffers);
             if (mEmptyBuffers.size() == 0) {
                 BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Starting to wait for an empty buffer." << FUNCTION_FILE_LINE;
@@ -142,7 +145,8 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t quote, wchar_t es
             numBufferToFill = mEmptyBuffers.front();
             assert(mBuffers[numBufferToFill].size() == 0);
             mEmptyBuffers.pop();
-            BOOST_LOG_SEV(gLogger, bltrivial::trace) << "The buffer #" << numBufferToFill << " is removed from the queue of empty buffers.";
+            BOOST_LOG_SEV(gLogger, bltrivial::trace) << "The buffer #" << numBufferToFill << " is removed from the queue of empty buffers."
+                                                     << FUNCTION_FILE_LINE;
         }
     }
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Finished the reader loop." << FUNCTION_FILE_LINE << std::flush;
@@ -156,6 +160,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t quote, wchar_t es
 
         // Even if the shared variable is atomic, it must be modified under the mutex in order to correctly publish
         // the modification to the waiting thread (https://en.cppreference.com/w/cpp/thread/condition_variable).
+        BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Lock" << FUNCTION_FILE_LINE;
         std::unique_lock lock(mMutexFullBuffers);
         mCharSetConversionError = true;
     } else {
@@ -163,13 +168,14 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t quote, wchar_t es
             // The last buffer is partially filled, add it into the queue of full buffers.
             addToFullBuffers();
         }
-        BOOST_LOG_SEV(gLogger, bltrivial::trace) << "It has been the last buffer.";
+        BOOST_LOG_SEV(gLogger, bltrivial::trace) << "It has been the last buffer." << FUNCTION_FILE_LINE;
     }
 
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "The reader loop is done, notifying all parser threads." << FUNCTION_FILE_LINE << std::flush;
     {
         // Even if the shared variable is atomic, it must be modified under the mutex in order to correctly publish
         // the modification to the waiting thread (https://en.cppreference.com/w/cpp/thread/condition_variable).
+        BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Lock" << FUNCTION_FILE_LINE;
         std::unique_lock lock(mMutexFullBuffers);
         mReaderLoopIsDone = true;
     }
@@ -183,7 +189,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t quote, wchar_t es
         BOOST_LOG_SEV(gLogger, bltrivial::error) << "Throwing exception @" << FUNCTION_FILE_LINE << std::flush;
         throw std::runtime_error(message.str());
     } else {
-        BOOST_LOG_SEV(gLogger, bltrivial::debug) << "All " << numInputFileLines << " lines processed.";
+        BOOST_LOG_SEV(gLogger, bltrivial::debug) << "All " << numInputFileLines << " lines processed." << FUNCTION_FILE_LINE;
         BOOST_LOG_SEV(gLogger, bltrivial::trace) << "<-" << FUNCTION_FILE_LINE << std::flush;
         return std::move(mResults);
     }
@@ -191,21 +197,24 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t quote, wchar_t es
 
 void CsvFileParser::parser()
 {
+    auto& gLogger = GlobalLogger::get();
+
     auto exitParserLoop = [this] { return (mReaderLoopIsDone && (mFullBuffers.size() == 0)) || mCharSetConversionError; };
 
     // Parser loop
-    auto& gLogger = GlobalLogger::get();
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Starting the parser loop." << FUNCTION_FILE_LINE << std::flush;
     while (true) {
         {
+            BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Lock" << FUNCTION_FILE_LINE;
             std::shared_lock lock(mMutexFullBuffers);
             if (exitParserLoop()) {
-                BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Exiting the parser loop.";
+                BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Exiting the parser loop." << FUNCTION_FILE_LINE;
                 break;
             }
         }
 
         {
+            BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Lock" << FUNCTION_FILE_LINE;
             std::unique_lock lock(mMutexFullBuffers);
             if (!mReaderLoopIsDone) {
                 BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Starting to wait for a full buffer." << FUNCTION_FILE_LINE;
@@ -214,11 +223,12 @@ void CsvFileParser::parser()
                     if ((mFullBuffers.size() > 0) || exitParserLoop()) {
                         break;
                     }
+                    BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Spurios wake up" << FUNCTION_FILE_LINE;
                 }
-                BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Finished waiting for a full buffer.";
+                BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Finished waiting for a full buffer." << FUNCTION_FILE_LINE;
 
                 if (exitParserLoop()) {
-                    BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Exiting the parser loop.";
+                    BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Exiting the parser loop." << FUNCTION_FILE_LINE;
                     break;
                 }
             }
@@ -227,22 +237,26 @@ void CsvFileParser::parser()
         // Get the number of the next full buffer to parse.
         unsigned int numBufferToParse;
         {
+            BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Lock" << FUNCTION_FILE_LINE;
             std::unique_lock lock(mMutexFullBuffers);
 
             assert(mFullBuffers.size() > 0);
             numBufferToParse = mFullBuffers.front();
             assert(mBuffers[numBufferToParse].size() > 0);
             mFullBuffers.pop();
-            BOOST_LOG_SEV(gLogger, bltrivial::trace) << "The buffer #" << numBufferToParse << " is removed from the queue of full buffers.";
+            BOOST_LOG_SEV(gLogger, bltrivial::trace) << "The buffer #" << numBufferToParse << " is removed from the queue of full buffers."
+                                                     << FUNCTION_FILE_LINE;
         }
 
         ParsingResults results;
         {
+            BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Lock" << FUNCTION_FILE_LINE;
             std::shared_lock lock(mMutexResults);
             results = mResults;
         }
         parseBuffer(numBufferToParse, results);
         {
+            BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Lock" << FUNCTION_FILE_LINE;
             std::unique_lock lock(mMutexResults);
             mResults.update(results);
         }
@@ -250,10 +264,12 @@ void CsvFileParser::parser()
         mBuffers[numBufferToParse].clear();
 
         {
+            BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Lock" << FUNCTION_FILE_LINE;
             std::lock_guard lock(mMutexEmptyBuffers);
             assert(mBuffers[numBufferToParse].size() == 0);
             mEmptyBuffers.push(numBufferToParse);
-            BOOST_LOG_SEV(gLogger, bltrivial::trace) << "The buffer #" << numBufferToParse << " is added into the queue of empty buffers.";
+            BOOST_LOG_SEV(gLogger, bltrivial::trace) << "The buffer #" << numBufferToParse << " is added into the queue of empty buffers."
+                                                     << FUNCTION_FILE_LINE;
         }
         mConditionVarEmptyBuffers.notify_one();
     }
@@ -265,16 +281,16 @@ void CsvFileParser::parseBuffer(unsigned int numBufferToParse, ParsingResults& r
     auto& gLogger = GlobalLogger::get();
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "->" << FUNCTION_FILE_LINE;
     assert(mBuffers[numBufferToParse].size() > 0);
-    BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Starting to parse the buffer #" << numBufferToParse << ".";
+    BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Starting to parse the buffer #" << numBufferToParse << "." << FUNCTION_FILE_LINE;
     std::this_thread::sleep_for(std::chrono::milliseconds(10));
-    BOOST_LOG_SEV(gLogger, bltrivial::trace) << "The buffer #" << numBufferToParse << " is parsed.";
+    BOOST_LOG_SEV(gLogger, bltrivial::trace) << "The buffer #" << numBufferToParse << " is parsed." << FUNCTION_FILE_LINE;
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "<-" << FUNCTION_FILE_LINE;
 }
 
 void CsvFileParser::parseColumnNames(std::wstring_view line, wchar_t separator, wchar_t quote, wchar_t escape)
 {
     auto& gLogger = GlobalLogger::get();
-    BOOST_LOG_SEV(gLogger, bltrivial::trace) << line << FUNCTION_FILE_LINE << std::flush;
+    BOOST_LOG_SEV(gLogger, bltrivial::trace) << "->" << FUNCTION_FILE_LINE << std::flush;
     CsvSeparator sep(escape, separator, quote);
     CsvTokenizer tok(line, sep);
     for (auto beg = tok.begin(); beg != tok.end(); ++beg) {
@@ -283,4 +299,5 @@ void CsvFileParser::parseColumnNames(std::wstring_view line, wchar_t separator, 
         boost::trim(name);
         mResults.addColumn(name);
     }
+    BOOST_LOG_SEV(gLogger, bltrivial::trace) << "<-" << FUNCTION_FILE_LINE << std::flush;
 }
