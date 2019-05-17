@@ -96,7 +96,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t quote, wchar_t es
                                                  << FUNCTION_FILE_LINE;
     }
 
-    auto addToFullBuffers = [this, &numBufferToFill, &gLogger]() {
+    auto addToFullBuffers = [this, &gLogger](unsigned int numBufferToFill) {
         {
             BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Lock" << FUNCTION_FILE_LINE;
             std::unique_lock lock(mMutexFullBuffers);
@@ -133,7 +133,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t quote, wchar_t es
 
         if (mBuffers.at(numBufferToFill).size() == kMaxBufferLines) {
             // The buffer is full, add it into the queue of full buffers.
-            addToFullBuffers();
+            addToFullBuffers(numBufferToFill);
 
             // Get the number of the next empty buffer to fill.
             BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Lock" << FUNCTION_FILE_LINE;
@@ -164,7 +164,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t quote, wchar_t es
     } else {
         if (mBuffers.at(numBufferToFill).size() > 0) {
             // The last buffer is partially filled, add it into the queue of full buffers.
-            addToFullBuffers();
+            addToFullBuffers(numBufferToFill);
         }
         BOOST_LOG_SEV(gLogger, bltrivial::trace) << "It has been the last buffer." << FUNCTION_FILE_LINE;
     }
