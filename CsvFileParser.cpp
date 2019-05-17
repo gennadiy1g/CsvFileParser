@@ -92,6 +92,8 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t quote, wchar_t es
     unsigned int numBufferToFill{ 0 }; // The buffer #0 is going to be filled first.
     for (unsigned int i = 1; i < numThreads; ++i) { // Do not add the buffer #0 into the queue of empty buffers.
         mEmptyBuffers.push(i);
+        BOOST_LOG_SEV(gLogger, bltrivial::trace) << "The buffer #" << i << " is added into the queue of empty buffers."
+                                                 << FUNCTION_FILE_LINE;
     }
 
     auto addToFullBuffers = [this, &numBufferToFill, &gLogger]() {
