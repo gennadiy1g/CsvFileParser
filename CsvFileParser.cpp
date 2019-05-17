@@ -233,6 +233,7 @@ void CsvFileParser::parser()
         }
 
         mBuffers.at(numBufferToParse).clear();
+        BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Cleared the buffer #" << numBufferToParse << FUNCTION_FILE_LINE;
 
         {
             BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Lock" << FUNCTION_FILE_LINE;
