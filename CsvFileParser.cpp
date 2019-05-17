@@ -234,7 +234,7 @@ void CsvFileParser::parser()
 
         {
             BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Lock" << FUNCTION_FILE_LINE;
-            std::lock_guard lock(mMutexEmptyBuffers);
+            std::unique_lock lock(mMutexEmptyBuffers);
             assert(mBuffers[numBufferToParse].size() == 0);
             mEmptyBuffers.push(numBufferToParse);
             BOOST_LOG_SEV(gLogger, bltrivial::trace) << "The buffer #" << numBufferToParse << " is added into the queue of empty buffers."
