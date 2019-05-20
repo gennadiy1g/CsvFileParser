@@ -34,9 +34,7 @@ struct GlobalFixture {
         BOOST_LOG_SEV(gLogger, bltrivial::info) << std::thread::hardware_concurrency() << " concurrent threads are supported.";
     }
 
-    void teardown()
-    {
-    }
+    void teardown() {}
 };
 
 BOOST_TEST_GLOBAL_FIXTURE(GlobalFixture);
