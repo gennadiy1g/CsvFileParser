@@ -1,3 +1,5 @@
+// for /l %i in (1,1,100) do echo %i & time /t & CsvFileParser.exe
+
 #define BOOST_TEST_MODULE Test Module CsvFileParser
 #include <boost/test/unit_test.hpp>
 
