@@ -80,16 +80,16 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t quote, wchar_t es
         throw std::runtime_error("Unable to open file \""s + blocale::conv::utf_to_utf<char>(mInputFile.native()) + "\" for reading!"s);
     }
     std::wstring line;
-    std::size_t numInputFileLines{ 0 }; // Counter of lines in the file.
+    std::size_t numInputFileLines { 0 }; // Counter of lines in the file.
 
     // Maximum number of lines in one buffer.
 #ifdef NDEBUG
-    const std::size_t kMaxBufferLines{ 1000 };
+    const std::size_t kMaxBufferLines { 1000 };
 #else
-    const std::size_t kMaxBufferLines{ 10 };
+    const std::size_t kMaxBufferLines { 10 };
 #endif
 
-    unsigned int numBufferToFill{ 0 }; // The buffer #0 is going to be filled first.
+    unsigned int numBufferToFill { 0 }; // The buffer #0 is going to be filled first.
     for (unsigned int i = 1; i < numThreads; ++i) { // Do not add the buffer #0 into the queue of empty buffers.
         mEmptyBuffers.push(i);
         BOOST_LOG_SEV(gLogger, bltrivial::trace) << "The buffer #" << i << " is added into the queue of empty buffers."
@@ -116,7 +116,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t quote, wchar_t es
 
     // Launch parser threads
     std::vector<std::thread> threads(numThreads);
-    std::generate(threads.begin(), threads.end(), [this] { return std::thread{ &CsvFileParser::parser, this }; });
+    std::generate(threads.begin(), threads.end(), [this] { return std::thread { &CsvFileParser::parser, this }; });
 
     // Reader loop
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Starting the reader loop." << FUNCTION_FILE_LINE << std::flush;
