@@ -56,17 +56,17 @@ public:
 
 protected:
     std::wstring mName;
-    bool mIsFloat{ true };
-    bool mIsDecimal{ true };
-    bool mIsInt{ true };
-    bool mIsBool{ true };
-    bool mIsDate{ true };
-    bool mIsTime{ true };
-    bool mIsTimeStamp{ true };
-    bool mIsNull{ false };
+    bool mIsFloat { true };
+    bool mIsDecimal { true };
+    bool mIsInt { true };
+    bool mIsBool { true };
+    bool mIsDate { true };
+    bool mIsTime { true };
+    bool mIsTimeStamp { true };
+    bool mIsNull { false };
     std::optional<unsigned short> mPrec;
     std::optional<unsigned short> mScale;
-    unsigned short mLength{ 0 };
+    unsigned short mLength { 0 };
     std::optional<long long> mMinVal;
     std::optional<long long> mMaxVal;
 };
