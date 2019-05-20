@@ -124,7 +124,7 @@ private:
     std::condition_variable mConditionVarEmptyBuffers;
 
     std::queue<unsigned int> mFullBuffers;
-    std::shared_mutex mMutexFullBuffers;
+    std::mutex mMutexFullBuffers;
     std::condition_variable_any mConditionVarFullBuffers;
 
     ParsingResults mResults;

@@ -2,6 +2,7 @@
 #include "log.h"
 #include <boost/algorithm/string.hpp>
 #include <cassert>
+#include <optional>
 #include <sstream>
 #include <thread>
 
@@ -70,7 +71,6 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t quote, wchar_t es
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "->" << FUNCTION_FILE_LINE;
 
     auto numThreads = numThreadsOpt > 0 ? numThreadsOpt : std::thread::hardware_concurrency();
-
     mBuffers.resize(numThreads);
 
     BOOST_LOG_SEV(gLogger, bltrivial::debug) << mInputFile.native() << FUNCTION_FILE_LINE;
@@ -147,7 +147,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t quote, wchar_t es
             numBufferToFill = mEmptyBuffers.front();
             // assert(mBuffers.at(numBufferToFill).size() == 0);
             if (mBuffers.at(numBufferToFill).size() != 0) {
-                BOOST_LOG_SEV(gLogger, bltrivial::error) << "Buffer " << numBufferToFill << " is not empty!" << FUNCTION_FILE_LINE << std::flush;
+                BOOST_LOG_SEV(gLogger, bltrivial::error) << "The buffer #" << numBufferToFill << " is not empty!" << FUNCTION_FILE_LINE << std::flush;
             }
             mEmptyBuffers.pop();
             BOOST_LOG_SEV(gLogger, bltrivial::trace) << "The buffer #" << numBufferToFill << " is removed from the queue of empty buffers."
@@ -197,7 +197,10 @@ void CsvFileParser::parser()
     // Parser loop
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Starting the parser loop." << FUNCTION_FILE_LINE << std::flush;
     while (true) {
-        unsigned int numBufferToParse;
+        // Part 1. Try to get the number of a full buffer.
+
+        std::optional<unsigned int> numBufferToParse;
+        numBufferToParse.reset();
         {
             BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Lock" << FUNCTION_FILE_LINE;
             std::unique_lock lock(mMutexFullBuffers);
@@ -216,43 +219,49 @@ void CsvFileParser::parser()
                 // Get the number of the next full buffer to parse.
                 numBufferToParse = mFullBuffers.front();
                 // assert(mBuffers.at(numBufferToParse).size() > 0);
-                if (mBuffers.at(numBufferToParse).size() == 0) {
-                    BOOST_LOG_SEV(gLogger, bltrivial::error) << "Buffer " << numBufferToParse << " is empty!" << FUNCTION_FILE_LINE << std::flush;
+                if (mBuffers.at(numBufferToParse.value()).size() == 0) {
+                    BOOST_LOG_SEV(gLogger, bltrivial::error) << "The buffer #" << numBufferToParse.value() << " is empty!" << FUNCTION_FILE_LINE << std::flush;
                 }
                 mFullBuffers.pop();
-                BOOST_LOG_SEV(gLogger, bltrivial::trace) << "The buffer #" << numBufferToParse << " is removed from the queue of full buffers."
+                BOOST_LOG_SEV(gLogger, bltrivial::trace) << "The buffer #" << numBufferToParse.value() << " is removed from the queue of full buffers."
                                                          << FUNCTION_FILE_LINE;
             }
         }
 
-        ParsingResults results;
-        {
-            BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Lock" << FUNCTION_FILE_LINE;
-            std::shared_lock lock(mMutexResults);
-            results = mResults;
-        }
-        parseBuffer(numBufferToParse, results);
-        {
-            BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Lock" << FUNCTION_FILE_LINE;
-            std::unique_lock lock(mMutexResults);
-            mResults.update(results);
-        }
+        if (numBufferToParse.has_value()) {
+            // Part 2. Parse the full buffer given its number.
 
-        mBuffers.at(numBufferToParse).clear();
-        BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Cleared the buffer #" << numBufferToParse << FUNCTION_FILE_LINE;
-
-        {
-            BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Lock" << FUNCTION_FILE_LINE;
-            std::unique_lock lock(mMutexEmptyBuffers);
-            // assert(mBuffers.at(numBufferToParse).size() == 0);
-            if (mBuffers.at(numBufferToParse).size() != 0) {
-                BOOST_LOG_SEV(gLogger, bltrivial::error) << "Buffer " << numBufferToParse << " is not empty!" << FUNCTION_FILE_LINE << std::flush;
+            ParsingResults results;
+            {
+                BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Lock" << FUNCTION_FILE_LINE;
+                std::shared_lock lock(mMutexResults);
+                results = mResults;
             }
-            mEmptyBuffers.push(numBufferToParse);
-            BOOST_LOG_SEV(gLogger, bltrivial::trace) << "The buffer #" << numBufferToParse << " is added into the queue of empty buffers."
-                                                     << FUNCTION_FILE_LINE;
+            parseBuffer(numBufferToParse.value(), results);
+            {
+                BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Lock" << FUNCTION_FILE_LINE;
+                std::unique_lock lock(mMutexResults);
+                mResults.update(results);
+            }
+
+            // Part 3. Clear the parsed buffer and return it into the queue of empty buffers.
+
+            mBuffers.at(numBufferToParse.value()).clear();
+            BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Cleared the buffer #" << numBufferToParse.value() << FUNCTION_FILE_LINE;
+
+            {
+                BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Lock" << FUNCTION_FILE_LINE;
+                std::unique_lock lock(mMutexEmptyBuffers);
+                // assert(mBuffers.at(numBufferToParse).size() == 0);
+                if (mBuffers.at(numBufferToParse.value()).size() != 0) {
+                    BOOST_LOG_SEV(gLogger, bltrivial::error) << "The buffer #" << numBufferToParse.value() << " is not empty!" << FUNCTION_FILE_LINE << std::flush;
+                }
+                mEmptyBuffers.push(numBufferToParse.value());
+                BOOST_LOG_SEV(gLogger, bltrivial::trace) << "The buffer #" << numBufferToParse.value() << " is added into the queue of empty buffers."
+                                                         << FUNCTION_FILE_LINE;
+            }
+            mConditionVarEmptyBuffers.notify_one();
         }
-        mConditionVarEmptyBuffers.notify_one();
     }
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Finished the parser loop." << FUNCTION_FILE_LINE << std::flush;
 }
