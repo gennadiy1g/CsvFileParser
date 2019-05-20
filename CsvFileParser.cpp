@@ -162,8 +162,11 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t quote, wchar_t es
                 << "\", line: " << numInputFileLines + 1 << ", column: " << line.length() + 1 << '.';
         BOOST_LOG_SEV(gLogger, bltrivial::debug) << line;
         BOOST_LOG_SEV(gLogger, bltrivial::error) << message.str() << FUNCTION_FILE_LINE << std::flush;
-
-        mCharSetConversionError = true;
+        {
+            std::unique_lock lock(mMutexFullBuffers);
+            mCharSetConversionError = true;
+            mReaderLoopIsDone = true;
+        }
     } else {
         if (mBuffers.at(numBufferToFill).size() > 0) {
             // The last buffer is partially filled, add it into the queue of full buffers.
@@ -172,8 +175,11 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t quote, wchar_t es
         BOOST_LOG_SEV(gLogger, bltrivial::trace) << "It has been the last buffer." << FUNCTION_FILE_LINE;
     }
 
+    {
+        std::unique_lock lock(mMutexFullBuffers);
+        mReaderLoopIsDone = true;
+    }
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "The reader loop is done, notifying all parser threads." << FUNCTION_FILE_LINE << std::flush;
-    mReaderLoopIsDone = true;
     mConditionVarFullBuffers.notify_all();
 
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Starting to wait for all parser threads to finish." << FUNCTION_FILE_LINE << std::flush;
@@ -193,16 +199,15 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t quote, wchar_t es
 void CsvFileParser::parser()
 {
     auto& gLogger = GlobalLogger::get();
-
     auto exitParserLoop = [this] { return (mReaderLoopIsDone && (mFullBuffers.size() == 0)) || mCharSetConversionError; };
 
     // Parser loop
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Starting the parser loop." << FUNCTION_FILE_LINE << std::flush;
     while (true) {
-        // Part 1. Try to get the number of the next full buffer to parse.
-
         std::optional<unsigned int> numBufferToParse;
         numBufferToParse.reset();
+
+        // Part 1. Try to get the number of the next full buffer to parse.
         {
             BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Lock" << FUNCTION_FILE_LINE;
             std::unique_lock lock(mMutexFullBuffers);
