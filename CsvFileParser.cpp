@@ -122,7 +122,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t quote, wchar_t es
         BOOST_LOG_SEV(gLogger, bltrivial::trace) << numInputFileLines << ' ' << line << FUNCTION_FILE_LINE;
 
         if (numInputFileLines == 1) {
-            parseColumnNames(line, separator, quote, escape);
+            parseColumnNames(line);
             continue;
         }
 
@@ -280,12 +280,11 @@ void CsvFileParser::parseBuffer(unsigned int numBufferToParse, ParsingResults& r
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "<-" << FUNCTION_FILE_LINE;
 }
 
-void CsvFileParser::parseColumnNames(std::wstring_view line, wchar_t separator, wchar_t quote, wchar_t escape)
+void CsvFileParser::parseColumnNames(std::wstring_view line)
 {
     auto& gLogger = GlobalLogger::get();
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "->" << FUNCTION_FILE_LINE << std::flush;
-    CsvSeparator sep(escape, separator, quote);
-    CsvTokenizer tok(line, sep);
+    CsvTokenizer tok(line, mSep);
     for (auto beg = tok.begin(); beg != tok.end(); ++beg) {
         BOOST_LOG_SEV(gLogger, bltrivial::trace) << *beg;
         auto name = *beg;
