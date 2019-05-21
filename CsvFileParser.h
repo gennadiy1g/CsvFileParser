@@ -68,7 +68,7 @@ protected:
     bool mIsNull { false };
     std::optional<unsigned short> mPrec;
     std::optional<unsigned short> mScale;
-    unsigned short mLength { 0 };
+    std::size_t mLength { 0 };
     std::optional<long long> mMinVal;
     std::optional<long long> mMaxVal;
 };
@@ -93,7 +93,7 @@ public:
 
 private:
     std::vector<ColumnInfo> mColumns;
-    unsigned long long mNumMalformedLines { 0 };
+    std::size_t mNumMalformedLines { 0 };
 };
 
 class CsvFileParser {
