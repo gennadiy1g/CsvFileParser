@@ -21,6 +21,7 @@ typedef boost::escaped_list_separator<wchar_t, std::char_traits<wchar_t>> CsvSep
 typedef boost::tokenizer<CsvSeparator, std::wstring::const_iterator, std::wstring> CsvTokenizer;
 
 class ParserBuffer {
+    friend class CsvFileParser;
 public:
     ParserBuffer() = default; // Constructor
     virtual ~ParserBuffer() = default; // Defaulted virtual destructor
@@ -36,7 +37,6 @@ public:
     void addLine(std::wstring&& line);
     std::size_t size();
     void clear();
-    const std::vector<std::wstring>& lines();
 
 private:
     std::vector<std::wstring> mLines;
@@ -73,6 +73,7 @@ protected:
 };
 
 class ParsingResults {
+    friend class CsvFileParser;
 public:
     ParsingResults() = default; // Constructor
     virtual ~ParsingResults() = default; // Defaulted virtual destructor
@@ -87,7 +88,6 @@ public:
 
     void update(const ParsingResults& results);
     void addColumn(std::wstring_view name);
-    const std::vector<ColumnInfo>& columns();
 
 private:
     std::vector<ColumnInfo> mColumns;

@@ -22,11 +22,6 @@ void ParsingResults::addColumn(std::wstring_view name)
     mColumns.emplace_back(name);
 }
 
-const std::vector<ColumnInfo>& ParsingResults::columns()
-{
-    return mColumns;
-};
-
 void ParserBuffer::addLine(std::wstring&& line)
 {
     mLines.push_back(std::move(line));
@@ -41,11 +36,6 @@ void ParserBuffer::clear()
 {
     mLines.clear();
 }
-
-const std::vector<std::wstring>& ParserBuffer::lines()
-{
-    return mLines;
-};
 
 CsvFileParser::CsvFileParser(bfs::path inputFile)
     : mInputFile(inputFile)
@@ -281,7 +271,7 @@ void CsvFileParser::parseBuffer(unsigned int numBufferToParse, ParsingResults& r
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Starting to parse the buffer #" << numBufferToParse << "." << FUNCTION_FILE_LINE;
 
     CsvTokenizer tok(L""s, mSep);
-    for (auto& line : mBuffers.at(numBufferToParse).lines()) {
+    for (auto& line : mBuffers.at(numBufferToParse).mLines) {
         unsigned int i { 0 };
 
         tok.assign(line);
