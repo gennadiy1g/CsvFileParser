@@ -74,6 +74,7 @@ protected:
 
 class ParsingResults {
     friend class CsvFileParser;
+
 public:
     ParsingResults() = default; // Constructor
     virtual ~ParsingResults() = default; // Defaulted virtual destructor
@@ -91,6 +92,7 @@ public:
 
 private:
     std::vector<ColumnInfo> mColumns;
+    unsigned long long mNumMalformedLines { 0 };
 };
 
 class CsvFileParser {
