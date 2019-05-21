@@ -109,10 +109,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t quote, wchar_t es
 
     mReaderLoopIsDone = false;
     mCharSetConversionError = false;
-
-    mSeparator = separator;
-    mQuote = quote;
-    mEscape = escape;
+    mSep = CsvSeparator(escape, separator, quote);
 
     // Launch parser threads
     std::vector<std::thread> threads(numThreads);
@@ -276,7 +273,9 @@ void CsvFileParser::parseBuffer(unsigned int numBufferToParse, ParsingResults& r
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "->" << FUNCTION_FILE_LINE;
     assert(mBuffers.at(numBufferToParse).size() > 0);
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Starting to parse the buffer #" << numBufferToParse << "." << FUNCTION_FILE_LINE;
+
     std::this_thread::sleep_for(std::chrono::milliseconds(10));
+
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "The buffer #" << numBufferToParse << " is parsed." << FUNCTION_FILE_LINE;
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "<-" << FUNCTION_FILE_LINE;
 }
