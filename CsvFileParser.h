@@ -22,7 +22,7 @@ typedef boost::tokenizer<CsvSeparator, std::wstring::const_iterator, std::wstrin
 
 class ParserBuffer {
 public:
-    ParserBuffer(); // Constructor
+    ParserBuffer() = default; // Constructor
     virtual ~ParserBuffer() = default; // Defaulted virtual destructor
 
     // Disallow assignment and pass-by-value.

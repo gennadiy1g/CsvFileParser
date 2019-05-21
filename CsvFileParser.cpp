@@ -22,10 +22,6 @@ void ParsingResults::addColumn(std::wstring_view name)
     mColumns.emplace_back(name);
 }
 
-ParserBuffer::ParserBuffer()
-{
-}
-
 void ParserBuffer::addLine(std::wstring&& line)
 {
     mLines.push_back(std::move(line));
