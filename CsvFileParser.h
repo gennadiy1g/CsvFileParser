@@ -87,6 +87,7 @@ public:
 
     void update(const ParsingResults& results);
     void addColumn(std::wstring_view name);
+    const std::vector<ColumnInfo>& columns();
 
 private:
     std::vector<ColumnInfo> mColumns;
