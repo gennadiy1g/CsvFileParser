@@ -41,6 +41,11 @@ void ParserBuffer::clear()
     mLines.clear();
 }
 
+const std::vector<std::wstring>& ParserBuffer::Lines()
+{
+    return mLines;
+};
+
 CsvFileParser::CsvFileParser(bfs::path inputFile)
     : mInputFile(inputFile)
 {
@@ -274,7 +279,14 @@ void CsvFileParser::parseBuffer(unsigned int numBufferToParse, ParsingResults& r
     assert(mBuffers.at(numBufferToParse).size() > 0);
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Starting to parse the buffer #" << numBufferToParse << "." << FUNCTION_FILE_LINE;
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    for (auto& line : mBuffers.at(numBufferToParse).Lines()) {
+        CsvTokenizer tok(line, mSep);
+        for (auto beg = tok.begin(); beg != tok.end(); ++beg) {
+            // BOOST_LOG_SEV(gLogger, bltrivial::trace) << *beg;
+            auto value = *beg;
+            boost::trim(value);
+        }
+    }
 
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "The buffer #" << numBufferToParse << " is parsed." << FUNCTION_FILE_LINE;
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "<-" << FUNCTION_FILE_LINE;

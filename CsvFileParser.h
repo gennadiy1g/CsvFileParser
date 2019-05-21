@@ -36,6 +36,7 @@ public:
     void addLine(std::wstring&& line);
     std::size_t size();
     void clear();
+    const std::vector<std::wstring>& Lines();
 
 private:
     std::vector<std::wstring> mLines;
