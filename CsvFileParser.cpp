@@ -279,10 +279,11 @@ void CsvFileParser::parseBuffer(unsigned int numBufferToParse, ParsingResults& r
     assert(mBuffers.at(numBufferToParse).size() > 0);
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Starting to parse the buffer #" << numBufferToParse << "." << FUNCTION_FILE_LINE;
 
+    CsvTokenizer tok(L""s, mSep);
     for (auto& line : mBuffers.at(numBufferToParse).Lines()) {
-        CsvTokenizer tok(line, mSep);
+        tok.assign(line);
         for (auto beg = tok.begin(); beg != tok.end(); ++beg) {
-            // BOOST_LOG_SEV(gLogger, bltrivial::trace) << *beg;
+            BOOST_LOG_SEV(gLogger, bltrivial::trace) << *beg;
             auto value = *beg;
             boost::trim(value);
         }
