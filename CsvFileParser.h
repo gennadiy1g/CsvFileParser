@@ -43,6 +43,7 @@ private:
 };
 
 class ColumnInfo {
+    friend class CsvFileParser;
 public:
     explicit ColumnInfo(std::wstring_view name); // Constructor
     virtual ~ColumnInfo() = default; // Defaulted virtual destructor
@@ -115,6 +116,7 @@ private:
     void parseBuffer(unsigned int numBufferToParse, ParsingResults& results);
     void checkInputFile();
     void parseColumnNames(std::wstring_view line);
+    void analyzeToken(std::wstring_view token, ColumnInfo& columnInfo);
 
     bfs::path mInputFile;
 

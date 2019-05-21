@@ -276,7 +276,10 @@ void CsvFileParser::parseBuffer(unsigned int numBufferToParse, ParsingResults& r
         tok.assign(line);
         for (auto beg = tok.begin(); beg != tok.end(); ++beg) {
             // BOOST_LOG_SEV(gLogger, bltrivial::trace) << *beg;
-            auto value = *beg;
+            auto token = *beg;
+            if (i < results.mColumns.size()) {
+                analyzeToken(token, results.mColumns[i]);
+            }
             ++i;
         }
         if (i != results.mColumns.size()) {
@@ -301,3 +304,11 @@ void CsvFileParser::parseColumnNames(std::wstring_view line)
     }
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "<-" << FUNCTION_FILE_LINE << std::flush;
 }
+
+void CsvFileParser::analyzeToken(std::wstring_view token, ColumnInfo& columnInfo)
+{
+    auto len = token.length();
+    if (len > columnInfo.mLength) {
+        columnInfo.mLength = len;
+    }
+};
