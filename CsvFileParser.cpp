@@ -340,8 +340,14 @@ void ColumnInfo::analyzeToken(std::wstring_view token)
         try {
             auto val = boost::lexical_cast<double>(tokenTrimmed);
 
+            // https://en.cppreference.com/w/cpp/language/floating_literal
             if (mIsDecimal && boost::icontains(tokenTrimmed, L"E")) {
+                // Decimal floating-point literals are fine.
                 mIsDecimal = false;
+            }
+            if (boost::icontains(tokenTrimmed, L"P")) {
+                // Hexadecimal floating-point literals are not recognized.
+                mIsDecimal = mIsFloat = false;
             }
 
             if (mMinDoubleVal.has_value() && mMaxDoubleVal.has_value()) {
