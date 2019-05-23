@@ -325,6 +325,7 @@ void ColumnInfo::analyzeToken(std::wstring_view token)
         try {
             auto val = boost::lexical_cast<long long>(tokenTrim);
 
+            // ! The same logic as below, just different names of variables.
             if (mMinLongVal.has_value() && mMaxLongVal.has_value()) {
                 if (val < mMinLongVal) {
                     mMinLongVal = val;
@@ -352,6 +353,7 @@ void ColumnInfo::analyzeToken(std::wstring_view token)
                 mIsDecimal = mIsFloat = false;
             }
 
+            // ! The same logic as above, just different names of variables.
             if (mMinDoubleVal.has_value() && mMaxDoubleVal.has_value()) {
                 if (val < mMinDoubleVal) {
                     mMinDoubleVal = val;
