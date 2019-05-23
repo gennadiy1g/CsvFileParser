@@ -10,7 +10,7 @@
 using namespace std::string_literals;
 
 ColumnInfo::ColumnInfo(std::wstring_view name)
-    : mName(name)
+    : mName(boost::trim_copy(std::wstring(name)))
 {
 }
 
