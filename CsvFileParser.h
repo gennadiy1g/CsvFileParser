@@ -69,8 +69,8 @@ protected:
     std::optional<unsigned short> mPrec;
     std::optional<unsigned short> mScale;
     std::size_t mLength { 0 };
-    std::optional<long long> mMinVal;
-    std::optional<long long> mMaxVal;
+    std::optional<long long> mMinLongVal;
+    std::optional<long long> mMaxLongVal;
 };
 
 class ParsingResults {

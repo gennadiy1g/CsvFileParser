@@ -1,6 +1,7 @@
 #include "CsvFileParser.h"
 #include "log.h"
 #include <boost/algorithm/string.hpp>
+#include <boost/lexical_cast.hpp>
 #include <cassert>
 #include <optional>
 #include <sstream>
@@ -310,5 +311,35 @@ void CsvFileParser::analyzeToken(std::wstring_view token, ColumnInfo& columnInfo
     auto len = token.length();
     if (len > columnInfo.mLength) {
         columnInfo.mLength = len;
+    }
+
+    std::wstring tokenTrimmed(boost::trim_copy(std::wstring(token)));
+
+    if (columnInfo.mIsInt) {
+        try {
+            auto val = boost::lexical_cast<long long>(tokenTrimmed);
+
+            if (columnInfo.mMinLongVal.has_value() && columnInfo.mMaxLongVal.has_value()) {
+                if (val < columnInfo.mMinLongVal) {
+                    columnInfo.mMinLongVal = val;
+                } else if (val > columnInfo.mMaxLongVal) {
+                    columnInfo.mMaxLongVal = val;
+                }
+            } else {
+                columnInfo.mMinLongVal = val;
+                columnInfo.mMaxLongVal = val;
+            }
+        } catch (const boost::bad_lexical_cast& e) {
+            columnInfo.mIsInt = false;
+        }
+    } else if (columnInfo.mIsDecimal || columnInfo.mIsFloat) {
+        try {
+            auto val = boost::lexical_cast<double>(tokenTrimmed);
+            if (columnInfo.mIsDecimal && boost::icontains(tokenTrimmed, L"E")) {
+                columnInfo.mIsDecimal = false;
+            }
+        } catch (const boost::bad_lexical_cast& e) {
+            columnInfo.mIsDecimal = columnInfo.mIsFloat = false;
+        }
     }
 };
