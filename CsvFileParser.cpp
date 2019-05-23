@@ -351,18 +351,18 @@ void ColumnInfo::analyzeToken(std::wstring_view token)
             if (boost::icontains(tokenTrim, L"P")) {
                 // Hexadecimal floating-point literals are not recognized.
                 mIsDecimal = mIsFloat = false;
-            }
-
-            // ! The same logic as above, just different names of variables.
-            if (mMinDoubleVal.has_value() && mMaxDoubleVal.has_value()) {
-                if (val < mMinDoubleVal) {
+            } else {
+                // ! The same logic as above, just different names of variables.
+                if (mMinDoubleVal.has_value() && mMaxDoubleVal.has_value()) {
+                    if (val < mMinDoubleVal) {
+                        mMinDoubleVal = val;
+                    } else if (val > mMaxDoubleVal) {
+                        mMaxDoubleVal = val;
+                    }
+                } else {
                     mMinDoubleVal = val;
-                } else if (val > mMaxDoubleVal) {
                     mMaxDoubleVal = val;
                 }
-            } else {
-                mMinDoubleVal = val;
-                mMaxDoubleVal = val;
             }
 
         } catch (const boost::bad_lexical_cast& e) {
