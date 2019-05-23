@@ -195,7 +195,7 @@ void CsvFileParser::parser()
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Starting the parser loop." << FUNCTION_FILE_LINE << std::flush;
     while (true) {
         std::optional<unsigned int> numBufferToParse;
-        numBufferToParse.reset();
+        numBufferToParse.reset(); // TODO: comment out this line and rerun the tests
 
         // Part 1. Try to get the number of the next full buffer to parse.
         {
