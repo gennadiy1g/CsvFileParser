@@ -313,15 +313,15 @@ void ColumnInfo::analyzeToken(std::wstring_view token)
         mLength = len;
     }
 
-    std::wstring tokenTrimmed(boost::trim_copy(std::wstring(token)));
+    std::wstring tokenTrim(boost::trim_copy(std::wstring(token)));
 
-    if (!mIsNull && (tokenTrimmed.length() == 0)) {
+    if (!mIsNull && (tokenTrim.length() == 0)) {
         mIsNull = true;
     }
 
     if (mIsInt) {
         try {
-            auto val = boost::lexical_cast<long long>(tokenTrimmed);
+            auto val = boost::lexical_cast<long long>(tokenTrim);
 
             if (mMinLongVal.has_value() && mMaxLongVal.has_value()) {
                 if (val < mMinLongVal) {
@@ -338,14 +338,14 @@ void ColumnInfo::analyzeToken(std::wstring_view token)
         }
     } else if (mIsDecimal || mIsFloat) {
         try {
-            auto val = boost::lexical_cast<double>(tokenTrimmed);
+            auto val = boost::lexical_cast<double>(tokenTrim);
 
             // https://en.cppreference.com/w/cpp/language/floating_literal
-            if (mIsDecimal && boost::icontains(tokenTrimmed, L"E")) {
+            if (mIsDecimal && boost::icontains(tokenTrim, L"E")) {
                 // Decimal floating-point literals are fine.
                 mIsDecimal = false;
             }
-            if (boost::icontains(tokenTrimmed, L"P")) {
+            if (boost::icontains(tokenTrim, L"P")) {
                 // Hexadecimal floating-point literals are not recognized.
                 mIsDecimal = mIsFloat = false;
             }
