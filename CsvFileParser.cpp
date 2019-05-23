@@ -279,7 +279,7 @@ void CsvFileParser::parseBuffer(unsigned int numBufferToParse, ParsingResults& r
             // BOOST_LOG_SEV(gLogger, bltrivial::trace) << *beg;
             auto token = *beg;
             if (i < results.mColumns.size()) {
-                analyzeToken(token, results.mColumns[i]);
+                results.mColumns[i].analyzeToken(token);
             }
             ++i;
         }
@@ -306,40 +306,40 @@ void CsvFileParser::parseColumnNames(std::wstring_view line)
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "<-" << FUNCTION_FILE_LINE << std::flush;
 }
 
-void CsvFileParser::analyzeToken(std::wstring_view token, ColumnInfo& columnInfo)
+void ColumnInfo::analyzeToken(std::wstring_view token)
 {
     auto len = token.length();
-    if (len > columnInfo.mLength) {
-        columnInfo.mLength = len;
+    if (len > mLength) {
+        mLength = len;
     }
 
     std::wstring tokenTrimmed(boost::trim_copy(std::wstring(token)));
 
-    if (columnInfo.mIsInt) {
+    if (mIsInt) {
         try {
             auto val = boost::lexical_cast<long long>(tokenTrimmed);
 
-            if (columnInfo.mMinLongVal.has_value() && columnInfo.mMaxLongVal.has_value()) {
-                if (val < columnInfo.mMinLongVal) {
-                    columnInfo.mMinLongVal = val;
-                } else if (val > columnInfo.mMaxLongVal) {
-                    columnInfo.mMaxLongVal = val;
+            if (mMinLongVal.has_value() && mMaxLongVal.has_value()) {
+                if (val < mMinLongVal) {
+                    mMinLongVal = val;
+                } else if (val > mMaxLongVal) {
+                    mMaxLongVal = val;
                 }
             } else {
-                columnInfo.mMinLongVal = val;
-                columnInfo.mMaxLongVal = val;
+                mMinLongVal = val;
+                mMaxLongVal = val;
             }
         } catch (const boost::bad_lexical_cast& e) {
-            columnInfo.mIsInt = false;
+            mIsInt = false;
         }
-    } else if (columnInfo.mIsDecimal || columnInfo.mIsFloat) {
+    } else if (mIsDecimal || mIsFloat) {
         try {
             auto val = boost::lexical_cast<double>(tokenTrimmed);
-            if (columnInfo.mIsDecimal && boost::icontains(tokenTrimmed, L"E")) {
-                columnInfo.mIsDecimal = false;
+            if (mIsDecimal && boost::icontains(tokenTrimmed, L"E")) {
+                mIsDecimal = false;
             }
         } catch (const boost::bad_lexical_cast& e) {
-            columnInfo.mIsDecimal = columnInfo.mIsFloat = false;
+            mIsDecimal = mIsFloat = false;
         }
     }
 };

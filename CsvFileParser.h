@@ -43,7 +43,6 @@ private:
 };
 
 class ColumnInfo {
-    friend class CsvFileParser;
 public:
     explicit ColumnInfo(std::wstring_view name); // Constructor
     virtual ~ColumnInfo() = default; // Defaulted virtual destructor
@@ -55,6 +54,8 @@ public:
     // Explicitly default move constructor and move assignment operator.
     ColumnInfo(ColumnInfo&& src) = default;
     ColumnInfo& operator=(ColumnInfo&& rhs) = default;
+
+    void analyzeToken(std::wstring_view token);
 
 protected:
     std::wstring mName;
@@ -116,8 +117,7 @@ private:
     void parseBuffer(unsigned int numBufferToParse, ParsingResults& results);
     void checkInputFile();
     void parseColumnNames(std::wstring_view line);
-    void analyzeToken(std::wstring_view token, ColumnInfo& columnInfo);
-
+    
     bfs::path mInputFile;
 
     std::atomic_bool mReaderLoopIsDone;
