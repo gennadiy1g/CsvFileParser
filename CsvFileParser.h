@@ -22,6 +22,7 @@ typedef boost::tokenizer<CsvSeparator, std::wstring::const_iterator, std::wstrin
 
 class ParserBuffer {
     friend class CsvFileParser;
+
 public:
     ParserBuffer() = default; // Constructor
     virtual ~ParserBuffer() = default; // Defaulted virtual destructor
@@ -72,6 +73,8 @@ protected:
     std::size_t mLength { 0 };
     std::optional<long long> mMinLongVal;
     std::optional<long long> mMaxLongVal;
+    std::optional<double> mMinDoubleVal;
+    std::optional<double> mMaxDoubleVal;
 };
 
 class ParsingResults {
@@ -117,7 +120,7 @@ private:
     void parseBuffer(unsigned int numBufferToParse, ParsingResults& results);
     void checkInputFile();
     void parseColumnNames(std::wstring_view line);
-    
+
     bfs::path mInputFile;
 
     std::atomic_bool mReaderLoopIsDone;

@@ -335,9 +335,22 @@ void ColumnInfo::analyzeToken(std::wstring_view token)
     } else if (mIsDecimal || mIsFloat) {
         try {
             auto val = boost::lexical_cast<double>(tokenTrimmed);
+
             if (mIsDecimal && boost::icontains(tokenTrimmed, L"E")) {
                 mIsDecimal = false;
             }
+
+            if (mMinDoubleVal.has_value() && mMaxDoubleVal.has_value()) {
+                if (val < mMinDoubleVal) {
+                    mMinDoubleVal = val;
+                } else if (val > mMaxDoubleVal) {
+                    mMaxDoubleVal = val;
+                }
+            } else {
+                mMinDoubleVal = val;
+                mMaxDoubleVal = val;
+            }
+
         } catch (const boost::bad_lexical_cast& e) {
             mIsDecimal = mIsFloat = false;
         }
