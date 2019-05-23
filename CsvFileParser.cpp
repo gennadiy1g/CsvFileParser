@@ -315,6 +315,10 @@ void ColumnInfo::analyzeToken(std::wstring_view token)
 
     std::wstring tokenTrimmed(boost::trim_copy(std::wstring(token)));
 
+    if (!mIsNull && (tokenTrimmed.length() == 0)) {
+        mIsNull = true;
+    }
+
     if (mIsInt) {
         try {
             auto val = boost::lexical_cast<long long>(tokenTrimmed);
