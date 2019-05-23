@@ -349,7 +349,8 @@ void ColumnInfo::analyzeToken(std::wstring_view token)
                 mIsDecimal = false;
             }
             if (boost::icontains(tokenTrim, L"P")) {
-                // Hexadecimal floating-point literals are not recognized.
+                // Hexadecimal floating-point literals are accepted in C++17, but may not be accepted
+                // by a RDBMS.
                 mIsDecimal = mIsFloat = false;
             } else {
                 // ! The same logic as above, just different names of variables.
