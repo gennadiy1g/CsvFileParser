@@ -10,8 +10,9 @@
 using namespace std::string_literals;
 
 ColumnInfo::ColumnInfo(std::wstring_view name)
-    : mName(boost::trim_copy(std::wstring(name)))
+    : mName(name)
 {
+    boost::trim(mName);
 }
 
 void ParsingResults::update(const ParsingResults& results)
@@ -313,7 +314,8 @@ void ColumnInfo::analyzeToken(std::wstring_view token)
         mLength = len;
     }
 
-    std::wstring tokenTrim(boost::trim_copy(std::wstring(token)));
+    std::wstring tokenTrim(token);
+    boost::trim(tokenTrim);
 
     if (!mIsNull && (tokenTrim.length() == 0)) {
         mIsNull = true;
