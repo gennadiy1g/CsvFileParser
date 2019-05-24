@@ -309,9 +309,9 @@ void CsvFileParser::parseColumnNames(std::wstring_view line)
 
 void ColumnInfo::analyzeToken(std::wstring_view token)
 {
-    auto len = token.length();
-    if (len > mLength) {
-        mLength = len;
+    auto lengthToken = token.length();
+    if (lengthToken > mLength) {
+        mLength = lengthToken;
     }
 
     std::wstring tokenTrim(token);
@@ -319,55 +319,64 @@ void ColumnInfo::analyzeToken(std::wstring_view token)
 
     if (!mIsNull && (tokenTrim.length() == 0)) {
         mIsNull = true;
-    }
-
-    if (mIsInt) {
-        try {
-            auto val = boost::lexical_cast<long long>(tokenTrim);
-
-            // ! The same logic as below, just different names of variables.
-            if (mMinLongVal.has_value() && mMaxLongVal.has_value()) {
-                if (val < mMinLongVal) {
-                    mMinLongVal = val;
-                } else if (val > mMaxLongVal) {
-                    mMaxLongVal = val;
-                }
+    } else {
+        if (mIsFloat) {
+            if (boost::istarts_with(tokenTrim, L"0x") || boost::icontains(tokenTrim, L"p")) {
+                // Hexadecimal floating-point literals are accepted in C++17 (
+                // https://en.cppreference.com/w/cpp/language/floating_literal), but may not be accepted
+                // by a database during import from a CSV file, so we treat them as strings.
+                mIsFloat = mIsDecimal = mIsInt = false;
             } else {
-                mMinLongVal = val;
-                mMaxLongVal = val;
-            }
-        } catch (const boost::bad_lexical_cast& e) {
-            mIsInt = false;
-        }
-    } else if (mIsDecimal || mIsFloat) {
-        try {
-            auto val = boost::lexical_cast<double>(tokenTrim);
+                try {
+                    auto value = boost::lexical_cast<double>(tokenTrim);
 
-            // https://en.cppreference.com/w/cpp/language/floating_literal
-            if (mIsDecimal && boost::icontains(tokenTrim, L"E")) {
-                // Decimal floating-point literals are fine.
-                mIsDecimal = false;
-            }
-            if (boost::icontains(tokenTrim, L"P")) {
-                // Hexadecimal floating-point literals are accepted in C++17, but may not be accepted
-                // by a RDBMS.
-                mIsDecimal = mIsFloat = false;
-            } else {
-                // ! The same logic as above, just different names of variables.
-                if (mMinDoubleVal.has_value() && mMaxDoubleVal.has_value()) {
-                    if (val < mMinDoubleVal) {
-                        mMinDoubleVal = val;
-                    } else if (val > mMaxDoubleVal) {
-                        mMaxDoubleVal = val;
+                    if ((!mMinVal.has_value()) || (value < mMinVal)) {
+                        mMinVal = value;
                     }
-                } else {
-                    mMinDoubleVal = val;
-                    mMaxDoubleVal = val;
+
+                    if ((!mMaxVal.has_value()) || (value > mMaxVal)) {
+                        mMaxVal = value;
+                    }
+
+                    if (mIsDecimal) {
+                        if (boost::icontains(tokenTrim, L"e")) {
+                            mIsDecimal = false;
+                        } else {
+
+                            if (mIsInt) {
+                                try {
+                                    boost::lexical_cast<long long>(tokenTrim);
+                                } catch (const boost::bad_lexical_cast& e) {
+                                    mIsInt = false;
+                                }
+                            }
+
+                            if (!mIsInt) {
+                                auto posDecimalPoint = tokenTrim.find(L'.');
+                                assert(posDecimalPoint != std::string::npos);
+
+                                auto lengthTokenTrim = tokenTrim.length();
+                                auto Precision = lengthTokenTrim - 1;
+                                if (value < 0) {
+                                    --Precision;
+                                }
+                                assert(Precision > 0);
+                                if ((!mPrecision.has_value()) || (Precision > mPrecision.value_or(0))) {
+                                    mPrecision = Precision;
+                                }
+
+                                auto Scale = lengthTokenTrim - posDecimalPoint - 1;
+                                assert(Scale >= 0);
+                                if ((!mScale.has_value()) || (Scale > mScale.value_or(0))) {
+                                    mScale = Scale;
+                                }
+                            }
+                        }
+                    }
+                } catch (const boost::bad_lexical_cast& e) {
+                    mIsFloat = mIsDecimal = mIsInt = false;
                 }
             }
-
-        } catch (const boost::bad_lexical_cast& e) {
-            mIsDecimal = mIsFloat = false;
         }
     }
 };

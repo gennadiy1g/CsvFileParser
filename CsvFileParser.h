@@ -68,13 +68,11 @@ protected:
     bool mIsTime { true };
     bool mIsTimeStamp { true };
     bool mIsNull { false };
-    std::optional<unsigned short> mPrec;
+    std::optional<unsigned short> mPrecision;
     std::optional<unsigned short> mScale;
     std::size_t mLength { 0 };
-    std::optional<long long> mMinLongVal;
-    std::optional<long long> mMaxLongVal;
-    std::optional<double> mMinDoubleVal;
-    std::optional<double> mMaxDoubleVal;
+    std::optional<double> mMinVal;
+    std::optional<double> mMaxVal;
 };
 
 class ParsingResults {
