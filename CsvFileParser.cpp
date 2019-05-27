@@ -316,14 +316,13 @@ void ColumnInfo::analyzeToken(std::wstring_view token)
 
     std::wstring tokenTrim(token);
     boost::trim(tokenTrim);
+    auto lengthtokenTrim = tokenTrim.length();
 
-    if (!mIsNull && (tokenTrim.length() == 0)) {
-        mIsNull = true;
-    } else {
+    if (lengthtokenTrim > 0) {
         if (mIsFloat) {
             if (boost::istarts_with(tokenTrim, L"0x") || boost::icontains(tokenTrim, L"p")) {
-                // Hexadecimal floating-point literals are accepted in C++17 (
-                // https://en.cppreference.com/w/cpp/language/floating_literal), but may not be accepted
+                // Hexadecimal floating-point literals are accepted in C++17
+                // (https://en.cppreference.com/w/cpp/language/floating_literal), but may not be accepted
                 // by a database during import from a CSV file, so we treat them as strings.
                 mIsFloat = mIsDecimal = mIsInt = false;
             } else {
@@ -340,9 +339,8 @@ void ColumnInfo::analyzeToken(std::wstring_view token)
 
                     if (mIsDecimal) {
                         if (boost::icontains(tokenTrim, L"e")) {
-                            mIsDecimal = false;
+                            mIsDecimal = mIsInt = false;
                         } else {
-
                             if (mIsInt) {
                                 try {
                                     boost::lexical_cast<long long>(tokenTrim);
@@ -351,32 +349,37 @@ void ColumnInfo::analyzeToken(std::wstring_view token)
                                 }
                             }
 
-                            if (!mIsInt) {
-                                auto posDecimalPoint = tokenTrim.find(L'.');
-                                assert(posDecimalPoint != std::string::npos);
+                            auto posDecimalPoint = tokenTrim.find(L'.');
+                            if (posDecimalPoint != std::string::npos) {
+                                if ((!mDigitsBeforeDecimalPoint.has_value()) || (posDecimalPoint > mDigitsBeforeDecimalPoint.value())) {
+                                    mDigitsBeforeDecimalPoint = posDecimalPoint;
 
-                                auto lengthTokenTrim = tokenTrim.length();
-                                auto Precision = lengthTokenTrim - 1;
-                                if (value < 0) {
-                                    --Precision;
+                                    auto len = lengthtokenTrim - posDecimalPoint - 1;
+                                    if ((!mDigitsAfterDecimalPoint.has_value()) || (len > mDigitsAfterDecimalPoint))
+                                        mDigitsAfterDecimalPoint = len;
                                 }
-                                assert(Precision > 0);
-                                if ((!mPrecision.has_value()) || (Precision > mPrecision.value_or(0))) {
-                                    mPrecision = Precision;
+                            } else {
+                                if ((!mDigitsBeforeDecimalPoint.has_value()) || (lengthtokenTrim > mDigitsBeforeDecimalPoint.value())) {
+                                    mDigitsBeforeDecimalPoint = lengthtokenTrim;
                                 }
-
-                                auto Scale = lengthTokenTrim - posDecimalPoint - 1;
-                                assert(Scale >= 0);
-                                if ((!mScale.has_value()) || (Scale > mScale.value_or(0))) {
-                                    mScale = Scale;
-                                }
+                                if (!mDigitsAfterDecimalPoint.has_value())
+                                    mDigitsAfterDecimalPoint = 0;
                             }
+                            if (value < 0) {
+                                mDigitsBeforeDecimalPoint = mDigitsBeforeDecimalPoint.value() - 1;
+                            }
+                            assert(mDigitsBeforeDecimalPoint.value() >= 0);
+                            assert(mDigitsAfterDecimalPoint.value() >= 0);
                         }
                     }
                 } catch (const boost::bad_lexical_cast& e) {
                     mIsFloat = mIsDecimal = mIsInt = false;
                 }
             }
+        }
+    } else {
+        if (!mIsNull) {
+            mIsNull = true;
         }
     }
 };

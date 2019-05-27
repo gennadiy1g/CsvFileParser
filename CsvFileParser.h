@@ -68,9 +68,9 @@ protected:
     bool mIsTime { true };
     bool mIsTimeStamp { true };
     bool mIsNull { false };
-    std::optional<unsigned short> mPrecision;
-    std::optional<unsigned short> mScale;
     std::size_t mLength { 0 };
+    std::optional<unsigned short> mDigitsBeforeDecimalPoint;
+    std::optional<unsigned short> mDigitsAfterDecimalPoint;
     std::optional<double> mMinVal;
     std::optional<double> mMaxVal;
 };
