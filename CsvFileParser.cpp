@@ -355,17 +355,20 @@ void ColumnInfo::analyzeToken(std::wstring_view token)
                             if (posDecimalPoint != std::string::npos) {
                                 if ((!mDigitsBeforeDecimalPoint.has_value()) || (posDecimalPoint > mDigitsBeforeDecimalPoint.value())) {
                                     mDigitsBeforeDecimalPoint = posDecimalPoint;
+                                }
 
-                                    auto len = lengthTokenTrim - posDecimalPoint - 1;
-                                    if ((!mDigitsAfterDecimalPoint.has_value()) || (len > mDigitsAfterDecimalPoint))
-                                        mDigitsAfterDecimalPoint = len;
+                                auto len = lengthTokenTrim - posDecimalPoint - 1;
+                                if ((!mDigitsAfterDecimalPoint.has_value()) || (len > mDigitsAfterDecimalPoint)) {
+                                    mDigitsAfterDecimalPoint = len;
                                 }
                             } else {
                                 if ((!mDigitsBeforeDecimalPoint.has_value()) || (lengthTokenTrim > mDigitsBeforeDecimalPoint.value())) {
                                     mDigitsBeforeDecimalPoint = lengthTokenTrim;
                                 }
-                                if (!mDigitsAfterDecimalPoint.has_value())
+
+                                if (!mDigitsAfterDecimalPoint.has_value()) {
                                     mDigitsAfterDecimalPoint = 0;
+                                }
                             }
                             if (value < 0) {
                                 mDigitsBeforeDecimalPoint = mDigitsBeforeDecimalPoint.value() - 1;
