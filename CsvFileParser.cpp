@@ -309,6 +309,8 @@ void CsvFileParser::parseColumnNames(std::wstring_view line)
 
 void ColumnInfo::analyzeToken(std::wstring_view token)
 {
+    ++mNumAnalyzeTokenCalls;
+
     auto lengthToken = token.length();
     if (lengthToken > mLength) {
         mLength = lengthToken;
@@ -386,16 +388,29 @@ void ColumnInfo::analyzeToken(std::wstring_view token)
 
 ColumnType ColumnInfo::type()
 {
-    if (mIsFloat) {
-        if (mIsInt) {
-            return ColumnType::Int;
-        } else if (mIsDecimal) {
-            return ColumnType::Decimal;
+    if (mNumAnalyzeTokenCalls > 0) {
+        if (mIsFloat) {
+            if (mIsInt) {
+                return ColumnType::Int;
+            } else if (mIsDecimal) {
+                return ColumnType::Decimal;
+            } else {
+                return ColumnType::Float;
+            }
         } else {
-            return ColumnType::Float;
+            return ColumnType::String;
         }
     } else {
         return ColumnType::String;
+    }
+};
+
+bool ColumnInfo::IsNull()
+{
+    if (mNumAnalyzeTokenCalls > 0) {
+        return mIsNull;
+    } else {
+        return true;
     }
 };
 
