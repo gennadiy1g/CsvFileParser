@@ -318,9 +318,9 @@ void ColumnInfo::analyzeToken(std::wstring_view token)
 
     std::wstring tokenTrim(token);
     boost::trim(tokenTrim);
-    auto lengthtokenTrim = tokenTrim.length();
+    auto lengthTokenTrim = tokenTrim.length();
 
-    if (lengthtokenTrim > 0) {
+    if (lengthTokenTrim > 0) {
         if (mIsFloat) {
             if (boost::istarts_with(tokenTrim, L"0x") || boost::icontains(tokenTrim, L"p")) {
                 // Hexadecimal floating-point literals are accepted in C++17
@@ -356,13 +356,13 @@ void ColumnInfo::analyzeToken(std::wstring_view token)
                                 if ((!mDigitsBeforeDecimalPoint.has_value()) || (posDecimalPoint > mDigitsBeforeDecimalPoint.value())) {
                                     mDigitsBeforeDecimalPoint = posDecimalPoint;
 
-                                    auto len = lengthtokenTrim - posDecimalPoint - 1;
+                                    auto len = lengthTokenTrim - posDecimalPoint - 1;
                                     if ((!mDigitsAfterDecimalPoint.has_value()) || (len > mDigitsAfterDecimalPoint))
                                         mDigitsAfterDecimalPoint = len;
                                 }
                             } else {
-                                if ((!mDigitsBeforeDecimalPoint.has_value()) || (lengthtokenTrim > mDigitsBeforeDecimalPoint.value())) {
-                                    mDigitsBeforeDecimalPoint = lengthtokenTrim;
+                                if ((!mDigitsBeforeDecimalPoint.has_value()) || (lengthTokenTrim > mDigitsBeforeDecimalPoint.value())) {
+                                    mDigitsBeforeDecimalPoint = lengthTokenTrim;
                                 }
                                 if (!mDigitsAfterDecimalPoint.has_value())
                                     mDigitsAfterDecimalPoint = 0;
