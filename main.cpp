@@ -41,6 +41,8 @@ struct GlobalFixture {
 
 BOOST_TEST_GLOBAL_FIXTURE(GlobalFixture);
 
+BOOST_AUTO_TEST_SUITE(CsvFileParser_parse);
+
 BOOST_AUTO_TEST_CASE(ZX0training_UTF8)
 {
     CsvFileParser parser(LR"^(C:\Users\genna_000\Documents\Experiments\test data\ZX0training_UTF-8.csv)^");
@@ -63,3 +65,5 @@ BOOST_AUTO_TEST_CASE(ZX0training_CP863)
     CsvFileParser parser(LR"^(C:\Users\genna_000\Documents\Experiments\test data\ZX0training_CP-863.csv)^");
     BOOST_REQUIRE_EXCEPTION(parser.parse(L',', L'"', L'\\'), std::runtime_error, pred);
 }
+
+BOOST_AUTO_TEST_SUITE_END();
