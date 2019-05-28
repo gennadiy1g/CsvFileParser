@@ -69,6 +69,7 @@ public:
 
     void analyzeToken(std::wstring_view token);
     ColumnType type();
+    bool IsNull() { return mIsNull; };
     unsigned short DigitsBeforeDecimalPoint() { return mDigitsBeforeDecimalPoint.value_or(0); };
     unsigned short DigitsAfterDecimalPoint() { return mDigitsAfterDecimalPoint.value_or(0); };
 
