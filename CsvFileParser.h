@@ -43,6 +43,14 @@ private:
     std::vector<std::wstring> mLines;
 };
 
+enum class ColumnType {
+    String,
+
+    Float,
+    Decimal,
+    Int
+};
+
 class ColumnInfo {
 public:
     explicit ColumnInfo(std::wstring_view name); // Constructor
@@ -57,6 +65,9 @@ public:
     ColumnInfo& operator=(ColumnInfo&& rhs) = default;
 
     void analyzeToken(std::wstring_view token);
+    ColumnType type();
+    unsigned short DigitsBeforeDecimalPoint() { return mDigitsBeforeDecimalPoint.value_or(0); };
+    unsigned short DigitsAfterDecimalPoint() { return mDigitsAfterDecimalPoint.value_or(0); };
 
 protected:
     std::wstring mName;

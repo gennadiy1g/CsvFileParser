@@ -383,3 +383,18 @@ void ColumnInfo::analyzeToken(std::wstring_view token)
         }
     }
 };
+
+ColumnType ColumnInfo::type()
+{
+    if (mIsFloat) {
+        if (mIsInt) {
+            return ColumnType::Int;
+        } else if (mIsDecimal) {
+            return ColumnType::Decimal;
+        } else {
+            return ColumnType::Float;
+        }
+    } else {
+        return ColumnType::String;
+    }
+};
