@@ -401,6 +401,22 @@ ColumnType ColumnInfo::type()
 
 std::ostream& operator<<(std::ostream& ostr, const ColumnType& columnType)
 {
-    ostr << "foo";
+    switch (columnType) {
+    case ColumnType::String:
+        ostr << "ColumnType::String";
+        break;
+    case ColumnType::Float:
+        ostr << "ColumnType::Float";
+        break;
+    case ColumnType::Decimal:
+        ostr << "ColumnType::Decimal";
+        break;
+    case ColumnType::Int:
+        ostr << "ColumnType::Int";
+        break;
+    default:
+        ostr << "uknown ColumnType";
+        break;
+    }
     return ostr;
 };
