@@ -73,12 +73,20 @@ BOOST_AUTO_TEST_SUITE(ColumnInfo_analyzeToken);
 BOOST_AUTO_TEST_CASE(float_decimal_int)
 {
     ColumnInfo columnInfo(L"column1"s);
+    BOOST_TEST(columnInfo.type() == ColumnType::String);
+    BOOST_CHECK(columnInfo.IsNull());
+
     columnInfo.analyzeToken(L"0"s);
     BOOST_TEST(columnInfo.type() == ColumnType::Int);
-    BOOST_TEST(columnInfo.type() != ColumnType::Decimal);
-    BOOST_TEST(columnInfo.type() != ColumnType::Float);
-    BOOST_TEST(columnInfo.type() != ColumnType::String);
     BOOST_CHECK(!columnInfo.IsNull());
+
+    columnInfo.analyzeToken(L""s);
+    BOOST_TEST(columnInfo.type() == ColumnType::Int);
+    BOOST_CHECK(columnInfo.IsNull());
+
+    columnInfo.analyzeToken(L" "s);
+    BOOST_TEST(columnInfo.type() == ColumnType::Int);
+    BOOST_CHECK(columnInfo.IsNull());
 }
 
 BOOST_AUTO_TEST_SUITE_END();
