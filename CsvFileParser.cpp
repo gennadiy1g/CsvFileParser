@@ -398,3 +398,9 @@ ColumnType ColumnInfo::type()
         return ColumnType::String;
     }
 };
+
+std::ostream& operator<<(std::ostream& ostr, const ColumnType& columnType)
+{
+    ostr << "foo";
+    return ostr;
+};

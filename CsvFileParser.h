@@ -8,6 +8,7 @@
 #include <condition_variable>
 #include <mutex>
 #include <optional>
+#include <ostream>
 #include <queue>
 #include <shared_mutex>
 #include <string>
@@ -46,10 +47,12 @@ private:
 enum class ColumnType {
     String,
 
-    Float,
-    Decimal,
+    Float, // includes Decimal and Int
+    Decimal, // includes Int
     Int
 };
+
+std::ostream& operator<<(std::ostream& ostr, const ColumnType& columnType);
 
 class ColumnInfo {
 public:

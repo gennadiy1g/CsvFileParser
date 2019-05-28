@@ -67,3 +67,15 @@ BOOST_AUTO_TEST_CASE(ZX0training_CP863)
 }
 
 BOOST_AUTO_TEST_SUITE_END();
+
+BOOST_AUTO_TEST_SUITE(ColumnInfo_analyzeToken);
+
+BOOST_AUTO_TEST_CASE(float_decimal_int)
+{
+    ColumnInfo columnInfo(L"column1"s);
+    BOOST_TEST(columnInfo.type() == ColumnType::String);
+    columnInfo.analyzeToken(L"01"s);
+    BOOST_TEST(columnInfo.type() == ColumnType::Int);
+}
+
+BOOST_AUTO_TEST_SUITE_END();
