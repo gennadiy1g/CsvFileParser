@@ -70,8 +70,8 @@ public:
     void analyzeToken(std::wstring_view token);
     ColumnType type();
     bool IsNull();
-    unsigned short DigitsBeforeDecimalPoint() { return mDigitsBeforeDecimalPoint.value_or(0); };
-    unsigned short DigitsAfterDecimalPoint() { return mDigitsAfterDecimalPoint.value_or(0); };
+    std::size_t DigitsBeforeDecimalPoint() { return mDigitsBeforeDecimalPoint.value_or(0); };
+    std::size_t DigitsAfterDecimalPoint() { return mDigitsAfterDecimalPoint.value_or(0); };
 
 protected:
     std::size_t mNumAnalyzeTokenCalls { 0 };
@@ -85,8 +85,8 @@ protected:
     bool mIsTimeStamp { true };
     bool mIsNull { false };
     std::size_t mLength { 0 };
-    std::optional<unsigned short> mDigitsBeforeDecimalPoint;
-    std::optional<unsigned short> mDigitsAfterDecimalPoint;
+    std::optional<std::size_t> mDigitsBeforeDecimalPoint;
+    std::optional<std::size_t> mDigitsAfterDecimalPoint;
     std::optional<double> mMinVal;
     std::optional<double> mMaxVal;
 };
