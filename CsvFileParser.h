@@ -70,6 +70,7 @@ public:
     void analyzeToken(std::wstring_view token);
     ColumnType type();
     bool IsNull();
+    std::size_t length() { return mLength; };
     std::size_t DigitsBeforeDecimalPoint() { return mDigitsBeforeDecimalPoint.value_or(0); };
     std::size_t DigitsAfterDecimalPoint() { return mDigitsAfterDecimalPoint.value_or(0); };
 
