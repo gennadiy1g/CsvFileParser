@@ -181,11 +181,11 @@ BOOST_AUTO_TEST_CASE(time_stamp)
     BOOST_CHECK(columnInfo.IsNull());
 
     columnInfo.analyzeToken(L" 2019-02-28 23:59:59.999 "s);
-    // BOOST_TEST(columnInfo.type() == ColumnType::TimeStamp);
+    BOOST_TEST(columnInfo.type() == ColumnType::TimeStamp);
     BOOST_CHECK(!columnInfo.IsNull());
 
     columnInfo.analyzeToken(L" "s);
-    // BOOST_TEST(columnInfo.type() == ColumnType::TimeStamp);
+    BOOST_TEST(columnInfo.type() == ColumnType::TimeStamp);
     BOOST_CHECK(columnInfo.IsNull());
 }
 
