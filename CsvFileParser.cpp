@@ -383,7 +383,7 @@ void ColumnInfo::analyzeToken(std::wstring_view token)
             }
         }
 
-        auto timeStampFacet = new bpt::wtime_input_facet(L"%Y-%m-%d %H:%M:%S%F");
+        static auto timeStampFacet = new bpt::wtime_input_facet(L"%Y-%m-%d %H:%M:%S%F");
         std::wistringstream stringStream(tokenTrim);
         stringStream.imbue(std::locale(stringStream.getloc(), timeStampFacet));
     } else {
