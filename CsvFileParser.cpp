@@ -383,9 +383,28 @@ void ColumnInfo::analyzeToken(std::wstring_view token)
             }
         }
 
-        static auto timeStampFacet = new bpt::wtime_input_facet(L"%Y-%m-%d %H:%M:%S%F");
-        std::wistringstream stringStream(tokenTrim);
-        stringStream.imbue(std::locale(stringStream.getloc(), timeStampFacet));
+        if (mIsTimeStamp) {
+            static auto timeStampFacet = new bpt::wtime_input_facet(L"%Y-%m-%d %H:%M:%S%F");
+            std::wistringstream stringStream(tokenTrim);
+            stringStream.imbue(std::locale(stringStream.getloc(), timeStampFacet));
+            assert(!stringStream.eof());
+            bpt::ptime posixTime;
+            stringStream >> posixTime;
+            if (!stringStream.fail()) {
+                stringStream.get();
+                mIsTimeStamp = stringStream.eof(); // there must be no more characters afther the parsed ones
+            } else {
+                mIsTimeStamp = false;
+            }
+        }
+
+        if (mIsTime) {
+            mIsTime = false;
+        }
+
+        if (mIsDate) {
+            mIsDate = false;
+        }
     } else {
         if (!mIsNull) {
             mIsNull = true;
@@ -404,6 +423,12 @@ ColumnType ColumnInfo::type()
             } else {
                 return ColumnType::Float;
             }
+        } else if (mIsTimeStamp) {
+            return ColumnType::TimeStamp;
+        } else if (mIsTime) {
+            return ColumnType::Time;
+        } else if (mIsDate) {
+            return ColumnType::Date;
         } else {
             return ColumnType::String;
         }
@@ -424,9 +449,6 @@ bool ColumnInfo::IsNull()
 std::ostream& operator<<(std::ostream& ostr, const ColumnType& columnType)
 {
     switch (columnType) {
-    case ColumnType::String:
-        ostr << "ColumnType::String";
-        break;
     case ColumnType::Float:
         ostr << "ColumnType::Float";
         break;
@@ -435,6 +457,18 @@ std::ostream& operator<<(std::ostream& ostr, const ColumnType& columnType)
         break;
     case ColumnType::Int:
         ostr << "ColumnType::Int";
+        break;
+    case ColumnType::TimeStamp:
+        ostr << "ColumnType::TimeStamp";
+        break;
+    case ColumnType::Date:
+        ostr << "ColumnType::Date";
+        break;
+    case ColumnType::Time:
+        ostr << "ColumnType::Time";
+        break;
+    case ColumnType::String:
+        ostr << "ColumnType::String";
         break;
     default:
         ostr << "uknown ColumnType";

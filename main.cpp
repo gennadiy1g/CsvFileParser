@@ -77,13 +77,13 @@ BOOST_AUTO_TEST_CASE(float_decimal_int)
         BOOST_TEST(columnInfo.type() == ColumnType::String);
         BOOST_CHECK(columnInfo.IsNull());
 
-        columnInfo.analyzeToken(L"0"s);
+        columnInfo.analyzeToken(L"0"s); // TODO: surround with spaces
         BOOST_TEST(columnInfo.type() == ColumnType::Int);
         BOOST_CHECK(!columnInfo.IsNull());
         BOOST_TEST(columnInfo.DigitsBeforeDecimalPoint() == 1);
         BOOST_TEST(columnInfo.DigitsAfterDecimalPoint() == 0);
 
-        columnInfo.analyzeToken(L""s);
+        columnInfo.analyzeToken(L""s); // TODO: surround with spaces
         BOOST_TEST(columnInfo.type() == ColumnType::Int);
         BOOST_CHECK(columnInfo.IsNull());
 
@@ -172,6 +172,21 @@ BOOST_AUTO_TEST_CASE(float_decimal_int)
         BOOST_TEST(columnInfo.DigitsBeforeDecimalPoint() == 9);
         BOOST_TEST(columnInfo.DigitsAfterDecimalPoint() == 5);
     }
+}
+
+BOOST_AUTO_TEST_CASE(time_stamp)
+{
+    ColumnInfo columnInfo(L"column1"s);
+    BOOST_TEST(columnInfo.type() == ColumnType::String);
+    BOOST_CHECK(columnInfo.IsNull());
+
+    columnInfo.analyzeToken(L" 2019-02-28 23:59:59.999 "s);
+    // BOOST_TEST(columnInfo.type() == ColumnType::TimeStamp);
+    BOOST_CHECK(!columnInfo.IsNull());
+
+    columnInfo.analyzeToken(L" "s);
+    // BOOST_TEST(columnInfo.type() == ColumnType::TimeStamp);
+    BOOST_CHECK(columnInfo.IsNull());
 }
 
 BOOST_AUTO_TEST_SUITE_END();
