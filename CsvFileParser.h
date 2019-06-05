@@ -8,6 +8,7 @@
 #include <boost/locale.hpp>
 #include <boost/tokenizer.hpp>
 #include <condition_variable>
+#include <locale>
 #include <mutex>
 #include <optional>
 #include <ostream>
@@ -80,6 +81,8 @@ public:
     std::size_t DigitsBeforeDecimalPoint() { return mDigitsBeforeDecimalPoint.value_or(0); };
     std::size_t DigitsAfterDecimalPoint() { return mDigitsAfterDecimalPoint.value_or(0); };
 
+    static void initializeLocales();
+
 protected:
     std::size_t mNumAnalyzeTokenCalls { 0 };
     std::wstring mName;
@@ -96,6 +99,8 @@ protected:
     std::optional<std::size_t> mDigitsAfterDecimalPoint;
     std::optional<double> mMinVal;
     std::optional<double> mMaxVal;
+    
+    static inline std::locale sLocaleTimeStamp;
 };
 
 class ParsingResults {

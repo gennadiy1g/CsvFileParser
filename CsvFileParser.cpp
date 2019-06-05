@@ -307,6 +307,12 @@ void CsvFileParser::parseColumnNames(std::wstring_view line)
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "<-" << FUNCTION_FILE_LINE << std::flush;
 }
 
+void ColumnInfo::initializeLocales()
+{
+    auto timeStampFacet = new bpt::wtime_input_facet(L"%Y-%m-%d %H:%M:%S%F");
+    sLocaleTimeStamp = std::locale(std::locale(), timeStampFacet);
+};
+
 void ColumnInfo::analyzeToken(std::wstring_view token)
 {
     ++mNumAnalyzeTokenCalls;
