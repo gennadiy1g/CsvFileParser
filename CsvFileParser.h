@@ -1,6 +1,8 @@
 #pragma once
 
 #include <atomic>
+#include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/date_time/time_facet.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
 #include <boost/locale.hpp>
@@ -17,6 +19,7 @@
 
 namespace bfs = boost::filesystem;
 namespace blocale = boost::locale;
+namespace bpt = boost::posix_time;
 
 typedef boost::escaped_list_separator<wchar_t, std::char_traits<wchar_t>> CsvSeparator;
 typedef boost::tokenizer<CsvSeparator, std::wstring::const_iterator, std::wstring> CsvTokenizer;
