@@ -77,13 +77,13 @@ BOOST_AUTO_TEST_CASE(float_decimal_int)
         BOOST_TEST(columnInfo.type() == ColumnType::String);
         BOOST_CHECK(columnInfo.IsNull());
 
-        columnInfo.analyzeToken(L"0"s); // TODO: surround with spaces
+        columnInfo.analyzeToken(L" 0 "s);
         BOOST_TEST(columnInfo.type() == ColumnType::Int);
         BOOST_CHECK(!columnInfo.IsNull());
         BOOST_TEST(columnInfo.DigitsBeforeDecimalPoint() == 1);
         BOOST_TEST(columnInfo.DigitsAfterDecimalPoint() == 0);
 
-        columnInfo.analyzeToken(L""s); // TODO: surround with spaces
+        columnInfo.analyzeToken(L" "s);
         BOOST_TEST(columnInfo.type() == ColumnType::Int);
         BOOST_CHECK(columnInfo.IsNull());
 
