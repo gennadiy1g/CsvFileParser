@@ -187,6 +187,41 @@ BOOST_AUTO_TEST_CASE(time_stamp)
     columnInfo.analyzeToken(L" "s);
     BOOST_TEST(columnInfo.type() == ColumnType::TimeStamp);
     BOOST_CHECK(columnInfo.IsNull());
+
+    columnInfo.analyzeToken(L" 2019-02-28 23:59:59.999 foo "s);
+    BOOST_TEST(columnInfo.type() == ColumnType::String);
+    BOOST_CHECK(columnInfo.IsNull());
+
+    columnInfo.analyzeToken(L" 2019-02-28 23:59:59.999 "s);
+    BOOST_TEST(columnInfo.type() == ColumnType::String);
+    BOOST_CHECK(columnInfo.IsNull());
+}
+
+BOOST_AUTO_TEST_CASE(time_stamp2)
+{
+    ColumnInfo columnInfo(L"column1"s);
+    BOOST_TEST(columnInfo.type() == ColumnType::String);
+    BOOST_CHECK(columnInfo.IsNull());
+
+    columnInfo.analyzeToken(L" 2019-02-28 23:59:59.999 "s);
+    BOOST_TEST(columnInfo.type() == ColumnType::TimeStamp);
+    BOOST_CHECK(!columnInfo.IsNull());
+
+    columnInfo.analyzeToken(L" 2019-02-28 23:59:59 "s);
+    BOOST_TEST(columnInfo.type() == ColumnType::TimeStamp);
+    BOOST_CHECK(!columnInfo.IsNull());
+
+    columnInfo.analyzeToken(L" 2019-02-28 "s);
+    BOOST_TEST(columnInfo.type() == ColumnType::TimeStamp);
+    BOOST_CHECK(!columnInfo.IsNull());
+
+    columnInfo.analyzeToken(L" 2019-02-28 2019-02-28 "s);
+    BOOST_TEST(columnInfo.type() == ColumnType::String);
+    BOOST_CHECK(!columnInfo.IsNull());
+
+    columnInfo.analyzeToken(L" 2019-02-28 23:59:59.999 "s);
+    BOOST_TEST(columnInfo.type() == ColumnType::String);
+    BOOST_CHECK(!columnInfo.IsNull());
 }
 
 BOOST_AUTO_TEST_SUITE_END();
