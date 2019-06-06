@@ -102,6 +102,8 @@ protected:
     std::optional<double> mMaxVal;
 
     static inline std::locale sLocaleTimeStamp;
+    static inline std::locale sLocaleTime;
+    static inline std::locale sLocaleDate;
 };
 
 class ParsingResults {

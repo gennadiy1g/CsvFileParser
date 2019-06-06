@@ -311,6 +311,12 @@ void ColumnInfo::initializeLocales()
 {
     auto timeStampFacet = new bpt::wtime_input_facet(L"%Y-%m-%d %H:%M:%S%F");
     sLocaleTimeStamp = std::locale(std::locale(), timeStampFacet);
+
+    auto timeFacet = new bpt::wtime_input_facet(L"%H:%M:%S%F");
+    sLocaleTime = std::locale(std::locale(), timeFacet);
+
+    auto dateFacet = new bpt::wtime_input_facet(L"%Y-%m-%d");
+    sLocaleDate = std::locale(std::locale(), dateFacet);
 };
 
 void ColumnInfo::analyzeTemporal(const std::wstring& token, const std::locale& temporalLocale, bool& isTemporal)
@@ -413,11 +419,11 @@ void ColumnInfo::analyzeToken(std::wstring_view token)
         }
 
         if (mIsTime) {
-            mIsTime = false;
+            analyzeTemporal(tokenTrim, ColumnInfo::sLocaleTime, mIsTime);
         }
 
         if (mIsDate) {
-            mIsDate = false;
+            analyzeTemporal(tokenTrim, ColumnInfo::sLocaleDate, mIsDate);
         }
     } else {
         if (!mIsNull) {
