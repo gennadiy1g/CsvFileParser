@@ -78,7 +78,6 @@ public:
     ColumnInfo& operator=(ColumnInfo&& rhs) = default;
 
     void analyzeToken(std::wstring_view token);
-    void analyzeTemporal(const std::wstring& token, const std::locale& temporalLocale, bool& isTemporal);
     ColumnType type();
     bool IsNull();
     std::size_t maxLength() { return mMaxLength; };
@@ -89,6 +88,8 @@ public:
     static void initializeLocales();
 
 protected:
+    void analyzeTemporal(const std::wstring& token, const std::locale& temporalLocale, bool& isTemporal);
+
     std::size_t mNumAnalyzeTokenCalls { 0 };
     std::wstring mName;
     bool mIsFloat { true };
