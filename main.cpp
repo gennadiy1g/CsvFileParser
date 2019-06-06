@@ -68,16 +68,16 @@ BOOST_AUTO_TEST_CASE(ZX0training_CP863)
 
 BOOST_AUTO_TEST_SUITE_END();
 
-struct ColumnInfoInitializeLocales {
-    ColumnInfoInitializeLocales()
+struct TestSuiteFixtureAnalyzeToken {
+    TestSuiteFixtureAnalyzeToken()
     {
-        BOOST_TEST_MESSAGE("setup fixture ColumnInfoInitializeLocales");
+        BOOST_TEST_MESSAGE("setup fixture TestSuiteFixtureAnalyzeToken");
         ColumnInfo::initializeLocales();
     }
-    ~ColumnInfoInitializeLocales() { BOOST_TEST_MESSAGE("teardown fixture ColumnInfoInitializeLocales"); }
+    ~TestSuiteFixtureAnalyzeToken() { BOOST_TEST_MESSAGE("teardown fixture TestSuiteFixtureAnalyzeToken"); }
 };
 
-BOOST_AUTO_TEST_SUITE(ColumnInfo_analyzeToken, *boost::unit_test::fixture<ColumnInfoInitializeLocales>());
+BOOST_AUTO_TEST_SUITE(ColumnInfo_analyzeToken, *boost::unit_test::fixture<TestSuiteFixtureAnalyzeToken>());
 
 BOOST_AUTO_TEST_CASE(float_decimal_int)
 {
