@@ -75,6 +75,7 @@ public:
     ColumnInfo& operator=(ColumnInfo&& rhs) = default;
 
     void analyzeToken(std::wstring_view token);
+    void analyzeTemporal(const std::wstring& token, const std::locale& temporalLocale, bool& isTemporal);
     ColumnType type();
     bool IsNull();
     std::size_t length() { return mLength; };
@@ -99,7 +100,7 @@ protected:
     std::optional<std::size_t> mDigitsAfterDecimalPoint;
     std::optional<double> mMinVal;
     std::optional<double> mMaxVal;
-    
+
     static inline std::locale sLocaleTimeStamp;
 };
 

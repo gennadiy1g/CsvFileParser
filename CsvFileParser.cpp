@@ -313,6 +313,21 @@ void ColumnInfo::initializeLocales()
     sLocaleTimeStamp = std::locale(std::locale(), timeStampFacet);
 };
 
+void ColumnInfo::analyzeTemporal(const std::wstring& token, const std::locale& temporalLocale, bool& isTemporal)
+{
+    std::wistringstream stringStream(token);
+    stringStream.imbue(temporalLocale);
+    assert(!stringStream.eof());
+    bpt::ptime posixTime;
+    stringStream >> posixTime;
+    if (!stringStream.fail()) {
+        stringStream.get();
+        isTemporal = stringStream.eof(); // there must be no more characters afther the parsed ones
+    } else {
+        isTemporal = false;
+    }
+};
+
 void ColumnInfo::analyzeToken(std::wstring_view token)
 {
     ++mNumAnalyzeTokenCalls;
