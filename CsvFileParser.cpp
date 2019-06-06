@@ -390,14 +390,18 @@ void ColumnInfo::analyzeToken(std::wstring_view token)
         }
 
         if (mIsTimeStamp) {
-            std::wistringstream stringStream(tokenTrim);
-            stringStream.imbue(ColumnInfo::sLocaleTimeStamp);
-            assert(!stringStream.eof());
-            bpt::ptime posixTime;
-            stringStream >> posixTime;
-            if (!stringStream.fail()) {
-                stringStream.get();
-                mIsTimeStamp = stringStream.eof(); // there must be no more characters afther the parsed ones
+            if (lengthTokenTrim > 10) { // There must be more characters than in YYYY-MM-DD
+                std::wistringstream stringStream(tokenTrim);
+                stringStream.imbue(ColumnInfo::sLocaleTimeStamp);
+                assert(!stringStream.eof());
+                bpt::ptime posixTime;
+                stringStream >> posixTime;
+                if (!stringStream.fail()) {
+                    stringStream.get();
+                    mIsTimeStamp = stringStream.eof(); // there must be no more characters afther the parsed ones
+                } else {
+                    mIsTimeStamp = false;
+                }
             } else {
                 mIsTimeStamp = false;
             }
