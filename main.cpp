@@ -91,14 +91,17 @@ BOOST_AUTO_TEST_CASE(float_decimal_int)
         BOOST_CHECK(!columnInfo.IsNull());
         BOOST_TEST(columnInfo.DigitsBeforeDecimalPoint() == 1);
         BOOST_TEST(columnInfo.DigitsAfterDecimalPoint() == 0);
+        BOOST_TEST(columnInfo.minLength() == 3);
 
         columnInfo.analyzeToken(L" "s);
         BOOST_TEST(columnInfo.type() == ColumnType::Int);
         BOOST_CHECK(columnInfo.IsNull());
+        BOOST_TEST(columnInfo.minLength() == 1);
 
-        columnInfo.analyzeToken(L" "s);
+        columnInfo.analyzeToken(L""s);
         BOOST_TEST(columnInfo.type() == ColumnType::Int);
         BOOST_CHECK(columnInfo.IsNull());
+        BOOST_TEST(columnInfo.minLength() == 0);
 
         columnInfo.analyzeToken(L" 1 "s);
         BOOST_TEST(columnInfo.type() == ColumnType::Int);
@@ -155,14 +158,15 @@ BOOST_AUTO_TEST_CASE(float_decimal_int)
         columnInfo.analyzeToken(L"0X0p-1"s);
         BOOST_TEST(columnInfo.type() == ColumnType::String);
         BOOST_CHECK(columnInfo.IsNull());
-        BOOST_TEST(columnInfo.length() == 11);
+        BOOST_TEST(columnInfo.maxLength() == 11);
 
         columnInfo.analyzeToken(L"123456789"s);
         BOOST_TEST(columnInfo.type() == ColumnType::String);
         BOOST_CHECK(columnInfo.IsNull());
         BOOST_TEST(columnInfo.DigitsBeforeDecimalPoint() == 5);
         BOOST_TEST(columnInfo.DigitsAfterDecimalPoint() == 3);
-        BOOST_TEST(columnInfo.length() == 11);
+        BOOST_TEST(columnInfo.maxLength() == 11);
+        BOOST_TEST(columnInfo.minLength() == 0);
     }
     {
         ColumnInfo columnInfo(L"column2"s);

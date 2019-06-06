@@ -339,8 +339,11 @@ void ColumnInfo::analyzeToken(std::wstring_view token)
     ++mNumAnalyzeTokenCalls;
 
     auto lengthToken = token.length();
-    if (lengthToken > mLength) {
-        mLength = lengthToken;
+    if (lengthToken > mMaxLength) {
+        mMaxLength = lengthToken;
+    }
+    if ((!mMinLength.has_value()) || (lengthToken < mMinLength)) {
+        mMinLength = lengthToken;
     }
 
     std::wstring tokenTrim(token);

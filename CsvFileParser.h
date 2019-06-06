@@ -81,7 +81,8 @@ public:
     void analyzeTemporal(const std::wstring& token, const std::locale& temporalLocale, bool& isTemporal);
     ColumnType type();
     bool IsNull();
-    std::size_t length() { return mLength; };
+    std::size_t maxLength() { return mMaxLength; };
+    std::size_t minLength() { return mMinLength.value_or(0); };
     std::size_t DigitsBeforeDecimalPoint() { return mDigitsBeforeDecimalPoint.value_or(0); };
     std::size_t DigitsAfterDecimalPoint() { return mDigitsAfterDecimalPoint.value_or(0); };
 
@@ -98,7 +99,8 @@ protected:
     bool mIsTime { true };
     bool mIsTimeStamp { true };
     bool mIsNull { false };
-    std::size_t mLength { 0 };
+    std::size_t mMaxLength { 0 };
+    std::optional<std::size_t> mMinLength;
     std::optional<std::size_t> mDigitsBeforeDecimalPoint;
     std::optional<std::size_t> mDigitsAfterDecimalPoint;
     std::optional<double> mMinVal;
