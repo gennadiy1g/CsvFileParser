@@ -54,9 +54,12 @@ enum class ColumnType {
     Float, // includes Decimal and Int
     Decimal, // includes Int
     Int,
+
     TimeStamp,
     Time,
-    Date
+    Date,
+
+    Bool
 };
 
 std::ostream& operator<<(std::ostream& ostr, const ColumnType& columnType);

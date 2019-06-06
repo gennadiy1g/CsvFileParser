@@ -425,6 +425,12 @@ void ColumnInfo::analyzeToken(std::wstring_view token)
         if (mIsDate) {
             analyzeTemporal(tokenTrim, ColumnInfo::sLocaleDate, mIsDate);
         }
+
+        if (mIsBool) {
+            if ((tokenTrim != L"true") && (tokenTrim != L"false")) {
+                mIsBool = false;
+            }
+        }
     } else {
         if (!mIsNull) {
             mIsNull = true;
@@ -449,6 +455,9 @@ ColumnType ColumnInfo::type()
             return ColumnType::Time;
         } else if (mIsDate) {
             return ColumnType::Date;
+        }
+        if (mIsBool) {
+            return ColumnType::Bool;
         } else {
             return ColumnType::String;
         }

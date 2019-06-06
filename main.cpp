@@ -317,4 +317,27 @@ BOOST_AUTO_TEST_CASE(date2)
     BOOST_CHECK(!columnInfo.IsNull());
 }
 
+BOOST_AUTO_TEST_CASE(bool_)
+{
+    ColumnInfo columnInfo(L"column1"s);
+    BOOST_TEST(columnInfo.type() == ColumnType::String);
+    BOOST_CHECK(columnInfo.IsNull());
+
+    columnInfo.analyzeToken(L" true "s);
+    BOOST_TEST(columnInfo.type() == ColumnType::Bool);
+    BOOST_CHECK(!columnInfo.IsNull());
+
+    columnInfo.analyzeToken(L" false "s);
+    BOOST_TEST(columnInfo.type() == ColumnType::Bool);
+    BOOST_CHECK(!columnInfo.IsNull());
+
+    columnInfo.analyzeToken(L" yes "s);
+    BOOST_TEST(columnInfo.type() == ColumnType::String);
+    BOOST_CHECK(!columnInfo.IsNull());
+
+    columnInfo.analyzeToken(L" true "s);
+    BOOST_TEST(columnInfo.type() == ColumnType::String);
+    BOOST_CHECK(!columnInfo.IsNull());
+}
+
 BOOST_AUTO_TEST_SUITE_END();
