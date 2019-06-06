@@ -83,8 +83,8 @@ public:
     bool IsNull();
     std::size_t maxLength() { return mMaxLength; };
     std::size_t minLength() { return mMinLength.value_or(0); };
-    std::size_t DigitsBeforeDecimalPoint() { return mDigitsBeforeDecimalPoint.value_or(0); };
-    std::size_t DigitsAfterDecimalPoint() { return mDigitsAfterDecimalPoint.value_or(0); };
+    std::size_t digitsBeforeDecimalPoint() { return mDigitsBeforeDecimalPoint.value_or(0); };
+    std::size_t digitsAfterDecimalPoint() { return mDigitsAfterDecimalPoint.value_or(0); };
 
     static void initializeLocales();
 
