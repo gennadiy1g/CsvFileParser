@@ -341,7 +341,9 @@ void ColumnInfo::analyzeTemporal(const std::wstring& token, const std::locale& t
 
 void ColumnInfo::analyzeToken(std::wstring_view token)
 {
-    ++mNumAnalyzeTokenCalls;
+    if (!mAnalyzed) {
+        mAnalyzed = true;
+    };
 
     auto lengthToken = token.length();
     if (lengthToken > mMaxLength) {
@@ -447,7 +449,7 @@ void ColumnInfo::analyzeToken(std::wstring_view token)
 
 ColumnType ColumnInfo::type()
 {
-    if (mNumAnalyzeTokenCalls > 0) {
+    if (mAnalyzed) {
         if (mIsFloat) {
             if (mIsInt) {
                 return ColumnType::Int;
@@ -476,7 +478,7 @@ ColumnType ColumnInfo::type()
 
 bool ColumnInfo::IsNull()
 {
-    if (mNumAnalyzeTokenCalls > 0) {
+    if (mAnalyzed) {
         return mIsNull;
     } else {
         return true;

@@ -90,7 +90,7 @@ public:
 protected:
     void analyzeTemporal(const std::wstring& token, const std::locale& temporalLocale, bool& isTemporal);
 
-    std::size_t mNumAnalyzeTokenCalls { 0 };
+    bool mAnalyzed { false };
     std::wstring mName;
     bool mIsFloat { true };
     bool mIsDecimal { true };
