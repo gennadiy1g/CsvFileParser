@@ -328,7 +328,7 @@ void ColumnInfo::analyzeTemporal(const std::wstring& token, const std::locale& t
     stringStream >> posixTime;
     if (!stringStream.fail()) {
         stringStream.get();
-        isTemporal = stringStream.eof(); // there must be no more characters afther the parsed ones
+        isTemporal = stringStream.eof(); // there must be no more characters after the parsed ones
     } else {
         isTemporal = false;
     }
