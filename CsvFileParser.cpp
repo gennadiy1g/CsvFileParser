@@ -414,19 +414,18 @@ void ColumnInfo::analyzeToken(std::wstring_view token)
         }
 
         if (mIsTimeStamp) {
-            if (lengthTokenTrim > 10) { // There must be more characters than in YYYY-MM-DD
-                analyzeTemporal(tokenTrim, ColumnInfo::sLocaleTimeStamp, mIsTimeStamp);
+            analyzeTemporal(tokenTrim, ColumnInfo::sLocaleTimeStamp, mIsTimeStamp);
+            if (mIsTimeStamp) {
+                if (mIsDate) {
+                    analyzeTemporal(tokenTrim, ColumnInfo::sLocaleDate, mIsDate);
+                }
             } else {
-                mIsTimeStamp = false;
+                mIsDate = false;
             }
         }
 
         if (mIsTime) {
             analyzeTemporal(tokenTrim, ColumnInfo::sLocaleTime, mIsTime);
-        }
-
-        if (mIsDate) {
-            analyzeTemporal(tokenTrim, ColumnInfo::sLocaleDate, mIsDate);
         }
 
         if (mIsBool) {
@@ -453,13 +452,14 @@ ColumnType ColumnInfo::type()
                 return ColumnType::Float;
             }
         } else if (mIsTimeStamp) {
-            return ColumnType::TimeStamp;
+            if (mIsDate) {
+                return ColumnType::Date;
+            } else {
+                return ColumnType::TimeStamp;
+            }
         } else if (mIsTime) {
             return ColumnType::Time;
-        } else if (mIsDate) {
-            return ColumnType::Date;
-        }
-        if (mIsBool) {
+        } else if (mIsBool) {
             return ColumnType::Bool;
         } else {
             return ColumnType::String;
