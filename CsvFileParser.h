@@ -91,8 +91,9 @@ public:
 protected:
     void analyzeTemporal(const std::wstring& token, const std::locale& temporalLocale, bool& isTemporal);
 
-    bool mAnalyzed { false };
     std::wstring mName;
+
+    bool mAnalyzed { false };
     bool mIsFloat { true };
     bool mIsDecimal { true };
     bool mIsInt { true };
