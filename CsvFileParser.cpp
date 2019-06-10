@@ -349,7 +349,7 @@ void ColumnInfo::analyzeToken(std::wstring_view token)
     if (lengthToken > mMaxLength) {
         mMaxLength = lengthToken;
     }
-    if ((!mMinLength.has_value()) || (lengthToken < mMinLength)) {
+    if ((lengthToken > 0) && ((!mMinLength.has_value()) || (lengthToken < mMinLength))) {
         mMinLength = lengthToken;
     }
 
