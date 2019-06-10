@@ -86,6 +86,7 @@ public:
     std::size_t digitsAfterDecimalPoint() { return mDigitsAfterDecimalPoint.value_or(0); };
 
     static void initializeLocales();
+    void update(const ColumnInfo& columnInfo);
 
 protected:
     void analyzeTemporal(const std::wstring& token, const std::locale& temporalLocale, bool& isTemporal);

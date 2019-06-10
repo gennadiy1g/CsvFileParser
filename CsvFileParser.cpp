@@ -17,6 +17,9 @@ ColumnInfo::ColumnInfo(std::wstring_view name)
 
 void ParsingResults::update(const ParsingResults& results)
 {
+    for (std::size_t i = 0; i < mColumns.size(); ++i) {
+        mColumns[i].update(results.mColumns[i]);
+    };
 }
 
 void ParsingResults::addColumn(std::wstring_view name)
@@ -483,6 +486,24 @@ bool ColumnInfo::IsNull()
     } else {
         return true;
     }
+};
+
+void ColumnInfo::update(const ColumnInfo& columnInfo)
+{
+    assert(columnInfo.mAnalyzed);
+    if (!mAnalyzed) {
+        mAnalyzed = columnInfo.mAnalyzed;
+    }
+
+    mIsFloat = mIsFloat && columnInfo.mIsFloat;
+    mIsDecimal = mIsDecimal && columnInfo.mIsDecimal;
+    mIsInt = mIsInt && columnInfo.mIsInt;
+    mIsBool = mIsBool && columnInfo.mIsBool;
+    mIsDate = mIsDate && columnInfo.mIsDate;
+    mIsTime = mIsTime && columnInfo.mIsTime;
+    mIsTimeStamp = mIsTimeStamp && columnInfo.mIsTimeStamp;
+
+    mIsNull = mIsNull || columnInfo.mIsNull;
 };
 
 std::ostream& operator<<(std::ostream& ostr, const ColumnType& columnType)
