@@ -20,6 +20,7 @@ void ParsingResults::update(const ParsingResults& results)
     for (std::size_t i = 0; i < mColumns.size(); ++i) {
         mColumns[i].update(results.mColumns[i]);
     };
+    mNumMalformedLines = mNumMalformedLines + results.mNumMalformedLines;
 }
 
 void ParsingResults::addColumn(std::wstring_view name)
