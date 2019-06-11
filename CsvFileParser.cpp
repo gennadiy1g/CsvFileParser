@@ -82,7 +82,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t quote, wchar_t es
         throw std::runtime_error("Unable to open file \""s + blocale::conv::utf_to_utf<char>(mInputFile.native()) + "\" for reading!"s);
     }
     std::wstring line;
-    std::size_t numInputFileLines { 0 }; // Counter of lines in the file.
+    std::size_t numLines { 0 }; // Counter of lines in the file.
 
     // Maximum number of lines in one buffer.
 #ifdef NDEBUG
@@ -120,10 +120,10 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t quote, wchar_t es
     // Reader loop
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Starting the reader loop." << FUNCTION_FILE_LINE << std::flush;
     while (std::getline(inputFile, line)) {
-        ++numInputFileLines;
-        BOOST_LOG_SEV(gLogger, bltrivial::trace) << numInputFileLines << ' ' << line << FUNCTION_FILE_LINE;
+        ++numLines;
+        BOOST_LOG_SEV(gLogger, bltrivial::trace) << numLines << ' ' << line << FUNCTION_FILE_LINE;
 
-        if (numInputFileLines == 1) {
+        if (numLines == 1) {
             parseColumnNames(line);
             continue;
         }
@@ -151,12 +151,12 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t quote, wchar_t es
         }
     }
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Finished the reader loop." << FUNCTION_FILE_LINE << std::flush;
-    mResults.mNumLines = numInputFileLines;
+    mResults.mNumLines = numLines;
 
     std::stringstream message;
     if (!inputFile.eof()) {
         message << "Character set conversion error! File: \"" << blocale::conv::utf_to_utf<char>(mInputFile.native())
-                << "\", line: " << numInputFileLines + 1 << ", column: " << line.length() + 1 << '.';
+                << "\", line: " << numLines + 1 << ", column: " << line.length() + 1 << '.';
         BOOST_LOG_SEV(gLogger, bltrivial::debug) << line;
         BOOST_LOG_SEV(gLogger, bltrivial::error) << message.str() << FUNCTION_FILE_LINE << std::flush;
         {
@@ -187,7 +187,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t quote, wchar_t es
         BOOST_LOG_SEV(gLogger, bltrivial::error) << "Throwing exception @" << FUNCTION_FILE_LINE << std::flush;
         throw std::runtime_error(message.str());
     } else {
-        BOOST_LOG_SEV(gLogger, bltrivial::debug) << "All " << numInputFileLines << " lines processed." << FUNCTION_FILE_LINE;
+        BOOST_LOG_SEV(gLogger, bltrivial::debug) << "All " << numLines << " lines processed." << FUNCTION_FILE_LINE;
         BOOST_LOG_SEV(gLogger, bltrivial::trace) << "<-" << FUNCTION_FILE_LINE << std::flush;
         return std::move(mResults);
     }
