@@ -134,6 +134,7 @@ public:
 
 private:
     std::vector<ColumnInfo> mColumns;
+    std::size_t mNumLines { 0 };
     std::size_t mNumMalformedLines { 0 };
 };
 

@@ -151,6 +151,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t quote, wchar_t es
         }
     }
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Finished the reader loop." << FUNCTION_FILE_LINE << std::flush;
+    mResults.mNumLines = numInputFileLines;
 
     std::stringstream message;
     if (!inputFile.eof()) {
