@@ -278,17 +278,17 @@ void CsvFileParser::parseBuffer(unsigned int numBufferToParse, ParsingResults& r
 
     CsvTokenizer tok(L""s, mSep);
     for (auto& line : mBuffers.at(numBufferToParse).mLines) {
-        std::size_t i { 0 };
+        std::size_t columnNumber { 0 };
         tok.assign(line);
         for (auto beg = tok.begin(); beg != tok.end(); ++beg) {
             // BOOST_LOG_SEV(gLogger, bltrivial::trace) << *beg;
             auto token = *beg;
-            if (i < results.mColumns.size()) {
-                results.mColumns[i].analyzeToken(token);
+            if (columnNumber < results.mColumns.size()) {
+                results.mColumns[columnNumber].analyzeToken(token);
             }
-            ++i;
+            ++columnNumber;
         }
-        if (i != results.mColumns.size()) {
+        if (columnNumber != results.mColumns.size()) {
             ++results.mNumMalformedLines;
         }
     }
