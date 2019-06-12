@@ -64,6 +64,8 @@ enum class ColumnType {
 
 std::ostream& operator<<(std::ostream& ostr, const ColumnType& columnType);
 
+std::wostream& operator<<(std::wostream& ostr, const ColumnType& columnType);
+
 class ColumnInfo {
     friend std::wostream& operator<<(std::wostream& wostr, const ColumnInfo& columnInfo);
 
