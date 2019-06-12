@@ -90,7 +90,7 @@ public:
     static void initializeLocales();
     void update(const ColumnInfo& columnInfo);
 
-protected:
+private:
     void analyzeTemporal(const std::wstring& token, const std::locale& temporalLocale, bool& isTemporal);
 
     std::wstring mName;
