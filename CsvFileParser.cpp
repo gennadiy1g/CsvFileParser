@@ -250,7 +250,7 @@ void CsvFileParser::parser()
                 results = mResults;
             }
             parseBuffer(numBufferToParse.value(), results);
-            BOOST_LOG_SEV(gLogger, bltrivial::trace) << results;
+            BOOST_LOG_SEV(gLogger, bltrivial::trace) << results << FUNCTION_FILE_LINE;
             {
                 BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Lock" << FUNCTION_FILE_LINE;
                 std::unique_lock lock(mMutexResults);
