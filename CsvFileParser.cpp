@@ -536,7 +536,11 @@ void ColumnInfo::update(const ColumnInfo& columnInfo)
     }
 };
 
-std::wostream& operator<<(std::wostream& wostr, const ColumnInfo& columnInfo) { return wostr; };
+std::wostream& operator<<(std::wostream& wostr, const ColumnInfo& columnInfo)
+{
+    wostr << columnInfo.mName /*<< columnInfo.type()*/;
+    return wostr;
+};
 
 std::ostream& operator<<(std::ostream& ostr, const ColumnType& columnType)
 {
