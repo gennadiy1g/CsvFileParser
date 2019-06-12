@@ -30,6 +30,9 @@ void ParsingResults::addColumn(std::wstring_view name)
 
 std::wostream& operator<<(std::wostream& wostr, const ParsingResults& parsingResults)
 {
+    for (auto columnInfo : parsingResults.mColumns) {
+        wostr << columnInfo;
+    }
     return wostr;
 };
 
@@ -532,6 +535,8 @@ void ColumnInfo::update(const ColumnInfo& columnInfo)
         mMaxVal = columnInfo.mMaxVal;
     }
 };
+
+std::wostream& operator<<(std::wostream& wostr, const ColumnInfo& columnInfo) { return wostr; };
 
 std::ostream& operator<<(std::ostream& ostr, const ColumnType& columnType)
 {

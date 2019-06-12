@@ -65,6 +65,8 @@ enum class ColumnType {
 std::ostream& operator<<(std::ostream& ostr, const ColumnType& columnType);
 
 class ColumnInfo {
+    friend std::wostream& operator<<(std::wostream& wostr, const ColumnInfo& columnInfo);
+
 public:
     explicit ColumnInfo(std::wstring_view name); // Constructor
     virtual ~ColumnInfo() = default; // Defaulted virtual destructor
@@ -113,6 +115,8 @@ protected:
     static inline std::locale sLocaleTime;
     static inline std::locale sLocaleDate;
 };
+
+std::wostream& operator<<(std::wostream& wostr, const ColumnInfo& columnInfo);
 
 class ParsingResults {
     friend class CsvFileParser;
