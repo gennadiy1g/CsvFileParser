@@ -116,6 +116,7 @@ protected:
 
 class ParsingResults {
     friend class CsvFileParser;
+    friend std::wostream& operator<<(std::wostream& wostr, const ParsingResults& parsingResults);
 
 public:
     ParsingResults() = default; // Constructor
@@ -137,6 +138,8 @@ private:
     std::size_t mNumLines { 0 };
     std::size_t mNumMalformedLines { 0 };
 };
+
+std::wostream& operator<<(std::wostream& wostr, const ParsingResults& parsingResults);
 
 class CsvFileParser {
 public:

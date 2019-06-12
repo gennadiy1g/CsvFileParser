@@ -28,6 +28,11 @@ void ParsingResults::addColumn(std::wstring_view name)
     mColumns.emplace_back(name);
 }
 
+std::wostream& operator<<(std::wostream& wostr, const ParsingResults& parsingResults)
+{
+    return wostr;
+};
+
 void ParserBuffer::addLine(std::wstring&& line)
 {
     mLines.push_back(std::move(line));
@@ -245,6 +250,7 @@ void CsvFileParser::parser()
                 results = mResults;
             }
             parseBuffer(numBufferToParse.value(), results);
+            BOOST_LOG_SEV(gLogger, bltrivial::trace) << results;
             {
                 BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Lock" << FUNCTION_FILE_LINE;
                 std::unique_lock lock(mMutexResults);
