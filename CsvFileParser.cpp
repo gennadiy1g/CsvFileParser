@@ -461,7 +461,7 @@ void ColumnInfo::analyzeToken(std::wstring_view token)
     }
 };
 
-ColumnType ColumnInfo::type()
+ColumnType ColumnInfo::type() const
 {
     if (mAnalyzed) {
         if (mIsFloat) {

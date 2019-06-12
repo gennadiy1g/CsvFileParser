@@ -80,7 +80,7 @@ public:
     ColumnInfo& operator=(ColumnInfo&& rhs) = default;
 
     void analyzeToken(std::wstring_view token);
-    ColumnType type();
+    ColumnType type() const;
     bool IsNull();
     std::size_t maxLength() { return mMaxLength; };
     std::size_t minLength() { return mMinLength.value_or(0); };
