@@ -30,7 +30,7 @@ void ParsingResults::addColumn(std::wstring_view name)
 
 std::wostream& operator<<(std::wostream& wostr, const ParsingResults& parsingResults)
 {
-    for (auto columnInfo : parsingResults.mColumns) {
+    for (auto& columnInfo : parsingResults.mColumns) {
         wostr << columnInfo;
     }
     return wostr;
