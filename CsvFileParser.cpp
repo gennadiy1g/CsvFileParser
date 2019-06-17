@@ -545,6 +545,23 @@ void ColumnInfo::update(const ColumnInfo& columnInfo)
 
 std::wostream& operator<<(std::wostream& wostr, const ColumnInfo& columnInfo)
 {
-    wostr << columnInfo.mName << columnInfo.type();
+    wostr << columnInfo.mName << ' ' << columnInfo.type() << '(';
+    if (columnInfo.mMinLength.has_value()) {
+        wostr << "min length = " << columnInfo.mMinLength.value() << ", ";
+    }
+    wostr << "max length = " << columnInfo.mMaxLength;
+    if (columnInfo.mDigitsBeforeDecimalPoint.has_value()) {
+        wostr << ", digits before decimal = " << columnInfo.mDigitsBeforeDecimalPoint.value();
+    }
+    if (columnInfo.mDigitsAfterDecimalPoint.has_value()) {
+        wostr << ", digits after decimal = " << columnInfo.mDigitsAfterDecimalPoint.value();
+    }
+    if (columnInfo.mMinVal.has_value()) {
+        wostr << ", min value = " << columnInfo.mMinVal.value();
+    }
+    if (columnInfo.mMaxVal.has_value()) {
+        wostr << ", max value = " << columnInfo.mMaxVal.value();
+    }
+    wostr << ')';
     return wostr;
 };
