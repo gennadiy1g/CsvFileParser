@@ -62,9 +62,37 @@ enum class ColumnType {
     Bool
 };
 
-std::ostream& operator<<(std::ostream& ostr, const ColumnType& columnType);
-
-std::wostream& operator<<(std::wostream& ostr, const ColumnType& columnType);
+template <typename T>
+T& operator<<(T& ostr, const ColumnType& columnType)
+{
+    switch (columnType) {
+    case ColumnType::Float:
+        ostr << "ColumnType::Float";
+        break;
+    case ColumnType::Decimal:
+        ostr << "ColumnType::Decimal";
+        break;
+    case ColumnType::Int:
+        ostr << "ColumnType::Int";
+        break;
+    case ColumnType::TimeStamp:
+        ostr << "ColumnType::TimeStamp";
+        break;
+    case ColumnType::Date:
+        ostr << "ColumnType::Date";
+        break;
+    case ColumnType::Time:
+        ostr << "ColumnType::Time";
+        break;
+    case ColumnType::String:
+        ostr << "ColumnType::String";
+        break;
+    default:
+        ostr << "uknown ColumnType";
+        break;
+    }
+    return ostr;
+};
 
 class ColumnInfo {
     friend std::wostream& operator<<(std::wostream& wostr, const ColumnInfo& columnInfo);
