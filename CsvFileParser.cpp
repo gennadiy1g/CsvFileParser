@@ -294,7 +294,7 @@ void CsvFileParser::parseBuffer(unsigned int numBufferToParse, ParsingResults& r
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Starting to parse the buffer #" << numBufferToParse << "." << FUNCTION_FILE_LINE;
 
     CsvTokenizer tok(L""s, mSep);
-    for (auto& line : mBuffers.at(numBufferToParse).mLines) {
+    for (const auto& line : mBuffers.at(numBufferToParse).mLines) {
         std::size_t columnNumber { 0 };
         tok.assign(line);
         for (auto beg = tok.begin(); beg != tok.end(); ++beg) {
