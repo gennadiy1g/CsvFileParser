@@ -55,10 +55,10 @@ enum class ColumnType {
     Decimal, // includes Int
     Int,
 
-    TimeStamp,
-    Time,
+    TimeStamp, // incudes Date
     Date,
 
+    Time,
     Bool
 };
 
