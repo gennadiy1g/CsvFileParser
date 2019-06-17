@@ -30,9 +30,16 @@ void ParsingResults::addColumn(std::wstring_view name)
 
 std::wostream& operator<<(std::wostream& wostr, const ParsingResults& parsingResults)
 {
-    for (auto& columnInfo : parsingResults.mColumns) {
+    wostr << "Parsing results: " << parsingResults.mColumns.size() << " columns: ";
+    auto isFirstIteration = true;
+    for (const auto& columnInfo : parsingResults.mColumns) {
+        if (!isFirstIteration) {
+            wostr << ", ";
+        }
         wostr << columnInfo;
+        isFirstIteration = false;
     }
+    wostr << "; " << parsingResults.mNumLines << " lines; " << parsingResults.mNumMalformedLines << " malformed lines.";
     return wostr;
 };
 
