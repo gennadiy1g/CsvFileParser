@@ -266,7 +266,9 @@ void CsvFileParser::parser()
             {
                 BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Lock" << FUNCTION_FILE_LINE;
                 std::unique_lock lock(mMutexResults);
+                BOOST_LOG_SEV(gLogger, bltrivial::trace) << mResults << FUNCTION_FILE_LINE;
                 mResults.update(results);
+                BOOST_LOG_SEV(gLogger, bltrivial::trace) << mResults << FUNCTION_FILE_LINE;
             }
 
             // Part 3. Clear the parsed buffer and return it into the queue of empty buffers.
