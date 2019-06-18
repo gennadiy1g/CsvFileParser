@@ -197,6 +197,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t quote, wchar_t es
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Starting to wait for all parser threads to finish." << FUNCTION_FILE_LINE << std::flush;
     std::for_each(threads.begin(), threads.end(), [](auto& t) { t.join(); });
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Finished waiting. All parser threads finished." << FUNCTION_FILE_LINE << std::flush;
+    BOOST_LOG_SEV(gLogger, bltrivial::trace) << mResults << FUNCTION_FILE_LINE;
 
     if (!inputFile.eof()) {
         BOOST_LOG_SEV(gLogger, bltrivial::error) << "Throwing exception @" << FUNCTION_FILE_LINE << std::flush;
