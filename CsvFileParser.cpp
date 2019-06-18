@@ -259,6 +259,8 @@ void CsvFileParser::parser()
                 BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Lock" << FUNCTION_FILE_LINE;
                 std::shared_lock lock(mMutexResults);
                 results = mResults;
+                results.mNumLines = 0;
+                results.mNumMalformedLines = 0;
             }
             BOOST_LOG_SEV(gLogger, bltrivial::trace) << results << FUNCTION_FILE_LINE;
             parseBuffer(numBufferToParse.value(), results);
