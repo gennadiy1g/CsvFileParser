@@ -556,7 +556,9 @@ std::wostream& operator<<(std::wostream& wostr, const ColumnInfo& columnInfo)
         if (columnInfo.mMinLength.has_value()) {
             wostr << ", min length = " << columnInfo.mMinLength.value();
         }
-        wostr << ", max length = " << columnInfo.mMaxLength;
+        if (columnInfo.mMaxLength > 0) {
+            wostr << ", max length = " << columnInfo.mMaxLength;
+        }
         if (columnInfo.mDigitsBeforeDecimalPoint.has_value()) {
             wostr << ", digits before decimal = " << columnInfo.mDigitsBeforeDecimalPoint.value();
         }
