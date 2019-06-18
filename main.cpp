@@ -101,7 +101,7 @@ BOOST_AUTO_TEST_CASE(float_decimal_int)
         columnInfo.analyzeToken(L""s);
         BOOST_TEST(columnInfo.type() == ColumnType::Int);
         BOOST_CHECK(columnInfo.IsNull());
-        BOOST_TEST(columnInfo.minLength() == 0);
+        BOOST_TEST(columnInfo.minLength() == 1);
 
         columnInfo.analyzeToken(L" 1 "s);
         BOOST_TEST(columnInfo.type() == ColumnType::Int);
@@ -166,7 +166,7 @@ BOOST_AUTO_TEST_CASE(float_decimal_int)
         BOOST_TEST(columnInfo.digitsBeforeDecimalPoint() == 5);
         BOOST_TEST(columnInfo.digitsAfterDecimalPoint() == 3);
         BOOST_TEST(columnInfo.maxLength() == 11);
-        BOOST_TEST(columnInfo.minLength() == 0);
+        BOOST_TEST(columnInfo.minLength() == 1);
     }
     {
         ColumnInfo columnInfo(L"column2"s);
