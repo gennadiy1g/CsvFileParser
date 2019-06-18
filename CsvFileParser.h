@@ -62,9 +62,41 @@ enum class ColumnType {
     Bool
 };
 
-std::ostream& operator<<(std::ostream& ostr, const ColumnType& columnType);
+template <typename T>
+T& operator<<(T& ostr, const ColumnType& columnType)
+{
+    switch (columnType) {
+    case ColumnType::Float:
+        ostr << "ColumnType::Float";
+        break;
+    case ColumnType::Decimal:
+        ostr << "ColumnType::Decimal";
+        break;
+    case ColumnType::Int:
+        ostr << "ColumnType::Int";
+        break;
+    case ColumnType::TimeStamp:
+        ostr << "ColumnType::TimeStamp";
+        break;
+    case ColumnType::Date:
+        ostr << "ColumnType::Date";
+        break;
+    case ColumnType::Time:
+        ostr << "ColumnType::Time";
+        break;
+    case ColumnType::String:
+        ostr << "ColumnType::String";
+        break;
+    default:
+        ostr << "uknown ColumnType";
+        break;
+    }
+    return ostr;
+};
 
 class ColumnInfo {
+    friend std::wostream& operator<<(std::wostream& wostr, const ColumnInfo& columnInfo);
+
 public:
     explicit ColumnInfo(std::wstring_view name); // Constructor
     virtual ~ColumnInfo() = default; // Defaulted virtual destructor
@@ -114,8 +146,11 @@ private:
     static inline std::locale sLocaleDate;
 };
 
+std::wostream& operator<<(std::wostream& wostr, const ColumnInfo& columnInfo);
+
 class ParsingResults {
     friend class CsvFileParser;
+    friend std::wostream& operator<<(std::wostream& wostr, const ParsingResults& parsingResults);
 
 public:
     ParsingResults() = default; // Constructor
@@ -137,6 +172,8 @@ private:
     std::size_t mNumLines { 0 };
     std::size_t mNumMalformedLines { 0 };
 };
+
+std::wostream& operator<<(std::wostream& wostr, const ParsingResults& parsingResults);
 
 class CsvFileParser {
 public:

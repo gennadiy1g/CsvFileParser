@@ -28,6 +28,21 @@ void ParsingResults::addColumn(std::wstring_view name)
     mColumns.emplace_back(name);
 }
 
+std::wostream& operator<<(std::wostream& wostr, const ParsingResults& parsingResults)
+{
+    wostr << "Parsing results: " << parsingResults.mColumns.size() << " columns: ";
+    auto isFirstIteration = true;
+    for (const auto& columnInfo : parsingResults.mColumns) {
+        if (!isFirstIteration) {
+            wostr << ", ";
+        }
+        wostr << columnInfo;
+        isFirstIteration = false;
+    }
+    wostr << "; " << parsingResults.mNumLines << " lines; " << parsingResults.mNumMalformedLines << " malformed lines.";
+    return wostr;
+};
+
 void ParserBuffer::addLine(std::wstring&& line)
 {
     mLines.push_back(std::move(line));
@@ -244,7 +259,9 @@ void CsvFileParser::parser()
                 std::shared_lock lock(mMutexResults);
                 results = mResults;
             }
+            BOOST_LOG_SEV(gLogger, bltrivial::trace) << results << FUNCTION_FILE_LINE;
             parseBuffer(numBufferToParse.value(), results);
+            BOOST_LOG_SEV(gLogger, bltrivial::trace) << results << FUNCTION_FILE_LINE;
             {
                 BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Lock" << FUNCTION_FILE_LINE;
                 std::unique_lock lock(mMutexResults);
@@ -527,33 +544,28 @@ void ColumnInfo::update(const ColumnInfo& columnInfo)
     }
 };
 
-std::ostream& operator<<(std::ostream& ostr, const ColumnType& columnType)
+std::wostream& operator<<(std::wostream& wostr, const ColumnInfo& columnInfo)
 {
-    switch (columnType) {
-    case ColumnType::Float:
-        ostr << "ColumnType::Float";
-        break;
-    case ColumnType::Decimal:
-        ostr << "ColumnType::Decimal";
-        break;
-    case ColumnType::Int:
-        ostr << "ColumnType::Int";
-        break;
-    case ColumnType::TimeStamp:
-        ostr << "ColumnType::TimeStamp";
-        break;
-    case ColumnType::Date:
-        ostr << "ColumnType::Date";
-        break;
-    case ColumnType::Time:
-        ostr << "ColumnType::Time";
-        break;
-    case ColumnType::String:
-        ostr << "ColumnType::String";
-        break;
-    default:
-        ostr << "uknown ColumnType";
-        break;
+    wostr << columnInfo.mName;
+    if (columnInfo.mAnalyzed) {
+        wostr << " (" << columnInfo.type();
+        if (columnInfo.mMinLength.has_value()) {
+            wostr << ", min length = " << columnInfo.mMinLength.value();
+        }
+        wostr << ", max length = " << columnInfo.mMaxLength;
+        if (columnInfo.mDigitsBeforeDecimalPoint.has_value()) {
+            wostr << ", digits before decimal = " << columnInfo.mDigitsBeforeDecimalPoint.value();
+        }
+        if (columnInfo.mDigitsAfterDecimalPoint.has_value()) {
+            wostr << ", digits after decimal = " << columnInfo.mDigitsAfterDecimalPoint.value();
+        }
+        if (columnInfo.mMinVal.has_value()) {
+            wostr << ", min value = " << columnInfo.mMinVal.value();
+        }
+        if (columnInfo.mMaxVal.has_value()) {
+            wostr << ", max value = " << columnInfo.mMaxVal.value();
+        }
+        wostr << ')';
     }
-    return ostr;
+    return wostr;
 };
