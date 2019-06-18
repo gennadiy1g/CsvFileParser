@@ -529,19 +529,19 @@ void ColumnInfo::update(const ColumnInfo& columnInfo)
     if (mMaxLength < columnInfo.mMaxLength) {
         mMaxLength = columnInfo.mMaxLength;
     }
-    if ((columnInfo.mMinLength.has_value()) && (mMinLength > columnInfo.mMinLength)) {
+    if ((columnInfo.mMinLength.has_value()) && ((!mMinLength.has_value()) || (mMinLength > columnInfo.mMinLength))) {
         mMinLength = columnInfo.mMinLength;
     }
-    if ((columnInfo.mDigitsBeforeDecimalPoint.has_value()) && (mDigitsBeforeDecimalPoint < columnInfo.mDigitsBeforeDecimalPoint)) {
+    if ((columnInfo.mDigitsBeforeDecimalPoint.has_value()) && ((!mDigitsBeforeDecimalPoint.has_value()) || (mDigitsBeforeDecimalPoint < columnInfo.mDigitsBeforeDecimalPoint))) {
         mDigitsBeforeDecimalPoint = columnInfo.mDigitsBeforeDecimalPoint;
     }
-    if ((columnInfo.mDigitsAfterDecimalPoint.has_value()) && (mDigitsAfterDecimalPoint < columnInfo.mDigitsAfterDecimalPoint)) {
+    if ((columnInfo.mDigitsAfterDecimalPoint.has_value()) && ((!mDigitsAfterDecimalPoint.has_value()) || (mDigitsAfterDecimalPoint < columnInfo.mDigitsAfterDecimalPoint))) {
         mDigitsAfterDecimalPoint = columnInfo.mDigitsAfterDecimalPoint;
     }
-    if ((columnInfo.mMinVal.has_value()) && (mMinVal > columnInfo.mMinVal)) {
+    if ((columnInfo.mMinVal.has_value()) && ((!mMinVal.has_value()) || (mMinVal > columnInfo.mMinVal))) {
         mMinVal = columnInfo.mMinVal;
     }
-    if ((columnInfo.mMaxVal.has_value()) && (mMaxVal < columnInfo.mMaxVal)) {
+    if ((columnInfo.mMaxVal.has_value()) && ((!mMaxVal.has_value()) || (mMaxVal < columnInfo.mMaxVal))) {
         mMaxVal = columnInfo.mMaxVal;
     }
 };
