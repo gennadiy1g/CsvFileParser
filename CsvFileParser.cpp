@@ -20,6 +20,7 @@ void ParsingResults::update(const ParsingResults& results)
     for (std::size_t i = 0; i < mColumns.size(); ++i) {
         mColumns[i].update(results.mColumns[i]);
     };
+    mNumLines = mNumLines + results.mNumLines;
     mNumMalformedLines = mNumMalformedLines + results.mNumMalformedLines;
 }
 
@@ -166,7 +167,6 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t quote, wchar_t es
         }
     }
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "Finished the reader loop." << FUNCTION_FILE_LINE << std::flush;
-    mResults.mNumLines = numLines;
 
     std::stringstream message;
     if (!inputFile.eof()) {
@@ -306,6 +306,7 @@ void CsvFileParser::parseBuffer(unsigned int numBufferToParse, ParsingResults& r
             }
             ++columnNumber;
         }
+        ++results.mNumLines;
         if (columnNumber != results.mColumns.size()) {
             ++results.mNumMalformedLines;
         }
