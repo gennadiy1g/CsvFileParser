@@ -35,6 +35,9 @@ struct GlobalFixture {
         BOOST_LOG_SEV(gLogger, bltrivial::debug) << "Localization backends: " << backendsList << '.';
 
         BOOST_LOG_SEV(gLogger, bltrivial::info) << std::thread::hardware_concurrency() << " concurrent threads are supported.";
+
+        BOOST_TEST_MESSAGE("Calling ColumnInfo::initializeLocales()");
+        ColumnInfo::initializeLocales();
     }
 
     void teardown() {}
@@ -70,12 +73,8 @@ BOOST_AUTO_TEST_CASE(ZX0training_CP863)
 BOOST_AUTO_TEST_SUITE_END();
 
 struct TestSuiteFixtureAnalyzeToken {
-    TestSuiteFixtureAnalyzeToken()
-    {
-        BOOST_TEST_MESSAGE("setup fixture TestSuiteFixtureAnalyzeToken");
-        ColumnInfo::initializeLocales();
-    }
-    ~TestSuiteFixtureAnalyzeToken() { BOOST_TEST_MESSAGE("teardown fixture TestSuiteFixtureAnalyzeToken"); }
+    TestSuiteFixtureAnalyzeToken() {}
+    ~TestSuiteFixtureAnalyzeToken() {}
 };
 
 BOOST_AUTO_TEST_SUITE(ColumnInfo_analyzeToken, *boost::unit_test::fixture<TestSuiteFixtureAnalyzeToken>());
