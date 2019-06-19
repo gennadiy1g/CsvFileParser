@@ -573,7 +573,7 @@ std::wostream& operator<<(std::wostream& wostr, const ColumnInfo& columnInfo)
         if (columnInfo.mMaxVal.has_value()) {
             wostr << ", max value = " << columnInfo.mMaxVal.value();
         }
-        wostr << ')';
+        wostr << ", " << (columnInfo.mIsNull ? "NULL" : "NOT NULL") << ')';
     }
     return wostr;
 };
