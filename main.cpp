@@ -365,3 +365,13 @@ BOOST_AUTO_TEST_CASE(bool_)
 }
 
 BOOST_AUTO_TEST_SUITE_END();
+
+BOOST_AUTO_TEST_SUITE(parsing_results);
+
+BOOST_AUTO_TEST_CASE(parsing_results_1)
+{
+    CsvFileParser parser(LR"^(C:\Users\genna_000\Documents\Experiments\test data\parsing_results_1.csv)^");
+    BOOST_REQUIRE_NO_THROW(parser.parse(L',', L'"', L'\\'));
+}
+
+BOOST_AUTO_TEST_SUITE_END();
