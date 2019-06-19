@@ -1,15 +1,16 @@
 // for /l %i in (1,1,100) do echo %i & time /t & CsvFileParser.exe
 
 #define BOOST_TEST_MODULE Master Test Suite
+
+#include <boost/algorithm/string.hpp>
 #include <boost/test/unit_test.hpp>
+#include <numeric>
+#include <string>
+#include <thread>
 
 #include "CsvFileParser.h"
 #include "log.h"
 #include "utilities.h"
-#include <boost/algorithm/string.hpp>
-#include <numeric>
-#include <string>
-#include <thread>
 
 using namespace std::string_literals;
 

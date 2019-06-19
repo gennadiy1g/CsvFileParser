@@ -1,5 +1,6 @@
-#include "log.h"
 #include <boost/locale.hpp>
+
+#include "log.h"
 
 namespace blocale = boost::locale;
 

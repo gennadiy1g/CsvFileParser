@@ -1,11 +1,12 @@
-#include "CsvFileParser.h"
-#include "log.h"
 #include <boost/algorithm/string.hpp>
 #include <boost/lexical_cast.hpp>
 #include <cassert>
 #include <optional>
 #include <sstream>
 #include <thread>
+
+#include "CsvFileParser.h"
+#include "log.h"
 
 using namespace std::string_literals;
 
