@@ -109,7 +109,19 @@ BOOST_AUTO_TEST_CASE(float_decimal_int)
         BOOST_TEST(columnInfo.digitsBeforeDecimalPoint() == 1);
         BOOST_TEST(columnInfo.digitsAfterDecimalPoint() == 0);
 
+        columnInfo.analyzeToken(L" -25 "s);
+        BOOST_TEST(columnInfo.type() == ColumnType::Int);
+        BOOST_CHECK(columnInfo.IsNull());
+        BOOST_TEST(columnInfo.digitsBeforeDecimalPoint() == 2);
+        BOOST_TEST(columnInfo.digitsAfterDecimalPoint() == 0);
+
         columnInfo.analyzeToken(L" 100 "s);
+        BOOST_TEST(columnInfo.type() == ColumnType::Int);
+        BOOST_CHECK(columnInfo.IsNull());
+        BOOST_TEST(columnInfo.digitsBeforeDecimalPoint() == 3);
+        BOOST_TEST(columnInfo.digitsAfterDecimalPoint() == 0);
+
+        columnInfo.analyzeToken(L" -123 "s);
         BOOST_TEST(columnInfo.type() == ColumnType::Int);
         BOOST_CHECK(columnInfo.IsNull());
         BOOST_TEST(columnInfo.digitsBeforeDecimalPoint() == 3);
