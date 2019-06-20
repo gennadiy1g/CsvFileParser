@@ -84,6 +84,9 @@ T& operator<<(T& ostr, const ColumnType& columnType)
     case ColumnType::Time:
         ostr << "ColumnType::Time";
         break;
+    case ColumnType::Bool:
+        ostr << "ColumnType::Bool";
+        break;
     case ColumnType::String:
         ostr << "ColumnType::String";
         break;
