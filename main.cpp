@@ -353,7 +353,7 @@ BOOST_AUTO_TEST_CASE(date2)
     BOOST_CHECK(!columnInfo.IsNull());
 }
 
-BOOST_AUTO_TEST_CASE(bool_)
+BOOST_AUTO_TEST_CASE(bool_1)
 {
     ColumnInfo columnInfo(L"column1"s);
     BOOST_TEST(columnInfo.type() == ColumnType::String);
@@ -367,11 +367,11 @@ BOOST_AUTO_TEST_CASE(bool_)
     BOOST_TEST(columnInfo.type() == ColumnType::Bool);
     BOOST_CHECK(!columnInfo.IsNull());
 
-    columnInfo.analyzeToken(L" yes "s);
+    columnInfo.analyzeToken(L" TRUE "s);
     BOOST_TEST(columnInfo.type() == ColumnType::String);
     BOOST_CHECK(!columnInfo.IsNull());
 
-    columnInfo.analyzeToken(L" true "s);
+    columnInfo.analyzeToken(L" false "s);
     BOOST_TEST(columnInfo.type() == ColumnType::String);
     BOOST_CHECK(!columnInfo.IsNull());
 }
