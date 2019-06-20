@@ -370,10 +370,6 @@ void ColumnInfo::analyzeTemporal(const std::wstring& token, const std::locale& t
 
 void ColumnInfo::analyzeToken(std::wstring_view token)
 {
-    if (!mAnalyzed) {
-        mAnalyzed = true;
-    };
-
     auto lengthToken = token.length();
     if (lengthToken > mMaxLength) {
         mMaxLength = lengthToken;
@@ -472,6 +468,10 @@ void ColumnInfo::analyzeToken(std::wstring_view token)
             mIsNull = true;
         }
     }
+
+    if (!mAnalyzed) {
+        mAnalyzed = true;
+    };
 };
 
 ColumnType ColumnInfo::type() const
