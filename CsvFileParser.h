@@ -125,7 +125,7 @@ private:
 
     std::wstring mName;
 
-    bool mAnalyzed { false };
+    bool mIsAnalyzed { false };
     bool mIsFloat { true };
     bool mIsDecimal { true };
     bool mIsInt { true };

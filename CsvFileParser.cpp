@@ -469,14 +469,14 @@ void ColumnInfo::analyzeToken(std::wstring_view token)
         }
     }
 
-    if (!mAnalyzed) {
-        mAnalyzed = true;
+    if (!mIsAnalyzed) {
+        mIsAnalyzed = true;
     };
 };
 
 ColumnType ColumnInfo::type() const
 {
-    if (mAnalyzed) {
+    if (mIsAnalyzed) {
         if (mIsFloat) {
             if (mIsInt) {
                 return ColumnType::Int;
@@ -505,7 +505,7 @@ ColumnType ColumnInfo::type() const
 
 bool ColumnInfo::IsNull()
 {
-    if (mAnalyzed) {
+    if (mIsAnalyzed) {
         return mIsNull;
     } else {
         return true;
@@ -514,9 +514,9 @@ bool ColumnInfo::IsNull()
 
 void ColumnInfo::update(const ColumnInfo& columnInfo)
 {
-    assert(columnInfo.mAnalyzed);
-    if (!mAnalyzed) {
-        mAnalyzed = columnInfo.mAnalyzed;
+    assert(columnInfo.mIsAnalyzed);
+    if (!mIsAnalyzed) {
+        mIsAnalyzed = columnInfo.mIsAnalyzed;
     }
 
     mIsFloat = mIsFloat && columnInfo.mIsFloat;
@@ -552,7 +552,7 @@ void ColumnInfo::update(const ColumnInfo& columnInfo)
 std::wostream& operator<<(std::wostream& wostr, const ColumnInfo& columnInfo)
 {
     wostr << columnInfo.mName;
-    if (columnInfo.mAnalyzed) {
+    if (columnInfo.mIsAnalyzed) {
         wostr << " (" << columnInfo.type();
         if (columnInfo.mMinLength.has_value()) {
             wostr << ", min length = " << columnInfo.mMinLength.value();
