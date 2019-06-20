@@ -418,26 +418,25 @@ void ColumnInfo::analyzeToken(std::wstring_view token)
                             }
 
                             auto posDecimalPoint = tokenTrim.find(L'.');
+                            decltype(posDecimalPoint) digitsBeforeDecimalPoint;
                             if (posDecimalPoint != std::string::npos) {
-                                auto digitsBeforeDecimalPoint = value < 0 ? posDecimalPoint - 1 : posDecimalPoint;
-                                if ((!mDigitsBeforeDecimalPoint.has_value()) || (digitsBeforeDecimalPoint > mDigitsBeforeDecimalPoint.value())) {
-                                    mDigitsBeforeDecimalPoint = digitsBeforeDecimalPoint;
-                                }
+                                digitsBeforeDecimalPoint = value < 0 ? posDecimalPoint - 1 : posDecimalPoint;
 
                                 auto len = lengthTokenTrim - posDecimalPoint - 1;
                                 if ((!mDigitsAfterDecimalPoint.has_value()) || (len > mDigitsAfterDecimalPoint)) {
                                     mDigitsAfterDecimalPoint = len;
                                 }
                             } else {
-                                auto digitsBeforeDecimalPoint = value < 0 ? lengthTokenTrim - 1 : lengthTokenTrim;
-                                if ((!mDigitsBeforeDecimalPoint.has_value()) || (digitsBeforeDecimalPoint > mDigitsBeforeDecimalPoint.value())) {
-                                    mDigitsBeforeDecimalPoint = digitsBeforeDecimalPoint;
-                                }
+                                digitsBeforeDecimalPoint = value < 0 ? lengthTokenTrim - 1 : lengthTokenTrim;
 
                                 if (!mDigitsAfterDecimalPoint.has_value()) {
                                     mDigitsAfterDecimalPoint = 0;
                                 }
                             }
+                            if ((!mDigitsBeforeDecimalPoint.has_value()) || (digitsBeforeDecimalPoint > mDigitsBeforeDecimalPoint.value())) {
+                                mDigitsBeforeDecimalPoint = digitsBeforeDecimalPoint;
+                            }
+
                             assert(mDigitsBeforeDecimalPoint.value() >= 0);
                             assert(mDigitsAfterDecimalPoint.value() >= 0);
                         }
