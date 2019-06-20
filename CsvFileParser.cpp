@@ -459,8 +459,19 @@ void ColumnInfo::analyzeToken(std::wstring_view token)
         }
 
         if (mIsBool) {
-            if ((tokenTrim != L"true") && (tokenTrim != L"false")) {
-                mIsBool = false;
+            if (!mIsAnalyzed) {
+                if ((tokenTrim == L"true") || (tokenTrim == L"false")) {
+                    mIsBoolInLowerCase = true;
+                }
+            }
+            if (mIsBoolInLowerCase) {
+                if ((tokenTrim != L"true") && (tokenTrim != L"false")) {
+                    mIsBool = false;
+                }
+            } else {
+                if ((tokenTrim != L"TRUE") && (tokenTrim != L"FALSE")) {
+                    mIsBool = false;
+                }
             }
         }
     } else {

@@ -130,6 +130,7 @@ private:
     bool mIsDecimal { true };
     bool mIsInt { true };
     bool mIsBool { true };
+    bool mIsBoolInLowerCase { false };
     bool mIsDate { true };
     bool mIsTime { true };
     bool mIsTimeStamp { true };
