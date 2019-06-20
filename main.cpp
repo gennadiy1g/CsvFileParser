@@ -376,6 +376,52 @@ BOOST_AUTO_TEST_CASE(bool_1)
     BOOST_CHECK(!columnInfo.IsNull());
 }
 
+BOOST_AUTO_TEST_CASE(bool_2)
+{
+    ColumnInfo columnInfo(L"column1"s);
+    BOOST_TEST(columnInfo.type() == ColumnType::String);
+    BOOST_CHECK(columnInfo.IsNull());
+
+    columnInfo.analyzeToken(L" TRUE "s);
+    BOOST_TEST(columnInfo.type() == ColumnType::Bool);
+    BOOST_CHECK(!columnInfo.IsNull());
+
+    columnInfo.analyzeToken(L" FALSE "s);
+    BOOST_TEST(columnInfo.type() == ColumnType::Bool);
+    BOOST_CHECK(!columnInfo.IsNull());
+
+    columnInfo.analyzeToken(L" true "s);
+    BOOST_TEST(columnInfo.type() == ColumnType::String);
+    BOOST_CHECK(!columnInfo.IsNull());
+
+    columnInfo.analyzeToken(L" FALSE "s);
+    BOOST_TEST(columnInfo.type() == ColumnType::String);
+    BOOST_CHECK(!columnInfo.IsNull());
+}
+
+BOOST_AUTO_TEST_CASE(bool_3)
+{
+    ColumnInfo columnInfo(L"column1"s);
+    BOOST_TEST(columnInfo.type() == ColumnType::String);
+    BOOST_CHECK(columnInfo.IsNull());
+
+    columnInfo.analyzeToken(L" true "s);
+    BOOST_TEST(columnInfo.type() == ColumnType::Bool);
+    BOOST_CHECK(!columnInfo.IsNull());
+
+    columnInfo.analyzeToken(L" false "s);
+    BOOST_TEST(columnInfo.type() == ColumnType::Bool);
+    BOOST_CHECK(!columnInfo.IsNull());
+
+    columnInfo.analyzeToken(L" True "s);
+    BOOST_TEST(columnInfo.type() == ColumnType::String);
+    BOOST_CHECK(!columnInfo.IsNull());
+
+    columnInfo.analyzeToken(L" false "s);
+    BOOST_TEST(columnInfo.type() == ColumnType::String);
+    BOOST_CHECK(!columnInfo.IsNull());
+}
+
 BOOST_AUTO_TEST_SUITE_END();
 
 BOOST_AUTO_TEST_SUITE(parsing_results);
