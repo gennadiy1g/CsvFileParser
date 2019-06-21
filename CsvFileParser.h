@@ -118,11 +118,11 @@ public:
 
     const std::wstring& Name() const { return mName; };
     ColumnType type() const;
-    bool IsNull();
-    std::size_t maxLength() { return mMaxLength; };
-    std::size_t minLength() { return mMinLength.value_or(0); };
-    std::size_t digitsBeforeDecimalPoint() { return mDigitsBeforeDecimalPoint.value_or(0); };
-    std::size_t digitsAfterDecimalPoint() { return mDigitsAfterDecimalPoint.value_or(0); };
+    bool IsNull() const;
+    std::size_t maxLength() const { return mMaxLength; };
+    std::size_t minLength() const { return mMinLength.value_or(0); };
+    std::size_t digitsBeforeDecimalPoint() const { return mDigitsBeforeDecimalPoint.value_or(0); };
+    std::size_t digitsAfterDecimalPoint() const { return mDigitsAfterDecimalPoint.value_or(0); };
 
 private:
     void analyzeTemporal(const std::wstring& token, const std::locale& temporalLocale, bool& isTemporal);

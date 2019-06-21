@@ -514,7 +514,7 @@ ColumnType ColumnInfo::type() const
     }
 };
 
-bool ColumnInfo::IsNull()
+bool ColumnInfo::IsNull() const
 {
     if (mIsAnalyzed) {
         return mIsNull;
