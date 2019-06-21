@@ -116,7 +116,7 @@ public:
     static void initializeLocales();
     void update(const ColumnInfo& columnInfo);
 
-    const std::wstring& Name() const { return mName; };
+    const std::wstring& name() const { return mName; };
     ColumnType type() const;
     bool IsNull() const { return mIsAnalyzed ? mIsNull : true; };
     std::size_t maxLength() const { return mMaxLength; };
@@ -172,9 +172,9 @@ public:
     void update(const ParsingResults& results);
     void addColumn(std::wstring_view name);
 
-    const std::vector<ColumnInfo>& Columns() const { return mColumns; }
-    std::size_t NumLines() const { return mNumLines; };
-    std::size_t NumMalformedLines() const { return mNumMalformedLines; };
+    const std::vector<ColumnInfo>& columns() const { return mColumns; }
+    std::size_t numLines() const { return mNumLines; };
+    std::size_t numMalformedLines() const { return mNumMalformedLines; };
 
 private:
     std::vector<ColumnInfo> mColumns;
