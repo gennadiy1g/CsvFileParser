@@ -84,97 +84,97 @@ BOOST_AUTO_TEST_CASE(float_decimal_int)
     {
         ColumnInfo columnInfo(L"column1"s);
         BOOST_TEST(columnInfo.type() == ColumnType::String);
-        BOOST_CHECK(columnInfo.IsNull());
+        BOOST_CHECK(columnInfo.isNull());
 
         columnInfo.analyzeToken(L" 0 "s);
         BOOST_TEST(columnInfo.type() == ColumnType::Int);
-        BOOST_CHECK(!columnInfo.IsNull());
+        BOOST_CHECK(!columnInfo.isNull());
         BOOST_TEST(columnInfo.digitsBeforeDecimalPoint() == 1);
         BOOST_TEST(columnInfo.digitsAfterDecimalPoint() == 0);
         BOOST_TEST(columnInfo.minLength() == 3);
 
         columnInfo.analyzeToken(L" "s);
         BOOST_TEST(columnInfo.type() == ColumnType::Int);
-        BOOST_CHECK(columnInfo.IsNull());
+        BOOST_CHECK(columnInfo.isNull());
         BOOST_TEST(columnInfo.minLength() == 1);
 
         columnInfo.analyzeToken(L""s);
         BOOST_TEST(columnInfo.type() == ColumnType::Int);
-        BOOST_CHECK(columnInfo.IsNull());
+        BOOST_CHECK(columnInfo.isNull());
         BOOST_TEST(columnInfo.minLength() == 1);
 
         columnInfo.analyzeToken(L" 1 "s);
         BOOST_TEST(columnInfo.type() == ColumnType::Int);
-        BOOST_CHECK(columnInfo.IsNull());
+        BOOST_CHECK(columnInfo.isNull());
         BOOST_TEST(columnInfo.digitsBeforeDecimalPoint() == 1);
         BOOST_TEST(columnInfo.digitsAfterDecimalPoint() == 0);
 
         columnInfo.analyzeToken(L" -25 "s);
         BOOST_TEST(columnInfo.type() == ColumnType::Int);
-        BOOST_CHECK(columnInfo.IsNull());
+        BOOST_CHECK(columnInfo.isNull());
         BOOST_TEST(columnInfo.digitsBeforeDecimalPoint() == 2);
         BOOST_TEST(columnInfo.digitsAfterDecimalPoint() == 0);
 
         columnInfo.analyzeToken(L" 100 "s);
         BOOST_TEST(columnInfo.type() == ColumnType::Int);
-        BOOST_CHECK(columnInfo.IsNull());
+        BOOST_CHECK(columnInfo.isNull());
         BOOST_TEST(columnInfo.digitsBeforeDecimalPoint() == 3);
         BOOST_TEST(columnInfo.digitsAfterDecimalPoint() == 0);
 
         columnInfo.analyzeToken(L" -123 "s);
         BOOST_TEST(columnInfo.type() == ColumnType::Int);
-        BOOST_CHECK(columnInfo.IsNull());
+        BOOST_CHECK(columnInfo.isNull());
         BOOST_TEST(columnInfo.digitsBeforeDecimalPoint() == 3);
         BOOST_TEST(columnInfo.digitsAfterDecimalPoint() == 0);
 
         columnInfo.analyzeToken(L" 25 "s);
         BOOST_TEST(columnInfo.type() == ColumnType::Int);
-        BOOST_CHECK(columnInfo.IsNull());
+        BOOST_CHECK(columnInfo.isNull());
         BOOST_TEST(columnInfo.digitsBeforeDecimalPoint() == 3);
         BOOST_TEST(columnInfo.digitsAfterDecimalPoint() == 0);
 
         columnInfo.analyzeToken(L" 25. "s);
         BOOST_TEST(columnInfo.type() == ColumnType::Decimal);
-        BOOST_CHECK(columnInfo.IsNull());
+        BOOST_CHECK(columnInfo.isNull());
         BOOST_TEST(columnInfo.digitsBeforeDecimalPoint() == 3);
         BOOST_TEST(columnInfo.digitsAfterDecimalPoint() == 0);
 
         columnInfo.analyzeToken(L" 25.00 "s);
         BOOST_TEST(columnInfo.type() == ColumnType::Decimal);
-        BOOST_CHECK(columnInfo.IsNull());
+        BOOST_CHECK(columnInfo.isNull());
         BOOST_TEST(columnInfo.digitsBeforeDecimalPoint() == 3);
         BOOST_TEST(columnInfo.digitsAfterDecimalPoint() == 2);
 
         columnInfo.analyzeToken(L" -150.00 "s);
         BOOST_TEST(columnInfo.type() == ColumnType::Decimal);
-        BOOST_CHECK(columnInfo.IsNull());
+        BOOST_CHECK(columnInfo.isNull());
         BOOST_TEST(columnInfo.digitsBeforeDecimalPoint() == 3);
         BOOST_TEST(columnInfo.digitsAfterDecimalPoint() == 2);
 
         columnInfo.analyzeToken(L" -1234.123 "s);
         BOOST_TEST(columnInfo.type() == ColumnType::Decimal);
-        BOOST_CHECK(columnInfo.IsNull());
+        BOOST_CHECK(columnInfo.isNull());
         BOOST_TEST(columnInfo.digitsBeforeDecimalPoint() == 4);
         BOOST_TEST(columnInfo.digitsAfterDecimalPoint() == 3);
 
         columnInfo.analyzeToken(L" -12345 "s);
         BOOST_TEST(columnInfo.type() == ColumnType::Decimal);
-        BOOST_CHECK(columnInfo.IsNull());
+        BOOST_CHECK(columnInfo.isNull());
         BOOST_TEST(columnInfo.digitsBeforeDecimalPoint() == 5);
         BOOST_TEST(columnInfo.digitsAfterDecimalPoint() == 3);
 
         columnInfo.analyzeToken(L"0.1e-1"s);
         BOOST_TEST(columnInfo.type() == ColumnType::Float);
-        BOOST_CHECK(columnInfo.IsNull());
+        BOOST_CHECK(columnInfo.isNull());
 
         columnInfo.analyzeToken(L"0X0p-1"s);
         BOOST_TEST(columnInfo.type() == ColumnType::String);
-        BOOST_CHECK(columnInfo.IsNull());
+        BOOST_CHECK(columnInfo.isNull());
         BOOST_TEST(columnInfo.maxLength() == 11);
 
         columnInfo.analyzeToken(L"123456789"s);
         BOOST_TEST(columnInfo.type() == ColumnType::String);
-        BOOST_CHECK(columnInfo.IsNull());
+        BOOST_CHECK(columnInfo.isNull());
         BOOST_TEST(columnInfo.digitsBeforeDecimalPoint() == 5);
         BOOST_TEST(columnInfo.digitsAfterDecimalPoint() == 3);
         BOOST_TEST(columnInfo.maxLength() == 11);
@@ -183,17 +183,17 @@ BOOST_AUTO_TEST_CASE(float_decimal_int)
     {
         ColumnInfo columnInfo(L"column2"s);
         BOOST_TEST(columnInfo.type() == ColumnType::String);
-        BOOST_CHECK(columnInfo.IsNull());
+        BOOST_CHECK(columnInfo.isNull());
 
         columnInfo.analyzeToken(L" -.00001 "s);
         BOOST_TEST(columnInfo.type() == ColumnType::Decimal);
-        BOOST_CHECK(!columnInfo.IsNull());
+        BOOST_CHECK(!columnInfo.isNull());
         BOOST_TEST(columnInfo.digitsBeforeDecimalPoint() == 0);
         BOOST_TEST(columnInfo.digitsAfterDecimalPoint() == 5);
 
         columnInfo.analyzeToken(L"123456789"s);
         BOOST_TEST(columnInfo.type() == ColumnType::Decimal);
-        BOOST_CHECK(!columnInfo.IsNull());
+        BOOST_CHECK(!columnInfo.isNull());
         BOOST_TEST(columnInfo.digitsBeforeDecimalPoint() == 9);
         BOOST_TEST(columnInfo.digitsAfterDecimalPoint() == 5);
     }
@@ -203,223 +203,223 @@ BOOST_AUTO_TEST_CASE(time_stamp)
 {
     ColumnInfo columnInfo(L"column1"s);
     BOOST_TEST(columnInfo.type() == ColumnType::String);
-    BOOST_CHECK(columnInfo.IsNull());
+    BOOST_CHECK(columnInfo.isNull());
 
     columnInfo.analyzeToken(L" 2019-02-28 23:59:59.999 "s);
     BOOST_TEST(columnInfo.type() == ColumnType::TimeStamp);
-    BOOST_CHECK(!columnInfo.IsNull());
+    BOOST_CHECK(!columnInfo.isNull());
 
     columnInfo.analyzeToken(L" "s);
     BOOST_TEST(columnInfo.type() == ColumnType::TimeStamp);
-    BOOST_CHECK(columnInfo.IsNull());
+    BOOST_CHECK(columnInfo.isNull());
 
     columnInfo.analyzeToken(L" 2019-02-28 23:59:59.999 foo "s);
     BOOST_TEST(columnInfo.type() == ColumnType::String);
-    BOOST_CHECK(columnInfo.IsNull());
+    BOOST_CHECK(columnInfo.isNull());
 
     columnInfo.analyzeToken(L" 2019-02-28 23:59:59.999 "s);
     BOOST_TEST(columnInfo.type() == ColumnType::String);
-    BOOST_CHECK(columnInfo.IsNull());
+    BOOST_CHECK(columnInfo.isNull());
 }
 
 BOOST_AUTO_TEST_CASE(time_stamp2)
 {
     ColumnInfo columnInfo(L"column1"s);
     BOOST_TEST(columnInfo.type() == ColumnType::String);
-    BOOST_CHECK(columnInfo.IsNull());
+    BOOST_CHECK(columnInfo.isNull());
 
     columnInfo.analyzeToken(L" 2019-02-28 23:59:59.999 "s);
     BOOST_TEST(columnInfo.type() == ColumnType::TimeStamp);
-    BOOST_CHECK(!columnInfo.IsNull());
+    BOOST_CHECK(!columnInfo.isNull());
 
     columnInfo.analyzeToken(L" 2019-02-28 23:59:59 "s);
     BOOST_TEST(columnInfo.type() == ColumnType::TimeStamp);
-    BOOST_CHECK(!columnInfo.IsNull());
+    BOOST_CHECK(!columnInfo.isNull());
 
     columnInfo.analyzeToken(L" 2019-02-28 "s);
     BOOST_TEST(columnInfo.type() == ColumnType::TimeStamp);
-    BOOST_CHECK(!columnInfo.IsNull());
+    BOOST_CHECK(!columnInfo.isNull());
 
     columnInfo.analyzeToken(L" 2019-02-28 23:59:59.999 "s);
     BOOST_TEST(columnInfo.type() == ColumnType::TimeStamp);
-    BOOST_CHECK(!columnInfo.IsNull());
+    BOOST_CHECK(!columnInfo.isNull());
 
     columnInfo.analyzeToken(L" 2019-02-28 "s);
     BOOST_TEST(columnInfo.type() == ColumnType::TimeStamp);
-    BOOST_CHECK(!columnInfo.IsNull());
+    BOOST_CHECK(!columnInfo.isNull());
 
     columnInfo.analyzeToken(L" 23:59:59.999 "s);
     BOOST_TEST(columnInfo.type() == ColumnType::String);
-    BOOST_CHECK(!columnInfo.IsNull());
+    BOOST_CHECK(!columnInfo.isNull());
 
     columnInfo.analyzeToken(L" 2019-02-28 23:59:59.999 "s);
     BOOST_TEST(columnInfo.type() == ColumnType::String);
-    BOOST_CHECK(!columnInfo.IsNull());
+    BOOST_CHECK(!columnInfo.isNull());
 }
 
 BOOST_AUTO_TEST_CASE(time)
 {
     ColumnInfo columnInfo(L"column1"s);
     BOOST_TEST(columnInfo.type() == ColumnType::String);
-    BOOST_CHECK(columnInfo.IsNull());
+    BOOST_CHECK(columnInfo.isNull());
 
     columnInfo.analyzeToken(L" 23:59:59.999 "s);
     BOOST_TEST(columnInfo.type() == ColumnType::Time);
-    BOOST_CHECK(!columnInfo.IsNull());
+    BOOST_CHECK(!columnInfo.isNull());
 
     columnInfo.analyzeToken(L" "s);
     BOOST_TEST(columnInfo.type() == ColumnType::Time);
-    BOOST_CHECK(columnInfo.IsNull());
+    BOOST_CHECK(columnInfo.isNull());
 
     columnInfo.analyzeToken(L" 23:59:59.999 foo "s);
     BOOST_TEST(columnInfo.type() == ColumnType::String);
-    BOOST_CHECK(columnInfo.IsNull());
+    BOOST_CHECK(columnInfo.isNull());
 
     columnInfo.analyzeToken(L" 23:59:59.999 "s);
     BOOST_TEST(columnInfo.type() == ColumnType::String);
-    BOOST_CHECK(columnInfo.IsNull());
+    BOOST_CHECK(columnInfo.isNull());
 }
 
 BOOST_AUTO_TEST_CASE(time_2)
 {
     ColumnInfo columnInfo(L"column1"s);
     BOOST_TEST(columnInfo.type() == ColumnType::String);
-    BOOST_CHECK(columnInfo.IsNull());
+    BOOST_CHECK(columnInfo.isNull());
 
     columnInfo.analyzeToken(L" 23:59:59.999 "s);
     BOOST_TEST(columnInfo.type() == ColumnType::Time);
-    BOOST_CHECK(!columnInfo.IsNull());
+    BOOST_CHECK(!columnInfo.isNull());
 
     columnInfo.analyzeToken(L" 23:59:59 "s);
     BOOST_TEST(columnInfo.type() == ColumnType::Time);
-    BOOST_CHECK(!columnInfo.IsNull());
+    BOOST_CHECK(!columnInfo.isNull());
 
     columnInfo.analyzeToken(L" 2019-02-28 "s);
     BOOST_TEST(columnInfo.type() == ColumnType::String);
-    BOOST_CHECK(!columnInfo.IsNull());
+    BOOST_CHECK(!columnInfo.isNull());
 
     columnInfo.analyzeToken(L" 23:59:59.999 "s);
     BOOST_TEST(columnInfo.type() == ColumnType::String);
-    BOOST_CHECK(!columnInfo.IsNull());
+    BOOST_CHECK(!columnInfo.isNull());
 }
 
 BOOST_AUTO_TEST_CASE(date)
 {
     ColumnInfo columnInfo(L"column1"s);
     BOOST_TEST(columnInfo.type() == ColumnType::String);
-    BOOST_CHECK(columnInfo.IsNull());
+    BOOST_CHECK(columnInfo.isNull());
 
     columnInfo.analyzeToken(L" 2019-02-28 "s);
     BOOST_TEST(columnInfo.type() == ColumnType::Date);
-    BOOST_CHECK(!columnInfo.IsNull());
+    BOOST_CHECK(!columnInfo.isNull());
 
     columnInfo.analyzeToken(L" "s);
     BOOST_TEST(columnInfo.type() == ColumnType::Date);
-    BOOST_CHECK(columnInfo.IsNull());
+    BOOST_CHECK(columnInfo.isNull());
 
     columnInfo.analyzeToken(L" 2019-02-28 23:59:59.999 "s);
     BOOST_TEST(columnInfo.type() == ColumnType::TimeStamp);
-    BOOST_CHECK(columnInfo.IsNull());
+    BOOST_CHECK(columnInfo.isNull());
 
     columnInfo.analyzeToken(L" 2019-02-28 "s);
     BOOST_TEST(columnInfo.type() == ColumnType::TimeStamp);
-    BOOST_CHECK(columnInfo.IsNull());
+    BOOST_CHECK(columnInfo.isNull());
 
     columnInfo.analyzeToken(L" 23:59:59.999 "s);
     BOOST_TEST(columnInfo.type() == ColumnType::String);
-    BOOST_CHECK(columnInfo.IsNull());
+    BOOST_CHECK(columnInfo.isNull());
 
     columnInfo.analyzeToken(L" 2019-02-28 "s);
     BOOST_TEST(columnInfo.type() == ColumnType::String);
-    BOOST_CHECK(columnInfo.IsNull());
+    BOOST_CHECK(columnInfo.isNull());
 }
 
 BOOST_AUTO_TEST_CASE(date2)
 {
     ColumnInfo columnInfo(L"column1"s);
     BOOST_TEST(columnInfo.type() == ColumnType::String);
-    BOOST_CHECK(columnInfo.IsNull());
+    BOOST_CHECK(columnInfo.isNull());
 
     columnInfo.analyzeToken(L" 2019-02-28 "s);
     BOOST_TEST(columnInfo.type() == ColumnType::Date);
-    BOOST_CHECK(!columnInfo.IsNull());
+    BOOST_CHECK(!columnInfo.isNull());
 
     columnInfo.analyzeToken(L" 23:59:59 "s);
     BOOST_TEST(columnInfo.type() == ColumnType::String);
-    BOOST_CHECK(!columnInfo.IsNull());
+    BOOST_CHECK(!columnInfo.isNull());
 
     columnInfo.analyzeToken(L" 2019-02-28 "s);
     BOOST_TEST(columnInfo.type() == ColumnType::String);
-    BOOST_CHECK(!columnInfo.IsNull());
+    BOOST_CHECK(!columnInfo.isNull());
 }
 
 BOOST_AUTO_TEST_CASE(bool_1)
 {
     ColumnInfo columnInfo(L"column1"s);
     BOOST_TEST(columnInfo.type() == ColumnType::String);
-    BOOST_CHECK(columnInfo.IsNull());
+    BOOST_CHECK(columnInfo.isNull());
 
     columnInfo.analyzeToken(L" true "s);
     BOOST_TEST(columnInfo.type() == ColumnType::Bool);
-    BOOST_CHECK(!columnInfo.IsNull());
+    BOOST_CHECK(!columnInfo.isNull());
 
     columnInfo.analyzeToken(L" false "s);
     BOOST_TEST(columnInfo.type() == ColumnType::Bool);
-    BOOST_CHECK(!columnInfo.IsNull());
+    BOOST_CHECK(!columnInfo.isNull());
 
     columnInfo.analyzeToken(L" TRUE "s);
     BOOST_TEST(columnInfo.type() == ColumnType::String);
-    BOOST_CHECK(!columnInfo.IsNull());
+    BOOST_CHECK(!columnInfo.isNull());
 
     columnInfo.analyzeToken(L" false "s);
     BOOST_TEST(columnInfo.type() == ColumnType::String);
-    BOOST_CHECK(!columnInfo.IsNull());
+    BOOST_CHECK(!columnInfo.isNull());
 }
 
 BOOST_AUTO_TEST_CASE(bool_2)
 {
     ColumnInfo columnInfo(L"column1"s);
     BOOST_TEST(columnInfo.type() == ColumnType::String);
-    BOOST_CHECK(columnInfo.IsNull());
+    BOOST_CHECK(columnInfo.isNull());
 
     columnInfo.analyzeToken(L" TRUE "s);
     BOOST_TEST(columnInfo.type() == ColumnType::Bool);
-    BOOST_CHECK(!columnInfo.IsNull());
+    BOOST_CHECK(!columnInfo.isNull());
 
     columnInfo.analyzeToken(L" FALSE "s);
     BOOST_TEST(columnInfo.type() == ColumnType::Bool);
-    BOOST_CHECK(!columnInfo.IsNull());
+    BOOST_CHECK(!columnInfo.isNull());
 
     columnInfo.analyzeToken(L" true "s);
     BOOST_TEST(columnInfo.type() == ColumnType::String);
-    BOOST_CHECK(!columnInfo.IsNull());
+    BOOST_CHECK(!columnInfo.isNull());
 
     columnInfo.analyzeToken(L" FALSE "s);
     BOOST_TEST(columnInfo.type() == ColumnType::String);
-    BOOST_CHECK(!columnInfo.IsNull());
+    BOOST_CHECK(!columnInfo.isNull());
 }
 
 BOOST_AUTO_TEST_CASE(bool_3)
 {
     ColumnInfo columnInfo(L"column1"s);
     BOOST_TEST(columnInfo.type() == ColumnType::String);
-    BOOST_CHECK(columnInfo.IsNull());
+    BOOST_CHECK(columnInfo.isNull());
 
     columnInfo.analyzeToken(L" true "s);
     BOOST_TEST(columnInfo.type() == ColumnType::Bool);
-    BOOST_CHECK(!columnInfo.IsNull());
+    BOOST_CHECK(!columnInfo.isNull());
 
     columnInfo.analyzeToken(L" false "s);
     BOOST_TEST(columnInfo.type() == ColumnType::Bool);
-    BOOST_CHECK(!columnInfo.IsNull());
+    BOOST_CHECK(!columnInfo.isNull());
 
     columnInfo.analyzeToken(L" True "s);
     BOOST_TEST(columnInfo.type() == ColumnType::String);
-    BOOST_CHECK(!columnInfo.IsNull());
+    BOOST_CHECK(!columnInfo.isNull());
 
     columnInfo.analyzeToken(L" false "s);
     BOOST_TEST(columnInfo.type() == ColumnType::String);
-    BOOST_CHECK(!columnInfo.IsNull());
+    BOOST_CHECK(!columnInfo.isNull());
 }
 
 BOOST_AUTO_TEST_SUITE_END();
@@ -439,7 +439,7 @@ BOOST_AUTO_TEST_CASE(parsing_results_1)
     BOOST_TEST(columns[0].type() == ColumnType::String);
     BOOST_TEST(columns[0].minLength() == 3);
     BOOST_TEST(columns[0].maxLength() == 5);
-    BOOST_CHECK(!columns[0].IsNull());
+    BOOST_CHECK(!columns[0].isNull());
 
     BOOST_TEST(columns[1].name().compare(L"col_int") == 0);
     BOOST_TEST(columns[2].name().compare(L"col_date") == 0);
