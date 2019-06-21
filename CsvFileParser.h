@@ -116,6 +116,7 @@ public:
     static void initializeLocales();
     void update(const ColumnInfo& columnInfo);
 
+    const std::wstring& Name() const { return mName; };
     ColumnType type() const;
     bool IsNull();
     std::size_t maxLength() { return mMaxLength; };
