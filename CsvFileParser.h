@@ -123,8 +123,8 @@ public:
     std::size_t minLength() const { return mMinLength.value_or(0); };
     std::size_t digitsBeforeDecimalPoint() const { return mDigitsBeforeDecimalPoint.value_or(0); };
     std::size_t digitsAfterDecimalPoint() const { return mDigitsAfterDecimalPoint.value_or(0); };
-    double minVal() const { return mMinVal.value_or(0); };
-    double maxVal() const { return mMaxVal.value_or(0); };
+    double minValue() const { return mMinValue.value_or(0); };
+    double maxValue() const { return mMaxValue.value_or(0); };
 
 private:
     void analyzeTemporal(const std::wstring& token, const std::locale& temporalLocale, bool& isTemporal);
@@ -145,8 +145,8 @@ private:
     std::optional<std::size_t> mMinLength;
     std::optional<std::size_t> mDigitsBeforeDecimalPoint;
     std::optional<std::size_t> mDigitsAfterDecimalPoint;
-    std::optional<double> mMinVal;
-    std::optional<double> mMaxVal;
+    std::optional<double> mMinValue;
+    std::optional<double> mMaxValue;
 
     static inline std::locale sLocaleTimeStamp;
     static inline std::locale sLocaleTime;

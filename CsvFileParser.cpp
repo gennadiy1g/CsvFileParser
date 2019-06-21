@@ -398,12 +398,12 @@ void ColumnInfo::analyzeToken(std::wstring_view token)
                 try {
                     auto value = boost::lexical_cast<double>(tokenTrim);
 
-                    if ((!mMinVal.has_value()) || (value < mMinVal)) {
-                        mMinVal = value;
+                    if ((!mMinValue.has_value()) || (value < mMinValue)) {
+                        mMinValue = value;
                     }
 
-                    if ((!mMaxVal.has_value()) || (value > mMaxVal)) {
-                        mMaxVal = value;
+                    if ((!mMaxValue.has_value()) || (value > mMaxValue)) {
+                        mMaxValue = value;
                     }
 
                     if (mIsDecimal) {
@@ -548,11 +548,11 @@ void ColumnInfo::update(const ColumnInfo& columnInfo)
     if ((columnInfo.mDigitsAfterDecimalPoint.has_value()) && ((!mDigitsAfterDecimalPoint.has_value()) || (mDigitsAfterDecimalPoint < columnInfo.mDigitsAfterDecimalPoint))) {
         mDigitsAfterDecimalPoint = columnInfo.mDigitsAfterDecimalPoint;
     }
-    if ((columnInfo.mMinVal.has_value()) && ((!mMinVal.has_value()) || (mMinVal > columnInfo.mMinVal))) {
-        mMinVal = columnInfo.mMinVal;
+    if ((columnInfo.mMinValue.has_value()) && ((!mMinValue.has_value()) || (mMinValue > columnInfo.mMinValue))) {
+        mMinValue = columnInfo.mMinValue;
     }
-    if ((columnInfo.mMaxVal.has_value()) && ((!mMaxVal.has_value()) || (mMaxVal < columnInfo.mMaxVal))) {
-        mMaxVal = columnInfo.mMaxVal;
+    if ((columnInfo.mMaxValue.has_value()) && ((!mMaxValue.has_value()) || (mMaxValue < columnInfo.mMaxValue))) {
+        mMaxValue = columnInfo.mMaxValue;
     }
 };
 
@@ -573,11 +573,11 @@ std::wostream& operator<<(std::wostream& wostr, const ColumnInfo& columnInfo)
         if (columnInfo.mDigitsAfterDecimalPoint.has_value()) {
             wostr << ", digits after decimal = " << columnInfo.mDigitsAfterDecimalPoint.value();
         }
-        if (columnInfo.mMinVal.has_value()) {
-            wostr << ", min value = " << columnInfo.mMinVal.value();
+        if (columnInfo.mMinValue.has_value()) {
+            wostr << ", min value = " << columnInfo.mMinValue.value();
         }
-        if (columnInfo.mMaxVal.has_value()) {
-            wostr << ", max value = " << columnInfo.mMaxVal.value();
+        if (columnInfo.mMaxValue.has_value()) {
+            wostr << ", max value = " << columnInfo.mMaxValue.value();
         }
         wostr << ", " << (columnInfo.mIsNull ? "NULL" : "NOT NULL") << ')';
     }

@@ -443,8 +443,8 @@ BOOST_AUTO_TEST_CASE(parsing_results_1)
 
     BOOST_TEST(columns[1].name().compare(L"col_int") == 0);
     BOOST_TEST(columns[1].type() == ColumnType::Int);
-    BOOST_TEST(columns[1].minVal() == -789);
-    BOOST_TEST(columns[1].maxVal() == 1200);
+    BOOST_TEST(columns[1].minValue() == -789);
+    BOOST_TEST(columns[1].maxValue() == 1200);
     BOOST_TEST(columns[1].digitsBeforeDecimalPoint() == 4);
     BOOST_TEST(columns[1].digitsAfterDecimalPoint() == 0);
     BOOST_TEST(columns[1].minLength() == 2);
