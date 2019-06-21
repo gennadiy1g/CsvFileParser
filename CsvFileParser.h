@@ -118,7 +118,7 @@ public:
 
     const std::wstring& Name() const { return mName; };
     ColumnType type() const;
-    bool IsNull() const;
+    bool IsNull() const { return mIsAnalyzed ? mIsNull : true; };
     std::size_t maxLength() const { return mMaxLength; };
     std::size_t minLength() const { return mMinLength.value_or(0); };
     std::size_t digitsBeforeDecimalPoint() const { return mDigitsBeforeDecimalPoint.value_or(0); };

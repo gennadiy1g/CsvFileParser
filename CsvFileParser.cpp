@@ -514,15 +514,6 @@ ColumnType ColumnInfo::type() const
     }
 };
 
-bool ColumnInfo::IsNull() const
-{
-    if (mIsAnalyzed) {
-        return mIsNull;
-    } else {
-        return true;
-    }
-};
-
 void ColumnInfo::update(const ColumnInfo& columnInfo)
 {
     assert(columnInfo.mIsAnalyzed);
