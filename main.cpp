@@ -480,6 +480,7 @@ BOOST_AUTO_TEST_CASE(parsing_results_1)
     BOOST_CHECK(!columns[5].isNull());
 
     BOOST_TEST(columns[6].name().compare(L"col_bool") == 0);
+    BOOST_CHECK(!columns[6].isNull());
 }
 
 BOOST_AUTO_TEST_SUITE_END();
