@@ -483,4 +483,61 @@ BOOST_AUTO_TEST_CASE(parsing_results_1)
     BOOST_CHECK(!columns[6].isNull());
 }
 
+BOOST_AUTO_TEST_CASE(parsing_results_2)
+{
+    CsvFileParser parser(LR"^(C:\Users\genna_000\Documents\Experiments\test data\parsing_results_2.csv)^");
+    auto parsingResults = parser.parse(L',', L'"', L'\\');
+    BOOST_TEST(parsingResults.numLines() == 20);
+    BOOST_TEST(parsingResults.numMalformedLines() == 0);
+    const auto& columns = parsingResults.columns();
+    BOOST_TEST(columns.size() == 7);
+
+    BOOST_TEST(columns[0].name().compare(L"col_str") == 0);
+    BOOST_TEST(columns[0].type() == ColumnType::String);
+    BOOST_TEST(columns[0].minLength() == 1);
+    BOOST_TEST(columns[0].maxLength() == 7);
+    BOOST_CHECK(columns[0].isNull());
+
+    BOOST_TEST(columns[1].name().compare(L"col_int") == 0);
+    BOOST_TEST(columns[1].type() == ColumnType::Int);
+    BOOST_TEST(columns[1].minValue() == -1031);
+    BOOST_TEST(columns[1].maxValue() == 1201);
+    BOOST_TEST(columns[1].digitsBeforeDecimalPoint() == 4);
+    BOOST_TEST(columns[1].digitsAfterDecimalPoint() == 0);
+    BOOST_TEST(columns[1].minLength() == 2);
+    BOOST_TEST(columns[1].maxLength() == 5);
+    BOOST_CHECK(columns[1].isNull());
+
+    BOOST_TEST(columns[2].name().compare(L"col_date") == 0);
+    BOOST_TEST(columns[2].type() == ColumnType::Date);
+    BOOST_TEST(columns[2].minLength() == 10);
+    BOOST_TEST(columns[2].maxLength() == 10);
+    BOOST_CHECK(columns[2].isNull());
+
+    BOOST_TEST(columns[3].name().compare(L"col_time") == 0);
+    BOOST_TEST(columns[3].type() == ColumnType::Time);
+    BOOST_TEST(columns[3].minLength() == 8);
+    BOOST_TEST(columns[3].maxLength() == 8);
+    BOOST_CHECK(columns[3].isNull());
+
+    BOOST_TEST(columns[4].name().compare(L"col_time_stamp") == 0);
+    BOOST_TEST(columns[4].type() == ColumnType::TimeStamp);
+    BOOST_TEST(columns[4].minLength() == 16);
+    BOOST_TEST(columns[4].maxLength() == 16);
+    BOOST_CHECK(columns[4].isNull());
+
+    BOOST_TEST(columns[5].name().compare(L"col_decimal") == 0);
+    BOOST_TEST(columns[5].type() == ColumnType::Decimal);
+    BOOST_TEST(columns[5].minValue() == -48.123456);
+    BOOST_TEST(columns[5].maxValue() == 1234.1234);
+    BOOST_TEST(columns[5].digitsBeforeDecimalPoint() == 4);
+    BOOST_TEST(columns[5].digitsAfterDecimalPoint() == 6);
+    BOOST_TEST(columns[5].minLength() == 2);
+    BOOST_TEST(columns[5].maxLength() == 10);
+    BOOST_CHECK(columns[5].isNull());
+
+    BOOST_TEST(columns[6].name().compare(L"col_bool") == 0);
+    BOOST_CHECK(columns[6].isNull());
+}
+
 BOOST_AUTO_TEST_SUITE_END();
