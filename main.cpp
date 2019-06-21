@@ -434,6 +434,19 @@ BOOST_AUTO_TEST_CASE(parsing_results_1)
     BOOST_TEST(parsingResults.numMalformedLines() == 0);
     const auto& columns = parsingResults.columns();
     BOOST_TEST(columns.size() == 7);
+
+    BOOST_TEST(columns[0].name().compare(L"col_str") == 0);
+    BOOST_TEST(columns[0].type() == ColumnType::String);
+    BOOST_TEST(columns[0].minLength() == 3);
+    BOOST_TEST(columns[0].maxLength() == 5);
+    BOOST_CHECK(!columns[0].IsNull());
+
+    BOOST_TEST(columns[1].name().compare(L"col_int") == 0);
+    BOOST_TEST(columns[2].name().compare(L"col_date") == 0);
+    BOOST_TEST(columns[3].name().compare(L"col_time") == 0);
+    BOOST_TEST(columns[4].name().compare(L"col_time_stamp") == 0);
+    BOOST_TEST(columns[5].name().compare(L"col_decimal") == 0);
+    BOOST_TEST(columns[6].name().compare(L"col_bool") == 0);
 }
 
 BOOST_AUTO_TEST_SUITE_END();
