@@ -172,9 +172,9 @@ public:
     void update(const ParsingResults& results);
     void addColumn(std::wstring_view name);
 
-    const std::vector<ColumnInfo>& Columns() { return mColumns; }
-    std::size_t NumLines() { return mNumLines; };
-    std::size_t NumMalformedLines() { return mNumMalformedLines; };
+    const std::vector<ColumnInfo>& Columns() const { return mColumns; }
+    std::size_t NumLines() const { return mNumLines; };
+    std::size_t NumMalformedLines() const { return mNumMalformedLines; };
 
 private:
     std::vector<ColumnInfo> mColumns;
