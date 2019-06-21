@@ -429,7 +429,11 @@ BOOST_AUTO_TEST_SUITE(parsing_results);
 BOOST_AUTO_TEST_CASE(parsing_results_1)
 {
     CsvFileParser parser(LR"^(C:\Users\genna_000\Documents\Experiments\test data\parsing_results_1.csv)^");
-    BOOST_REQUIRE_NO_THROW(parser.parse(L',', L'"', L'\\'));
+    auto parsingResults = parser.parse(L',', L'"', L'\\');
+    BOOST_TEST(parsingResults.NumLines() == 10);
+    BOOST_TEST(parsingResults.NumMalformedLines() == 0);
+    const auto& columns = parsingResults.Columns();
+    BOOST_TEST(columns.size() == 7);
 }
 
 BOOST_AUTO_TEST_SUITE_END();
