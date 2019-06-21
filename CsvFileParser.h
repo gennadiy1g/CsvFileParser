@@ -113,15 +113,15 @@ public:
     ColumnInfo& operator=(ColumnInfo&& rhs) = default;
 
     void analyzeToken(std::wstring_view token);
+    static void initializeLocales();
+    void update(const ColumnInfo& columnInfo);
+
     ColumnType type() const;
     bool IsNull();
     std::size_t maxLength() { return mMaxLength; };
     std::size_t minLength() { return mMinLength.value_or(0); };
     std::size_t digitsBeforeDecimalPoint() { return mDigitsBeforeDecimalPoint.value_or(0); };
     std::size_t digitsAfterDecimalPoint() { return mDigitsAfterDecimalPoint.value_or(0); };
-
-    static void initializeLocales();
-    void update(const ColumnInfo& columnInfo);
 
 private:
     void analyzeTemporal(const std::wstring& token, const std::locale& temporalLocale, bool& isTemporal);
