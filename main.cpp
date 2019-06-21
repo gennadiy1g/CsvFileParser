@@ -452,9 +452,33 @@ BOOST_AUTO_TEST_CASE(parsing_results_1)
     BOOST_CHECK(!columns[1].isNull());
 
     BOOST_TEST(columns[2].name().compare(L"col_date") == 0);
+    BOOST_TEST(columns[2].type() == ColumnType::Date);
+    BOOST_TEST(columns[2].minLength() == 10);
+    BOOST_TEST(columns[2].maxLength() == 10);
+    BOOST_CHECK(!columns[2].isNull());
+
     BOOST_TEST(columns[3].name().compare(L"col_time") == 0);
+    BOOST_TEST(columns[3].type() == ColumnType::Time);
+    BOOST_TEST(columns[3].minLength() == 8);
+    BOOST_TEST(columns[3].maxLength() == 8);
+    BOOST_CHECK(!columns[3].isNull());
+
     BOOST_TEST(columns[4].name().compare(L"col_time_stamp") == 0);
+    BOOST_TEST(columns[4].type() == ColumnType::TimeStamp);
+    BOOST_TEST(columns[4].minLength() == 16);
+    BOOST_TEST(columns[4].maxLength() == 16);
+    BOOST_CHECK(!columns[4].isNull());
+
     BOOST_TEST(columns[5].name().compare(L"col_decimal") == 0);
+    BOOST_TEST(columns[5].type() == ColumnType::Decimal);
+    BOOST_TEST(columns[5].minValue() == -48.05);
+    BOOST_TEST(columns[5].maxValue() == 125.66);
+    BOOST_TEST(columns[5].digitsBeforeDecimalPoint() == 3);
+    BOOST_TEST(columns[5].digitsAfterDecimalPoint() == 5);
+    BOOST_TEST(columns[5].minLength() == 2);
+    BOOST_TEST(columns[5].maxLength() == 8);
+    BOOST_CHECK(!columns[5].isNull());
+
     BOOST_TEST(columns[6].name().compare(L"col_bool") == 0);
 }
 
