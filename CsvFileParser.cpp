@@ -86,6 +86,10 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t quote, wchar_t es
 {
     checkInputFile();
 
+    if (mIsResultsMovedFrom) {
+        mResults = ParsingResults();
+    };
+
     auto& gLogger = GlobalLogger::get();
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "->" << FUNCTION_FILE_LINE;
 
@@ -206,6 +210,7 @@ ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t quote, wchar_t es
     } else {
         BOOST_LOG_SEV(gLogger, bltrivial::debug) << "All " << numLines << " lines processed." << FUNCTION_FILE_LINE;
         BOOST_LOG_SEV(gLogger, bltrivial::trace) << "<-" << FUNCTION_FILE_LINE << std::flush;
+        mIsResultsMovedFrom = true;
         return std::move(mResults);
     }
 }

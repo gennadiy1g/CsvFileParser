@@ -221,6 +221,7 @@ private:
     std::condition_variable_any mConditionVarFullBuffers;
 
     ParsingResults mResults;
+    bool mIsResultsMovedFrom { false };
     std::shared_mutex mMutexResults;
 
     CsvSeparator mSep;
