@@ -442,6 +442,15 @@ BOOST_AUTO_TEST_CASE(parsing_results_1)
     BOOST_CHECK(!columns[0].isNull());
 
     BOOST_TEST(columns[1].name().compare(L"col_int") == 0);
+    BOOST_TEST(columns[1].type() == ColumnType::Int);
+    BOOST_TEST(columns[1].minVal() == -789);
+    BOOST_TEST(columns[1].maxVal() == 1200);
+    BOOST_TEST(columns[1].digitsBeforeDecimalPoint() == 4);
+    BOOST_TEST(columns[1].digitsAfterDecimalPoint() == 0);
+    BOOST_TEST(columns[1].minLength() == 2);
+    BOOST_TEST(columns[1].maxLength() == 4);
+    BOOST_CHECK(!columns[1].isNull());
+
     BOOST_TEST(columns[2].name().compare(L"col_date") == 0);
     BOOST_TEST(columns[3].name().compare(L"col_time") == 0);
     BOOST_TEST(columns[4].name().compare(L"col_time_stamp") == 0);
