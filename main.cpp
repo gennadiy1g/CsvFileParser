@@ -537,6 +537,7 @@ BOOST_AUTO_TEST_CASE(parsing_results_2)
     BOOST_CHECK(columns[5].isNull());
 
     BOOST_TEST(columns[6].name().compare(L"col_bool") == 0);
+    BOOST_TEST(columns[6].type() == ColumnType::Bool);
     BOOST_CHECK(columns[6].isNull());
 }
 BOOST_AUTO_TEST_CASE(parsing_results_3)
@@ -587,6 +588,7 @@ BOOST_AUTO_TEST_CASE(parsing_results_3)
     BOOST_CHECK(!columns[4].isNull());
 
     BOOST_TEST(columns[5].name().compare(L"Col_6") == 0);
+    BOOST_TEST(columns[5].type() == ColumnType::Bool);
     BOOST_CHECK(!columns[5].isNull());
 
     BOOST_TEST(columns[6].name().compare(L"Col_7") == 0);
