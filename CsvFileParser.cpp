@@ -308,9 +308,10 @@ void CsvFileParser::parseBuffer(unsigned int numBufferToParse, ParsingResults& r
     CsvTokenizer tok(L""s, mSep);
     for (const auto& line : mBuffers.at(numBufferToParse).mLines) {
         std::size_t columnNumber { 0 };
+        BOOST_LOG_SEV(gLogger, bltrivial::trace) << line << FUNCTION_FILE_LINE;
         tok.assign(line);
         for (auto beg = tok.begin(); beg != tok.end(); ++beg) {
-            // BOOST_LOG_SEV(gLogger, bltrivial::trace) << *beg;
+            BOOST_LOG_SEV(gLogger, bltrivial::trace) << *beg << FUNCTION_FILE_LINE;
             auto token = *beg;
             if (columnNumber < results.mColumns.size()) {
                 results.mColumns[columnNumber].analyzeToken(token);
@@ -331,9 +332,10 @@ void CsvFileParser::parseColumnNames(std::wstring_view line)
 {
     auto& gLogger = GlobalLogger::get();
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << "->" << FUNCTION_FILE_LINE << std::flush;
+    BOOST_LOG_SEV(gLogger, bltrivial::trace) << line << FUNCTION_FILE_LINE;
     CsvTokenizer tok(line, mSep);
     for (auto beg = tok.begin(); beg != tok.end(); ++beg) {
-        BOOST_LOG_SEV(gLogger, bltrivial::trace) << *beg;
+        BOOST_LOG_SEV(gLogger, bltrivial::trace) << *beg << FUNCTION_FILE_LINE;
         auto name = *beg;
         boost::trim(name);
         mResults.addColumn(name);
