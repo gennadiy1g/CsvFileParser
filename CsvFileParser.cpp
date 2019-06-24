@@ -574,10 +574,10 @@ std::wostream& operator<<(std::wostream& wostr, const ColumnInfo& columnInfo)
             wostr << ", digits after decimal = " << columnInfo.mDigitsAfterDecimalPoint.value();
         }
         if (columnInfo.mMinValue.has_value()) {
-            wostr << ", min value = " << columnInfo.mMinValue.value();
+            wostr << ", min value = " << std::setprecision(std::numeric_limits<double>::digits10 + 1) << columnInfo.mMinValue.value();
         }
         if (columnInfo.mMaxValue.has_value()) {
-            wostr << ", max value = " << columnInfo.mMaxValue.value();
+            wostr << ", max value = " << std::setprecision(std::numeric_limits<double>::digits10 + 1) << columnInfo.mMaxValue.value();
         }
         wostr << ", " << (columnInfo.mIsNull ? "NULL" : "NOT NULL") << ')';
     }
