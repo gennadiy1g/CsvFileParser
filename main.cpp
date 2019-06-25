@@ -598,4 +598,21 @@ BOOST_AUTO_TEST_CASE(parsing_results_3)
     BOOST_CHECK(!columns[6].isNull());
 }
 
+BOOST_AUTO_TEST_CASE(parsing_results_bare_headers)
+{
+    CsvFileParser parser(LR"^(C:\Users\genna_000\Documents\Experiments\test data\bare_headers.csv)^");
+    auto parsingResults = parser.parse(L'\t', L'"', L'\\');
+    BOOST_TEST(parsingResults.numLines() == 0);
+    BOOST_TEST(parsingResults.numMalformedLines() == 0);
+    const auto& columns = parsingResults.columns();
+    BOOST_TEST(columns.size() == 7);
+    BOOST_TEST(columns[0].name().compare(L"Col_1") == 0);
+    BOOST_TEST(columns[1].name().compare(L"Col_2") == 0);
+    BOOST_TEST(columns[2].name().compare(L"Col_3") == 0);
+    BOOST_TEST(columns[3].name().compare(L"Col_4") == 0);
+    BOOST_TEST(columns[4].name().compare(L"Col_5") == 0);
+    BOOST_TEST(columns[5].name().compare(L"Col_6") == 0);
+    BOOST_TEST(columns[6].name().compare(L"Col_7") == 0);
+}
+
 BOOST_AUTO_TEST_SUITE_END();
