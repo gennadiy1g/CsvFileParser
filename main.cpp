@@ -615,4 +615,42 @@ BOOST_AUTO_TEST_CASE(parsing_results_bare_headers)
     BOOST_TEST(columns[6].name().compare(L"Col_7") == 0);
 }
 
+BOOST_AUTO_TEST_CASE(parsing_results_boolean)
+{
+    CsvFileParser parser(LR"^(C:\Users\genna_000\Documents\Experiments\test data\boolean.csv)^");
+    auto parsingResults = parser.parse(L' ', L'"', L'\\');
+    BOOST_TEST(parsingResults.numLines() == 4);
+    BOOST_TEST(parsingResults.numMalformedLines() == 0);
+    const auto& columns = parsingResults.columns();
+    BOOST_TEST(columns.size() == 7);
+
+    BOOST_TEST(columns[0].name().compare(L"a") == 0);
+    BOOST_TEST(columns[0].type() == ColumnType::Bool);
+    BOOST_CHECK(!columns[0].isNull());
+
+    BOOST_TEST(columns[1].name().compare(L"b") == 0);
+    BOOST_TEST(columns[1].type() == ColumnType::Bool);
+    BOOST_CHECK(!columns[1].isNull());
+
+    BOOST_TEST(columns[2].name().compare(L"c") == 0);
+    BOOST_TEST(columns[2].type() == ColumnType::String);
+    BOOST_CHECK(!columns[2].isNull());
+
+    BOOST_TEST(columns[3].name().compare(L"d") == 0);
+    BOOST_TEST(columns[3].type() == ColumnType::String);
+    BOOST_CHECK(!columns[3].isNull());
+
+    BOOST_TEST(columns[4].name().compare(L"e") == 0);
+    BOOST_TEST(columns[4].type() == ColumnType::String);
+    BOOST_CHECK(!columns[4].isNull());
+
+    BOOST_TEST(columns[5].name().compare(L"f") == 0);
+    BOOST_TEST(columns[5].type() == ColumnType::String);
+    BOOST_CHECK(!columns[5].isNull());
+
+    BOOST_TEST(columns[6].name().compare(L"g") == 0);
+    BOOST_TEST(columns[6].type() == ColumnType::String);
+    BOOST_CHECK(!columns[6].isNull());
+}
+
 BOOST_AUTO_TEST_SUITE_END();
