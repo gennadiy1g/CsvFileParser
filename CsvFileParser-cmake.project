@@ -3,6 +3,8 @@
   <Description/>
   <Dependencies/>
   <VirtualDirectory Name="src">
+    <File Name="BulkLoader.cpp"/>
+    <File Name="BulkLoader.h"/>
     <File Name="utilities.h"/>
     <File Name="utilities.cpp"/>
     <File Name="log.h"/>
