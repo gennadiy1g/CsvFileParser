@@ -13,7 +13,7 @@ public:
     virtual ~BulkLoader() = default; // Defaulted virtual destructor
 
     void parse(wchar_t separator, wchar_t quote);
-    void load(std::string_view hostName, int portNumber);
+    void load(std::string_view host, int port, std::string_view database, std::string_view table, std::string_view user, std::string_view password);
 
 private:
     virtual std::string generateCreateTableCommand() = 0;
