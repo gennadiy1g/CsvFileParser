@@ -3,6 +3,8 @@
   <Description/>
   <Dependencies/>
   <VirtualDirectory Name="src">
+    <File Name="MonetDBBulkLoader.cpp"/>
+    <File Name="MonetDBBulkLoader.h"/>
     <File Name="BulkLoader.cpp"/>
     <File Name="BulkLoader.h"/>
     <File Name="utilities.h"/>
