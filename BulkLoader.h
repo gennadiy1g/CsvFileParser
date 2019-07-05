@@ -1,11 +1,14 @@
 #pragma once
 
+#include <boost/filesystem.hpp>
 #include <string>
+
+namespace bfs = boost::filesystem;
 
 class BulkLoader {
 
 public:
-    BulkLoader() = default; // Constructor
+    BulkLoader(bfs::path inputFile); // Constructor
     virtual ~BulkLoader() = default; // Defaulted virtual destructor
 
     void bulkLoad();
