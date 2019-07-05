@@ -2,6 +2,7 @@
 
 #include <boost/filesystem.hpp>
 #include <string>
+#include <string_view>
 
 namespace bfs = boost::filesystem;
 
@@ -11,7 +12,8 @@ public:
     BulkLoader(bfs::path inputFile); // Constructor
     virtual ~BulkLoader() = default; // Defaulted virtual destructor
 
-    void bulkLoad();
+    void parse(wchar_t separator, wchar_t quote);
+    void load(std::string_view hostName, int portNumber);
 
 private:
     virtual std::string generateCreateTableCommand() = 0;
