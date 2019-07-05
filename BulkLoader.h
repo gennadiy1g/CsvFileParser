@@ -14,6 +14,7 @@ public:
 
     void parse(wchar_t separator, wchar_t quote);
     void load(std::string_view host, int port, std::string_view database, std::string_view table, std::string_view user, std::string_view password);
+    virtual void loadOnClient(std::string_view host, int port, std::string_view database, std::string_view table, std::string_view user, std::string_view password) = 0;
 
 private:
     virtual std::string generateCreateTableCommand() = 0;
