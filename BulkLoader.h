@@ -4,6 +4,8 @@
 #include <string>
 #include <string_view>
 
+#include "CsvFileParser.h"
+
 namespace bfs = boost::filesystem;
 
 class BulkLoader {
@@ -19,4 +21,7 @@ public:
 private:
     virtual std::string generateCreateTableCommand() = 0;
     virtual std::string generateCopyIntoCommand() = 0;
+
+    bfs::path mInputFile;
+    ParsingResults mParsingResults;
 };
