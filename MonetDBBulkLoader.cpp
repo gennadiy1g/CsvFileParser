@@ -4,12 +4,12 @@ using namespace std::string_literals;
 
 #include "MonetDBBulkLoader.h"
 
-std::string MonetDBBulkLoader::generateCopyIntoCommand()
+std::wstring MonetDBBulkLoader::generateCopyIntoCommand()
 {
-    return ""s;
+    return L""s;
 }
 
-std::string MonetDBBulkLoader::generateCreateTableCommand()
+std::wstring MonetDBBulkLoader::generateCreateTableCommand()
 {
-    return ""s;
+    return L""s;
 }

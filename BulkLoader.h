@@ -23,6 +23,6 @@ protected:
     ParsingResults mParsingResults;
 
 private:
-    virtual std::string generateCreateTableCommand() = 0;
-    virtual std::string generateCopyIntoCommand() = 0;
+    virtual std::wstring generateCreateTableCommand() = 0;
+    virtual std::wstring generateCopyIntoCommand() = 0;
 };
