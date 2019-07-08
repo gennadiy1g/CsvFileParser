@@ -43,7 +43,7 @@ std::wostream& operator<<(std::wostream& wostr, const ParsingResults& parsingRes
     }
     wostr << "; " << parsingResults.mNumLines << " lines; " << parsingResults.mNumMalformedLines << " malformed lines.";
     return wostr;
-};
+}
 
 void ParserBuffer::addLine(std::wstring&& line)
 {
@@ -80,7 +80,7 @@ void CsvFileParser::checkInputFile()
     if (bfs::file_size(mInputFile) == 0) {
         throw std::runtime_error("File \""s + blocale::conv::utf_to_utf<char>(mInputFile.native()) + "\" is empty!"s);
     }
-};
+}
 
 ParsingResults CsvFileParser::parse(wchar_t separator, wchar_t quote, wchar_t escape, unsigned int numThreadsOpt)
 {
@@ -358,7 +358,7 @@ void ColumnInfo::initializeLocales()
 
         initialized = true;
     }
-};
+}
 
 void ColumnInfo::analyzeTemporal(const std::wstring& token, const std::locale& temporalLocale, bool& isTemporal)
 {
@@ -373,7 +373,7 @@ void ColumnInfo::analyzeTemporal(const std::wstring& token, const std::locale& t
     } else {
         isTemporal = false;
     }
-};
+}
 
 void ColumnInfo::analyzeToken(std::wstring_view token)
 {
@@ -490,7 +490,7 @@ void ColumnInfo::analyzeToken(std::wstring_view token)
     if (!mIsAnalyzed) {
         mIsAnalyzed = true;
     };
-};
+}
 
 ColumnType ColumnInfo::type() const
 {
@@ -519,7 +519,7 @@ ColumnType ColumnInfo::type() const
     } else {
         return ColumnType::String;
     }
-};
+}
 
 void ColumnInfo::update(const ColumnInfo& columnInfo)
 {
@@ -556,7 +556,7 @@ void ColumnInfo::update(const ColumnInfo& columnInfo)
     if ((columnInfo.mMaxValue.has_value()) && ((!mMaxValue.has_value()) || (mMaxValue < columnInfo.mMaxValue))) {
         mMaxValue = columnInfo.mMaxValue;
     }
-};
+}
 
 std::wostream& operator<<(std::wostream& wostr, const ColumnInfo& columnInfo)
 {
@@ -584,4 +584,4 @@ std::wostream& operator<<(std::wostream& wostr, const ColumnInfo& columnInfo)
         wostr << ", " << (columnInfo.mIsNull ? "NULL" : "NOT NULL") << ')';
     }
     return wostr;
-};
+}
