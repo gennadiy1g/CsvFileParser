@@ -15,4 +15,8 @@ public:
     // Explicitly default move constructor and move assignment operator.
     MonetDBBulkLoader(MonetDBBulkLoader&& src) = default;
     MonetDBBulkLoader& operator=(MonetDBBulkLoader&& rhs) = default;
+
+private:
+    virtual std::string generateCreateTableCommand();
+    virtual std::string generateCopyIntoCommand();
 };
