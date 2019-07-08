@@ -18,10 +18,11 @@ public:
     void load(std::string_view host, int port, std::string_view database, std::string_view table, std::string_view user, std::string_view password);
     virtual void loadOnClient(std::string_view host, int port, std::string_view database, std::string_view table, std::string_view user, std::string_view password) = 0;
 
+protected:
+    bfs::path mInputFile;
+    ParsingResults mParsingResults;
+
 private:
     virtual std::string generateCreateTableCommand() = 0;
     virtual std::string generateCopyIntoCommand() = 0;
-
-    bfs::path mInputFile;
-    ParsingResults mParsingResults;
 };
