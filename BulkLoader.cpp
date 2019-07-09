@@ -1,6 +1,6 @@
 #include "BulkLoader.h"
 
-BulkLoader::BulkLoader(bfs::path inputFile)
+BulkLoader::BulkLoader(const bfs::path& inputFile)
     : mInputFile(inputFile)
 {
 }

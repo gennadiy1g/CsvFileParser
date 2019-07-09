@@ -11,7 +11,7 @@ namespace bfs = boost::filesystem;
 class BulkLoader {
 
 public:
-    BulkLoader(bfs::path inputFile); // Constructor
+    BulkLoader(const bfs::path& inputFile); // Constructor
     virtual ~BulkLoader() = default; // Defaulted virtual destructor
 
     void parse(wchar_t separator, wchar_t quote);
