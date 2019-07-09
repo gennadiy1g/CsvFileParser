@@ -881,3 +881,7 @@ BOOST_AUTO_TEST_CASE(parsing_results_boolean)
 }
 
 BOOST_AUTO_TEST_SUITE_END();
+
+BOOST_AUTO_TEST_SUITE(generate_create_table_command);
+
+BOOST_AUTO_TEST_SUITE_END();
