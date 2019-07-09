@@ -22,6 +22,7 @@ std::wstring MonetDBBulkLoader::generateCreateTableCommand() const
     std::wostringstream buf(L"CREATE TABLE ");
     buf << L'"' << boost::trim_copy(mInputFile.stem().wstring()) << L"\" (";
     auto firstColumn = true;
+    assert(mParsingResults.columns().size() > 0);
     for (const auto& column : mParsingResults.columns()) {
         if (firstColumn) {
             firstColumn = false;
