@@ -17,6 +17,6 @@ public:
     MonetDBBulkLoader& operator=(MonetDBBulkLoader&& rhs) = default;
 
 private:
-    virtual std::wstring generateCreateTableCommand();
-    virtual std::wstring generateCopyIntoCommand();
+    virtual std::wstring generateCreateTableCommand() const;
+    virtual std::wstring generateCopyIntoCommand() const;
 };

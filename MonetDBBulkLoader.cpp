@@ -7,12 +7,12 @@ using namespace std::string_literals;
 
 #include "MonetDBBulkLoader.h"
 
-std::wstring MonetDBBulkLoader::generateCopyIntoCommand()
+std::wstring MonetDBBulkLoader::generateCopyIntoCommand() const
 {
     return L""s;
 }
 
-std::wstring MonetDBBulkLoader::generateCreateTableCommand()
+std::wstring MonetDBBulkLoader::generateCreateTableCommand() const
 {
     std::wostringstream buf(L"CREATE TABLE ");
     buf << L'"' << boost::trim_copy(mInputFile.stem().wstring()) << L"\" (";
