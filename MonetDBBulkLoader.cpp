@@ -15,9 +15,20 @@ std::wstring MonetDBBulkLoader::generateCopyIntoCommand()
 std::wstring MonetDBBulkLoader::generateCreateTableCommand()
 {
     std::wostringstream buf(L"CREATE TABLE ");
-    buf << mInputFile.stem();
+    buf << L'"' << boost::trim_copy(mInputFile.stem().wstring()) << L"\" (";
     for (const auto& column : mParsingResults.columns()) {
         buf << L'"' << boost::trim_copy(column.name()) << L"\" ";
+        switch (column.type()) {
+        case ColumnType::String:;
+        case ColumnType::Float:;
+        case ColumnType::Decimal:;
+        case ColumnType::Int:;
+        case ColumnType::TimeStamp:;
+        case ColumnType::Date:;
+        case ColumnType::Time:;
+        case ColumnType::Bool:;
+        }
     }
+    buf << L')';
     return buf.str();
 }
