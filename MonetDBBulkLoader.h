@@ -5,7 +5,7 @@
 class MonetDBBulkLoader : public BulkLoader {
 
 public:
-    MonetDBBulkLoader() = default; // Constructor
+    MonetDBBulkLoader(const bfs::path& inputFile); // Constructor
     virtual ~MonetDBBulkLoader() = default; // Defaulted virtual destructor
 
     // Disallow assignment and pass-by-value.

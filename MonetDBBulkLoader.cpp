@@ -7,6 +7,11 @@ using namespace std::string_literals;
 
 #include "MonetDBBulkLoader.h"
 
+MonetDBBulkLoader::MonetDBBulkLoader(const bfs::path& inputFile)
+    : BulkLoader(inputFile)
+{
+}
+
 std::wstring MonetDBBulkLoader::generateCopyIntoCommand() const
 {
     return L""s;
