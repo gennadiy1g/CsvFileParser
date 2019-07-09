@@ -18,6 +18,8 @@ public:
     void load(std::string_view host, int port, std::string_view database, std::string_view table, std::string_view user, std::string_view password) const;
     virtual void loadOnClient(std::string_view host, int port, std::string_view database, std::string_view table, std::string_view user, std::string_view password) const = 0;
 
+    std::wstring generateCreateTableCommand_unit_testing() const { return generateCopyIntoCommand(); };
+
 protected:
     bfs::path mInputFile;
     ParsingResults mParsingResults;
