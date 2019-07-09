@@ -16,6 +16,8 @@ public:
     MonetDBBulkLoader(MonetDBBulkLoader&& src) = default;
     MonetDBBulkLoader& operator=(MonetDBBulkLoader&& rhs) = default;
 
+    virtual void loadOnClient(std::string_view host, int port, std::string_view database, std::string_view table, std::string_view user, std::string_view password) const {};
+
 private:
     virtual std::wstring generateCreateTableCommand() const;
     virtual std::wstring generateCopyIntoCommand() const;
