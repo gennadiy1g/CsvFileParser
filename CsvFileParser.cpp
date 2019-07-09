@@ -60,7 +60,7 @@ void ParserBuffer::clear()
     mLines.clear();
 }
 
-CsvFileParser::CsvFileParser(bfs::path inputFile)
+CsvFileParser::CsvFileParser(const bfs::path& inputFile)
     : mInputFile(inputFile)
 {
 }

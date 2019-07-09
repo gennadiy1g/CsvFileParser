@@ -188,7 +188,7 @@ std::wostream& operator<<(std::wostream& wostr, const ParsingResults& parsingRes
 
 class CsvFileParser {
 public:
-    explicit CsvFileParser(bfs::path inputFile); // Constructor
+    explicit CsvFileParser(const bfs::path& inputFile); // Constructor
     virtual ~CsvFileParser() = default; // Defaulted virtual destructor
 
     // Disallow assignment and pass-by-value.
