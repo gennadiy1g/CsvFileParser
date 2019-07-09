@@ -9,6 +9,7 @@
 #include <thread>
 
 #include "CsvFileParser.h"
+#include "MonetDBBulkLoader.h"
 #include "log.h"
 #include "utilities.h"
 
@@ -883,5 +884,11 @@ BOOST_AUTO_TEST_CASE(parsing_results_boolean)
 BOOST_AUTO_TEST_SUITE_END();
 
 BOOST_AUTO_TEST_SUITE(generate_create_table_command);
+
+BOOST_AUTO_TEST_CASE(generate_create_table_command_1)
+{
+    MonetDBBulkLoader bulkLoader(LR"^(C:\Users\genna_000\Documents\Experiments\test data\parsing_results_1.csv)^");
+    bulkLoader.generateCreateTableCommand_unit_testing();
+}
 
 BOOST_AUTO_TEST_SUITE_END();
