@@ -26,5 +26,5 @@ protected:
 
 private:
     virtual std::wstring generateCreateTableCommand(const std::wstring_view table) const = 0;
-    virtual std::wstring generateCopyIntoCommand() const = 0;
+    virtual std::wstring generateCopyIntoCommand(const std::wstring_view table) const = 0;
 };

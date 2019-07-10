@@ -12,7 +12,7 @@ MonetDBBulkLoader::MonetDBBulkLoader(const bfs::path& inputFile)
 {
 }
 
-std::wstring MonetDBBulkLoader::generateCopyIntoCommand() const
+std::wstring MonetDBBulkLoader::generateCopyIntoCommand(const std::wstring_view table) const
 {
     return L""s;
 }
