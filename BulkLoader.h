@@ -22,6 +22,8 @@ public:
 
 protected:
     bfs::path mInputFile;
+    wchar_t mSeparator;
+    wchar_t mQuote;
     ParsingResults mParsingResults;
 
 private:

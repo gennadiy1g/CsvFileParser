@@ -7,6 +7,8 @@ BulkLoader::BulkLoader(const bfs::path& inputFile)
 
 void BulkLoader::parse(wchar_t separator, wchar_t quote)
 {
+    mSeparator = separator;
+    mQuote = quote;
     CsvFileParser parser(mInputFile);
     mParsingResults = parser.parse(separator, quote, L'\\');
 }
