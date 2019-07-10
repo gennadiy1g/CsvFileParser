@@ -33,10 +33,13 @@ std::wstring MonetDBBulkLoader::generateCreateTableCommand() const
         switch (column.type()) {
         case ColumnType::String:
             buf << (column.minLength() != column.maxLength() ? L"VARCHAR(" : L"CHAR(") << column.maxLength() << L')';
+            break;
         case ColumnType::Float:
             buf << L"FLOAT(" << column.digitsBeforeDecimalPoint() + column.digitsAfterDecimalPoint() << L")";
+            break;
         case ColumnType::Decimal:
             buf << L"DECIMAL(" << column.digitsBeforeDecimalPoint() + column.digitsAfterDecimalPoint() << L',' << column.digitsAfterDecimalPoint() << L')';
+            break;
         case ColumnType::Int: {
             auto minValue = column.minValue();
             auto maxValue = column.maxValue();
@@ -49,15 +52,19 @@ std::wstring MonetDBBulkLoader::generateCreateTableCommand() const
             } else {
                 buf << L"BIGINT";
             }
-        }
+        } break;
         case ColumnType::TimeStamp:
             buf << L"TIMESTAMP";
+            break;
         case ColumnType::Date:
             buf << L"DATE";
+            break;
         case ColumnType::Time:
             buf << L"TIME";
+            break;
         case ColumnType::Bool:
             buf << L"BOOL";
+            break;
         }
     }
     buf << L')';
