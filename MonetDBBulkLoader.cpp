@@ -17,10 +17,10 @@ std::wstring MonetDBBulkLoader::generateCopyIntoCommand() const
     return L""s;
 }
 
-std::wstring MonetDBBulkLoader::generateCreateTableCommand() const
+std::wstring MonetDBBulkLoader::generateCreateTableCommand(const std::wstring_view table) const
 {
     std::wostringstream buf(L"CREATE TABLE ", std::ios_base::ate);
-    buf << L'"' << boost::trim_copy(mInputFile.stem().wstring()) << L"\" (";
+    buf << L'"' << boost::trim_copy(std::wstring(table)) << L"\" (";
     auto firstColumn = true;
     assert(mParsingResults.columns().size() > 0);
     for (const auto& column : mParsingResults.columns()) {

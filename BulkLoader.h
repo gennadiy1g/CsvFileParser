@@ -18,13 +18,13 @@ public:
     void load(std::string_view host, int port, std::string_view database, std::string_view table, std::string_view user, std::string_view password) const;
     virtual void loadOnClient(std::string_view host, int port, std::string_view database, std::string_view table, std::string_view user, std::string_view password) const = 0;
 
-    std::wstring generateCreateTableCommand_unit_testing() const { return generateCreateTableCommand(); };
+    std::wstring generateCreateTableCommand_unit_testing(const std::wstring_view table) const { return generateCreateTableCommand(table); };
 
 protected:
     bfs::path mInputFile;
     ParsingResults mParsingResults;
 
 private:
-    virtual std::wstring generateCreateTableCommand() const = 0;
+    virtual std::wstring generateCreateTableCommand(const std::wstring_view table) const = 0;
     virtual std::wstring generateCopyIntoCommand() const = 0;
 };

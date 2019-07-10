@@ -14,6 +14,7 @@
 #include "utilities.h"
 
 using namespace std::string_literals;
+using namespace std::literals;
 
 struct GlobalFixture {
     GlobalFixture() {}
@@ -889,7 +890,7 @@ BOOST_AUTO_TEST_CASE(generate_create_table_command_1)
 {
     MonetDBBulkLoader bulkLoader(LR"^(C:\Users\genna_000\Documents\Experiments\test data\parsing_results_1.csv)^");
     bulkLoader.parse(L',', L'"');
-    std::wcout << bulkLoader.generateCreateTableCommand_unit_testing();
+    std::wcout << bulkLoader.generateCreateTableCommand_unit_testing(L" Foo Bar "sv);
 }
 
 BOOST_AUTO_TEST_SUITE_END();
