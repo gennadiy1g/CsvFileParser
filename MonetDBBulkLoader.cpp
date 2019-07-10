@@ -74,6 +74,7 @@ std::wstring MonetDBBulkLoader::generateCreateTableCommand(const std::wstring_vi
             buf << L"BOOL";
             break;
         }
+        buf << (column.isNull() ? L" NULL" : L" NOT NULL");
     }
     buf << L')';
     return buf.str();
