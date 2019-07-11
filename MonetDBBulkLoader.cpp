@@ -1,5 +1,6 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/filesystem.hpp>
+#include <iomanip>
 #include <sstream>
 #include <string>
 
@@ -18,7 +19,7 @@ std::wstring MonetDBBulkLoader::generateCopyIntoCommand(const std::wstring_view 
     boost::trim(tableTrim);
     std::wostringstream buf(L"COPY ", std::ios_base::ate);
     buf << mParsingResults.numLines() << L" OFFSET 2 RECORDS INTO \"" << tableTrim << L"\" "
-        << L"FROM '" << boost::replace_all_copy(mInputFile.wstring(), L"\\"s, L"\\\\"s) << L'\''
+        << L"FROM " << std::quoted(mInputFile.wstring(), L'\'', L'\\')
         << L" USING DELIMITERS '" << mSeparator << L"','\\n','" << mQuote << L'\'';
     return buf.str();
 }
