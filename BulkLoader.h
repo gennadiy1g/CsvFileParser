@@ -8,6 +8,8 @@
 
 namespace bfs = boost::filesystem;
 
+using namespace std::literals;
+
 class BulkLoader {
 
 public:
@@ -15,7 +17,7 @@ public:
     virtual ~BulkLoader() = default; // Defaulted virtual destructor
 
     void parse(wchar_t separator, wchar_t quote);
-    void load(std::string_view host, int port, std::string_view database, std::string_view table, std::string_view user, std::string_view password) const;
+    void load(std::string_view table = ""sv, int port = 50000, std::string_view user = "monetdb"sv, std::string_view password = "monetdb"sv) const;
     virtual void loadOnClient(std::string_view host, int port, std::string_view database, std::string_view table, std::string_view user, std::string_view password) const = 0;
     const ParsingResults& parsingResults() { return mParsingResults; };
 
