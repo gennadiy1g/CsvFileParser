@@ -890,8 +890,9 @@ BOOST_AUTO_TEST_CASE(generate_create_table_command_1)
 {
     MonetDBBulkLoader bulkLoader(LR"^(C:\Users\genna_000\Documents\Experiments\test data\parsing_results_1.csv)^");
     bulkLoader.parse(L',', L'"');
-    std::wcout << bulkLoader.generateCreateTableCommand_unit_testing(L" Foo Bar "sv) << std::endl;
-    std::wcout << bulkLoader.generateCopyIntoCommand_unit_testing(L" Foo Bar "sv) << std::endl;
+    std::wcout << bulkLoader.generateDropTableCommand_unit_testing(L" Foo Bar "sv) << L';' << std::endl;
+    std::wcout << bulkLoader.generateCreateTableCommand_unit_testing(L" Foo Bar "sv) << L';' << std::endl;
+    std::wcout << bulkLoader.generateCopyIntoCommand_unit_testing(L" Foo Bar "sv) << L';' << std::endl;
 }
 
 BOOST_AUTO_TEST_SUITE_END();
