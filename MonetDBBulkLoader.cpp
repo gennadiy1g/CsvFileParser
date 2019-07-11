@@ -80,3 +80,12 @@ std::wstring MonetDBBulkLoader::generateCreateTableCommand(const std::wstring_vi
     buf << L')';
     return buf.str();
 }
+
+std::wstring MonetDBBulkLoader::generateDropTableCommand(const std::wstring_view table) const
+{
+    std::wstring tableTrim(table);
+    boost::trim(tableTrim);
+    std::wostringstream buf(L"DROP TABLE IF EXISTS ", std::ios_base::ate);
+    buf << std::quoted(tableTrim);
+    return buf.str();
+}
