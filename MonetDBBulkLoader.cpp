@@ -29,7 +29,7 @@ std::wstring MonetDBBulkLoader::generateCreateTableCommand(const std::wstring_vi
     std::wstring tableTrim(table);
     boost::trim(tableTrim);
     std::wostringstream buf(L"CREATE TABLE ", std::ios_base::ate);
-    buf << L'"' << tableTrim << L"\" (";
+    buf << std::quoted(tableTrim) << L" (";
     auto firstColumn = true;
     assert(mParsingResults.columns().size() > 0);
     for (const auto& column : mParsingResults.columns()) {
@@ -38,7 +38,7 @@ std::wstring MonetDBBulkLoader::generateCreateTableCommand(const std::wstring_vi
         } else {
             buf << L", ";
         };
-        buf << L'"' << boost::trim_copy(column.name()) << L"\" ";
+        buf << std::quoted(boost::trim_copy(column.name())) << L' ';
         switch (column.type()) {
         case ColumnType::String:
             buf << (column.minLength() != column.maxLength() ? L"VARCHAR(" : L"CHAR(") << column.maxLength() << L')';
