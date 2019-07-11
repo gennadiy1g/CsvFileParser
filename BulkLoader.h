@@ -17,6 +17,7 @@ public:
     void parse(wchar_t separator, wchar_t quote);
     void load(std::string_view host, int port, std::string_view database, std::string_view table, std::string_view user, std::string_view password) const;
     virtual void loadOnClient(std::string_view host, int port, std::string_view database, std::string_view table, std::string_view user, std::string_view password) const = 0;
+    const ParsingResults& parsingResults() { return mParsingResults; };
 
     std::wstring generateDropTableCommand_unit_testing(const std::wstring_view table) const { return generateDropTableCommand(table); };
     std::wstring generateCreateTableCommand_unit_testing(const std::wstring_view table) const { return generateCreateTableCommand(table); };
