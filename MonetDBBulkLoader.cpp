@@ -15,10 +15,8 @@ MonetDBBulkLoader::MonetDBBulkLoader(const bfs::path& inputFile)
 
 std::wstring MonetDBBulkLoader::generateCopyIntoCommand(const std::wstring_view table) const
 {
-    std::wstring tableTrim(table);
-    boost::trim(tableTrim);
     std::wostringstream buf(L"COPY ", std::ios_base::ate);
-    buf << mParsingResults.numLines() << L" OFFSET 2 RECORDS INTO " << std::quoted(tableTrim)
+    buf << mParsingResults.numLines() << L" OFFSET 2 RECORDS INTO " << std::quoted(table)
         << L" FROM " << std::quoted(mInputFile.wstring(), L'\'')
         << L" USING DELIMITERS '" << mSeparator << L"','\\n','" << mQuote << L'\'';
     return buf.str();
@@ -26,10 +24,8 @@ std::wstring MonetDBBulkLoader::generateCopyIntoCommand(const std::wstring_view 
 
 std::wstring MonetDBBulkLoader::generateCreateTableCommand(const std::wstring_view table) const
 {
-    std::wstring tableTrim(table);
-    boost::trim(tableTrim);
     std::wostringstream buf(L"CREATE TABLE ", std::ios_base::ate);
-    buf << std::quoted(tableTrim) << L" (";
+    buf << std::quoted(table) << L" (";
     auto firstColumn = true;
     assert(mParsingResults.columns().size() > 0);
     for (const auto& column : mParsingResults.columns()) {
@@ -83,9 +79,7 @@ std::wstring MonetDBBulkLoader::generateCreateTableCommand(const std::wstring_vi
 
 std::wstring MonetDBBulkLoader::generateDropTableCommand(const std::wstring_view table) const
 {
-    std::wstring tableTrim(table);
-    boost::trim(tableTrim);
     std::wostringstream buf(L"DROP TABLE IF EXISTS ", std::ios_base::ate);
-    buf << std::quoted(tableTrim);
+    buf << std::quoted(table);
     return buf.str();
 }
