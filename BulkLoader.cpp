@@ -21,4 +21,6 @@ void BulkLoader::load(std::wstring_view table, int port, std::string_view user, 
     // DRIVER=MonetDB ODBC Driver;PORT=50000;HOST=<your host>;DATABASE=<your db>;UID=monetdb;PWD=monetdb
     std::ostringstream connectionString("DRIVER=MonetDB ODBC Driver;HOST=127.0.0.1;", std::ios_base::ate);
     connectionString << "PORT=" << port << ";UID=" << user << ";PWD=" << password << ';';
+
+    nanodbc::connection connection(connectionString.str());
 }
