@@ -44,5 +44,6 @@ void BulkLoader::load(std::wstring_view table, int port, std::string_view user, 
     auto copyCommand(generateCopyIntoCommand(tableTrim));
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << copyCommand;
 
-    nanodbc::connection connection(connectionString);
+    nanodbc::connection connection(u"foo");
+    execute(connection, u"foo");
 }

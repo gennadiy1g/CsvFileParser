@@ -25,6 +25,9 @@
       <Compiler Options="-std=c++17" C_Options="" Assembler="">
         <IncludePath Value="."/>
         <IncludePath Value="../nanodbc-2.12.4/src"/>
+        <Preprocessor Value="NANODBC_ENABLE_BOOST"/>
+        <Preprocessor Value="NANODBC_ENABLE_UNICODE"/>
+        <Preprocessor Value="NANODBC_USE_UNICODE"/>
       </Compiler>
       <Linker Options="">
         <LibraryPath Value="."/>
