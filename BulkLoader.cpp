@@ -1,4 +1,5 @@
 #include <boost/algorithm/string.hpp>
+#include <boost/locale.hpp>
 #include <sstream>
 
 #include "BulkLoader.h"
@@ -18,7 +19,7 @@ void BulkLoader::parse(wchar_t separator, wchar_t quote)
     mParsingResults = parser.parse(separator, quote, L'\\');
 }
 
-void BulkLoader::load(std::wstring_view table, int port, std::string_view user, std::string_view password) const
+void BulkLoader::load(std::wstring_view table, int port, std::wstring_view user, std::wstring_view password) const
 {
     std::wstring tableTrim(table);
     boost::trim(tableTrim);
@@ -30,8 +31,8 @@ void BulkLoader::load(std::wstring_view table, int port, std::string_view user, 
     auto& gLogger = GlobalLogger::get();
 
     // DRIVER=MonetDB ODBC Driver;PORT=50000;HOST=<your host>;DATABASE=<your db>;UID=monetdb;PWD=monetdb
-    std::ostringstream buf("DRIVER=MonetDB ODBC Driver;HOST=127.0.0.1;", std::ios_base::ate);
-    buf << "PORT=" << port << ";UID=" << user << ";PWD=" << password << ';';
+    std::wostringstream buf(L"DRIVER=MonetDB ODBC Driver;HOST=127.0.0.1;", std::ios_base::ate);
+    buf << L"PORT=" << port << L";UID=" << user << L";PWD=" << password << L';';
     auto connectionString(buf.str());
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << connectionString;
 
@@ -44,6 +45,6 @@ void BulkLoader::load(std::wstring_view table, int port, std::string_view user, 
     auto copyCommand(generateCopyIntoCommand(tableTrim));
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << copyCommand;
 
-    nanodbc::connection connection(u"foo");
-    execute(connection, u"foo");
+    nanodbc::connection connection(boost::locale::conv::utf_to_utf<char16_t>(connectionString));
+    execute(connection, boost::locale::conv::utf_to_utf<char16_t>(dropCommand));
 }
