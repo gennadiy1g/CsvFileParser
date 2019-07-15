@@ -897,6 +897,8 @@ BOOST_AUTO_TEST_CASE(generate_create_table_command_1)
                                              << bulkLoader.parsingResults().numMalformedLines() << L" malformed lines, "
                                              << bulkLoader.parsingResults().columns().size() << L" columns" << FUNCTION_FILE_LINE;
     bulkLoader.load();
+    bulkLoader.load(L"Parsing Results 1");
+    bulkLoader.load(L"Разбор результатов 1");
 }
 
 BOOST_AUTO_TEST_SUITE_END();
