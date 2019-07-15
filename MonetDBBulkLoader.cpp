@@ -18,7 +18,7 @@ std::wstring MonetDBBulkLoader::generateCopyIntoCommand(const std::wstring_view 
     std::wostringstream buf(L"COPY ", std::ios_base::ate);
     buf << mParsingResults.numLines() << L" OFFSET 2 RECORDS INTO " << std::quoted(table)
         << L" FROM " << std::quoted(mInputFile.wstring(), L'\'')
-        << L" USING DELIMITERS '" << mSeparator << L"','\\n','" << mQuote << L"\' LOCKED";
+        << L" USING DELIMITERS '" << mSeparator << L"','\\n','" << mQuote << L"\'  NULL AS \'\' LOCKED";
     return buf.str();
 }
 
