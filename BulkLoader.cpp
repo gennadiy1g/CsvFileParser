@@ -39,13 +39,13 @@ void BulkLoader::load(std::wstring_view table, int port, std::wstring_view user,
 
     auto dropCommand(generateDropTableCommand(tableTrim));
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << dropCommand;
-    execute(connection, boost::locale::conv::utf_to_utf<char16_t>(dropCommand));
+    nanodbc::execute(connection, boost::locale::conv::utf_to_utf<char16_t>(dropCommand));
 
     auto createCommand(generateCreateTableCommand(tableTrim));
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << createCommand;
-    execute(connection, boost::locale::conv::utf_to_utf<char16_t>(createCommand));
+    nanodbc::execute(connection, boost::locale::conv::utf_to_utf<char16_t>(createCommand));
 
     auto copyCommand(generateCopyIntoCommand(tableTrim));
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << copyCommand;
-    execute(connection, boost::locale::conv::utf_to_utf<char16_t>(copyCommand));
+    nanodbc::execute(connection, boost::locale::conv::utf_to_utf<char16_t>(copyCommand));
 }
