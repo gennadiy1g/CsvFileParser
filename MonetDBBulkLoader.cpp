@@ -11,7 +11,7 @@ using namespace std::string_literals;
 MonetDBBulkLoader::MonetDBBulkLoader(const bfs::path& inputFile)
     : BulkLoader(inputFile)
 {
-    mDefaultConnectionParameters = { { L"DRIVER", L"MonetDB ODBC Driver" }, { L"HOST", L"127.0.0.1" } };
+    mConnectionParameters = { { L"DRIVER", L"MonetDB ODBC Driver" }, { L"HOST", L"127.0.0.1" } };
 }
 
 std::wstring MonetDBBulkLoader::generateCopyIntoCommand(const std::wstring_view table) const
