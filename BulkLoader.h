@@ -1,14 +1,19 @@
 #pragma once
 
 #include <boost/filesystem.hpp>
+#include <initializer_list>
 #include <string>
 #include <string_view>
+#include <utility>
 
 #include "CsvFileParser.h"
 
 namespace bfs = boost::filesystem;
 
 using namespace std::literals;
+
+using ConnectionParameter = std::pair<std::wstring, std::wstring>;
+using ConnectionParameters = std::initializer_list<ConnectionParameter>;
 
 class BulkLoader {
 
@@ -30,6 +35,7 @@ protected:
     wchar_t mSeparator;
     wchar_t mQuote;
     ParsingResults mParsingResults;
+    ConnectionParameters mDefaultConnectionParameters;
 
 private:
     virtual std::wstring generateDropTableCommand(const std::wstring_view table) const = 0;
