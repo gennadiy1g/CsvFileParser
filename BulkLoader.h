@@ -25,8 +25,12 @@ public:
     void load(std::wstring_view table = L""sv, int port = 50000, std::wstring_view user = L"monetdb"sv, std::wstring_view password = L"monetdb"sv) const;
     virtual void loadOnClient(std::string_view host, int port, std::string_view database, std::string_view table, std::string_view user, std::string_view password) const = 0;
     const ParsingResults& parsingResults() const { return mParsingResults; };
-    void setConnectionParameters(const std::initializer_list<ConnectionParameter>& connectionParameters);
-    void setConnectionParameters(const std::vector<ConnectionParameter>& connectionParameters);
+
+    template <typename T>
+    void setConnectionParameters(const T& connectionParameters)
+    {
+        mConnectionParameters.insert(mConnectionParameters.cend(), std::cbegin(connectionParameters), std::cend(connectionParameters));
+    }
 
     std::wstring generateDropTableCommand_unit_testing(const std::wstring_view table) const { return generateDropTableCommand(table); };
     std::wstring generateCreateTableCommand_unit_testing(const std::wstring_view table) const { return generateCreateTableCommand(table); };

@@ -49,13 +49,3 @@ void BulkLoader::load(std::wstring_view table, int port, std::wstring_view user,
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << copyCommand;
     nanodbc::execute(connection, boost::locale::conv::utf_to_utf<char16_t>(copyCommand));
 }
-
-void BulkLoader::setConnectionParameters(const std::initializer_list<ConnectionParameter>& connectionParameters)
-{
-    mConnectionParameters.insert(mConnectionParameters.cend(), std::cbegin(connectionParameters), std::cend(connectionParameters));
-}
-
-void BulkLoader::setConnectionParameters(const std::vector<ConnectionParameter>& connectionParameters)
-{
-    mConnectionParameters.insert(mConnectionParameters.cend(), std::cbegin(connectionParameters), std::cend(connectionParameters));
-}
