@@ -1,5 +1,6 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/locale.hpp>
+#include <map>
 #include <sstream>
 
 #include "BulkLoader.h"
@@ -52,5 +53,13 @@ void BulkLoader::load(std::wstring_view table, int port, std::wstring_view user,
 
 std::wstring BulkLoader::getConnectionString()
 {
+    std::map<std::wstring, std::wstring> connectionParameters;
+    for (const auto& param : mConnectionParameters) {
+        connectionParameters[param.first] = param.second;
+    }
+    std::wostringstream connectionString;
+    for (const auto& param : connectionParameters) {
+        connectionString << param.first << L'=' << param.second << L';';
+    }
     return L"";
 }
