@@ -51,7 +51,7 @@ void BulkLoader::load(std::wstring_view table, int port, std::wstring_view user,
     nanodbc::execute(connection, boost::locale::conv::utf_to_utf<char16_t>(copyCommand));
 }
 
-std::wstring BulkLoader::getConnectionString()
+std::wstring BulkLoader::getConnectionString() const
 {
     std::map<std::wstring, std::wstring> connectionParameters;
     for (const auto& param : mConnectionParameters) {
