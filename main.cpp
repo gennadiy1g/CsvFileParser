@@ -896,6 +896,8 @@ BOOST_AUTO_TEST_CASE(generate_create_table_command_1)
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << bulkLoader.parsingResults().numLines() << L" lines, "
                                              << bulkLoader.parsingResults().numMalformedLines() << L" malformed lines, "
                                              << bulkLoader.parsingResults().columns().size() << L" columns" << FUNCTION_FILE_LINE;
+    bulkLoader.setConnectionParameters<std::initializer_list<ConnectionParameter>>({ { L"uid", L"monetdb" }, { L"pwd", L"monetdb" } });
+    bulkLoader.setConnectionParameters<std::vector<ConnectionParameter>>({ { L"Uid", L"monetdb" }, { L"Pwd", L"monetdb" } });
     bulkLoader.load();
     bulkLoader.load(L"Parsing Results 1");
     bulkLoader.load(L"Разбор результатов 1");
@@ -911,6 +913,10 @@ BOOST_AUTO_TEST_CASE(generate_create_table_command_2)
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << bulkLoader.parsingResults().numLines() << L" lines, "
                                              << bulkLoader.parsingResults().numMalformedLines() << L" malformed lines, "
                                              << bulkLoader.parsingResults().columns().size() << L" columns" << FUNCTION_FILE_LINE;
+    int port { 50000 };
+    std::vector<ConnectionParameter> connectionParameters;
+    connectionParameters.push_back(std::make_pair(L"Port", std::to_wstring(port)));
+    bulkLoader.setConnectionParameters(connectionParameters);
     bulkLoader.load();
 }
 
