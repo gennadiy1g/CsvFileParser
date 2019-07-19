@@ -20,7 +20,7 @@ void BulkLoader::parse(wchar_t separator, wchar_t quote)
     mParsingResults = parser.parse(separator, quote, L'\\');
 }
 
-void BulkLoader::load(std::wstring_view table, int port, std::wstring_view user, std::wstring_view password) const
+void BulkLoader::load(std::wstring_view table) const
 {
     std::wstring tableTrim(table);
     boost::trim(tableTrim);
