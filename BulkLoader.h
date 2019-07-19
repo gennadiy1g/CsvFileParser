@@ -27,6 +27,7 @@ public:
     const ParsingResults& parsingResults() const { return mParsingResults; };
     template <typename T>
     void setConnectionParameters(const T& connectionParameters);
+    std::wstring getConnectionString();
     virtual std::wstring generateDropTableCommand(const std::wstring_view table) const = 0;
     virtual std::wstring generateCreateTableCommand(const std::wstring_view table) const = 0;
     virtual std::wstring generateCopyIntoCommand(const std::wstring_view table) const = 0;
