@@ -61,5 +61,5 @@ std::wstring BulkLoader::getConnectionString()
     for (const auto& param : connectionParameters) {
         connectionString << param.first << L'=' << param.second << L';';
     }
-    return L"";
+    return connectionString.str();
 }
