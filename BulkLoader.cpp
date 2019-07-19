@@ -55,7 +55,7 @@ std::wstring BulkLoader::getConnectionString()
 {
     std::map<std::wstring, std::wstring> connectionParameters;
     for (const auto& param : mConnectionParameters) {
-        connectionParameters[param.first] = param.second;
+        connectionParameters[boost::to_upper_copy(param.first)] = param.second;
     }
     std::wostringstream connectionString;
     for (const auto& param : connectionParameters) {
