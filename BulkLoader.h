@@ -13,7 +13,7 @@ namespace bfs = boost::filesystem;
 
 using namespace std::literals;
 
-using ConnectionParameter = std::pair<std::wstring, std::wstring>;
+typedef std::pair<std::wstring, std::wstring> ConnectionParameter;
 
 class BulkLoader {
 
