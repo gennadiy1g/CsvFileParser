@@ -27,9 +27,9 @@ public:
     const ParsingResults& parsingResults() const { return mParsingResults; };
     template <typename T>
     void setConnectionParameters(const T& connectionParameters);
-    std::wstring generateDropTableCommand_unit_testing(const std::wstring_view table) const { return generateDropTableCommand(table); };
-    std::wstring generateCreateTableCommand_unit_testing(const std::wstring_view table) const { return generateCreateTableCommand(table); };
-    std::wstring generateCopyIntoCommand_unit_testing(const std::wstring_view table) const { return generateCopyIntoCommand(table); };
+    virtual std::wstring generateDropTableCommand(const std::wstring_view table) const = 0;
+    virtual std::wstring generateCreateTableCommand(const std::wstring_view table) const = 0;
+    virtual std::wstring generateCopyIntoCommand(const std::wstring_view table) const = 0;
 
 protected:
     bfs::path mInputFile;
@@ -37,11 +37,6 @@ protected:
     wchar_t mQuote;
     ParsingResults mParsingResults;
     std::vector<ConnectionParameter> mConnectionParameters;
-
-private:
-    virtual std::wstring generateDropTableCommand(const std::wstring_view table) const = 0;
-    virtual std::wstring generateCreateTableCommand(const std::wstring_view table) const = 0;
-    virtual std::wstring generateCopyIntoCommand(const std::wstring_view table) const = 0;
 };
 
 template <typename T>
