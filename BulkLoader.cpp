@@ -31,10 +31,7 @@ void BulkLoader::load(std::wstring_view table, int port, std::wstring_view user,
 
     auto& gLogger = GlobalLogger::get();
 
-    // DRIVER=MonetDB ODBC Driver;PORT=50000;HOST=<your host>;DATABASE=<your db>;UID=monetdb;PWD=monetdb
-    std::wostringstream buf(L"DRIVER=MonetDB ODBC Driver;HOST=127.0.0.1;", std::ios_base::ate);
-    buf << L"PORT=" << port << L";UID=" << user << L";PWD=" << password << L';';
-    auto connectionString(buf.str());
+    auto connectionString = getConnectionString();
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << connectionString;
     nanodbc::connection connection(boost::locale::conv::utf_to_utf<char16_t>(connectionString));
 
