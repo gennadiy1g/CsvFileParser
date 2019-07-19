@@ -897,7 +897,7 @@ BOOST_AUTO_TEST_CASE(generate_create_table_command_1)
                                              << bulkLoader.parsingResults().numMalformedLines() << L" malformed lines, "
                                              << bulkLoader.parsingResults().columns().size() << L" columns" << FUNCTION_FILE_LINE;
     bulkLoader.setConnectionParameters<std::initializer_list<ConnectionParameter>>({ { L"uid", L"monetdb" }, { L"pwd", L"monetdb" } });
-    bulkLoader.setConnectionParameters<std::vector<ConnectionParameter>>({ { L"Uid", L"monetdb" }, { L"Pwd", L"monetdb" } });
+    bulkLoader.setConnectionParameters<std::vector<ConnectionParameter>>({ { L"Host", L"localhost" } });
     bulkLoader.load();
     bulkLoader.load(L"Parsing Results 1");
     bulkLoader.load(L"Разбор результатов 1");
