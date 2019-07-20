@@ -1002,7 +1002,7 @@ BOOST_AUTO_TEST_CASE(generate_create_table_command_russian_UTF8)
 
 BOOST_AUTO_TEST_CASE(generate_create_table_command_russian_UTF8_2)
 {
-    const std::wstring sourceFile(LR"^(C:\Users\genna_000\Documents\Experiments\test data\русский UTF8.csv)^");
+    const std::wstring sourceFile(LR"^(C:\Users\genna_000\Documents\Experiments\test data\russian_UTF-8_2.csv)^");
     auto& gLogger = GlobalLogger::get();
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << sourceFile << FUNCTION_FILE_LINE;
     MonetDBBulkLoader bulkLoader(sourceFile);
