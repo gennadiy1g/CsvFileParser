@@ -1000,4 +1000,17 @@ BOOST_AUTO_TEST_CASE(generate_create_table_command_russian_UTF8)
     bulkLoader.load();
 }
 
+BOOST_AUTO_TEST_CASE(generate_create_table_command_russian_UTF8_2)
+{
+    const std::wstring sourceFile(LR"^(C:\Users\genna_000\Documents\Experiments\test data\русский UTF8.csv)^");
+    auto& gLogger = GlobalLogger::get();
+    BOOST_LOG_SEV(gLogger, bltrivial::trace) << sourceFile << FUNCTION_FILE_LINE;
+    MonetDBBulkLoader bulkLoader(sourceFile);
+    bulkLoader.parse(L',', L'"');
+    BOOST_LOG_SEV(gLogger, bltrivial::trace) << bulkLoader.parsingResults().numLines() << L" lines, "
+                                             << bulkLoader.parsingResults().numMalformedLines() << L" malformed lines, "
+                                             << bulkLoader.parsingResults().columns().size() << L" columns" << FUNCTION_FILE_LINE;
+    bulkLoader.load();
+}
+
 BOOST_AUTO_TEST_SUITE_END();
