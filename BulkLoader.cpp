@@ -45,6 +45,8 @@ std::optional<std::size_t> BulkLoader::load(std::wstring_view table) const
     auto copyCommand(generateCopyIntoCommand(tableTrim));
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << copyCommand;
     nanodbc::execute(connection, boost::locale::conv::utf_to_utf<char16_t>(copyCommand));
+
+    return rejectedRecords(connection);
 }
 
 std::wstring BulkLoader::getConnectionString() const
