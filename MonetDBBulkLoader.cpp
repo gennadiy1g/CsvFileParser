@@ -87,5 +87,8 @@ std::wstring MonetDBBulkLoader::generateDropTableCommand(const std::wstring_view
 
 std::optional<std::size_t> MonetDBBulkLoader::rejectedRecords(nanodbc::connection& connection) const
 {
-    return std::nullopt;
+    nanodbc::result results;
+    results = nanodbc::execute(connection, u"SELECT COUNT(*) FROM sys.rejects");
+    results.next();
+    return results.get<std::size_t>(0);
 }
