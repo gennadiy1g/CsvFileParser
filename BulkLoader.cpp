@@ -60,7 +60,7 @@ std::wstring BulkLoader::getConnectionString() const
     return connectionString.str();
 }
 
-std::optional<std::size_t> BulkLoader::rejectedRecords(const nanodbc::connection& connecion) const
+std::optional<std::size_t> BulkLoader::rejectedRecords(nanodbc::connection& connection) const
 {
     return std::nullopt;
 };
