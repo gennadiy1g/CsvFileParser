@@ -46,7 +46,7 @@ std::optional<std::size_t> BulkLoader::load(std::wstring_view table) const
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << copyCommand;
     nanodbc::execute(connection, boost::locale::conv::utf_to_utf<char16_t>(copyCommand));
 
-    return rejectedRecords(connection);
+    return getRejectedRecords(connection);
 }
 
 std::wstring BulkLoader::getConnectionString() const
@@ -62,7 +62,7 @@ std::wstring BulkLoader::getConnectionString() const
     return connectionString.str();
 }
 
-std::optional<std::size_t> BulkLoader::rejectedRecords(nanodbc::connection& connection) const
+std::optional<std::size_t> BulkLoader::getRejectedRecords(nanodbc::connection& connection) const
 {
     return std::nullopt;
 };
