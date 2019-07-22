@@ -2,12 +2,14 @@
 
 #include <boost/filesystem.hpp>
 #include <initializer_list>
+#include <optional>
 #include <string>
 #include <string_view>
 #include <utility>
 #include <vector>
 
 #include "CsvFileParser.h"
+#include "nanodbc.h"
 
 namespace bfs = boost::filesystem;
 
@@ -31,6 +33,7 @@ public:
     virtual std::wstring generateDropTableCommand(const std::wstring_view table) const = 0;
     virtual std::wstring generateCreateTableCommand(const std::wstring_view table) const = 0;
     virtual std::wstring generateCopyIntoCommand(const std::wstring_view table) const = 0;
+    virtual std::optional<std::size_t> rejectedRecords(const nanodbc::connection& connecion) const;
 
 protected:
     bfs::path mInputFile;

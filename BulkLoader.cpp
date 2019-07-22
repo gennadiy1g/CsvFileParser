@@ -5,7 +5,6 @@
 
 #include "BulkLoader.h"
 #include "log.h"
-#include "nanodbc.h"
 
 BulkLoader::BulkLoader(const bfs::path& inputFile)
     : mInputFile(inputFile)
@@ -60,3 +59,8 @@ std::wstring BulkLoader::getConnectionString() const
     }
     return connectionString.str();
 }
+
+std::optional<std::size_t> BulkLoader::rejectedRecords(const nanodbc::connection& connecion) const
+{
+    return std::nullopt;
+};
