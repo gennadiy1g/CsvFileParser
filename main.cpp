@@ -898,8 +898,11 @@ BOOST_AUTO_TEST_CASE(generate_create_table_command_1)
                                              << bulkLoader.parsingResults().columns().size() << L" columns" << FUNCTION_FILE_LINE;
     bulkLoader.setConnectionParameters<std::initializer_list<ConnectionParameter>>({ { L"uid", L"monetdb" }, { L"pwd", L"monetdb" } });
     bulkLoader.setConnectionParameters<std::vector<ConnectionParameter>>({ { L"Host", L"localhost" } });
-    bulkLoader.load();
     bulkLoader.load(L"Parsing Results 1");
+    auto rejectedRecords = bulkLoader.load();
+    if (rejectedRecords.value_or(0) > 0) {
+        BOOST_LOG_SEV(gLogger, bltrivial::trace) << L"Rejected " << rejectedRecords.value() << L" records.";
+    }
     bulkLoader.load(L"Разбор результатов 1");
 }
 
@@ -917,7 +920,10 @@ BOOST_AUTO_TEST_CASE(generate_create_table_command_2)
     std::vector<ConnectionParameter> connectionParameters;
     connectionParameters.push_back(std::make_pair(L"Port", std::to_wstring(port)));
     bulkLoader.setConnectionParameters(connectionParameters);
-    bulkLoader.load();
+    auto rejectedRecords = bulkLoader.load();
+    if (rejectedRecords.value_or(0) > 0) {
+        BOOST_LOG_SEV(gLogger, bltrivial::trace) << L"Rejected " << rejectedRecords.value() << L" records.";
+    }
 }
 
 BOOST_AUTO_TEST_CASE(generate_create_table_command_3)
@@ -930,7 +936,10 @@ BOOST_AUTO_TEST_CASE(generate_create_table_command_3)
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << bulkLoader.parsingResults().numLines() << L" lines, "
                                              << bulkLoader.parsingResults().numMalformedLines() << L" malformed lines, "
                                              << bulkLoader.parsingResults().columns().size() << L" columns" << FUNCTION_FILE_LINE;
-    bulkLoader.load();
+    auto rejectedRecords = bulkLoader.load();
+    if (rejectedRecords.value_or(0) > 0) {
+        BOOST_LOG_SEV(gLogger, bltrivial::trace) << L"Rejected " << rejectedRecords.value() << L" records.";
+    }
 }
 
 BOOST_AUTO_TEST_CASE(generate_create_table_command_3_missing)
@@ -944,7 +953,10 @@ BOOST_AUTO_TEST_CASE(generate_create_table_command_3_missing)
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << bulkLoader.parsingResults().numLines() << L" lines, "
                                              << bulkLoader.parsingResults().numMalformedLines() << L" malformed lines, "
                                              << bulkLoader.parsingResults().columns().size() << L" columns" << FUNCTION_FILE_LINE;
-    bulkLoader.load();
+    auto rejectedRecords = bulkLoader.load();
+    if (rejectedRecords.value_or(0) > 0) {
+        BOOST_LOG_SEV(gLogger, bltrivial::trace) << L"Rejected " << rejectedRecords.value() << L" records.";
+    }
 }
 
 BOOST_AUTO_TEST_CASE(generate_create_table_command_4)
@@ -958,7 +970,10 @@ BOOST_AUTO_TEST_CASE(generate_create_table_command_4)
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << bulkLoader.parsingResults().numLines() << L" lines, "
                                              << bulkLoader.parsingResults().numMalformedLines() << L" malformed lines, "
                                              << bulkLoader.parsingResults().columns().size() << L" columns" << FUNCTION_FILE_LINE;
-    bulkLoader.load();
+    auto rejectedRecords = bulkLoader.load();
+    if (rejectedRecords.value_or(0) > 0) {
+        BOOST_LOG_SEV(gLogger, bltrivial::trace) << L"Rejected " << rejectedRecords.value() << L" records.";
+    }
 }
 
 BOOST_AUTO_TEST_CASE(generate_create_table_command_5)
@@ -971,7 +986,10 @@ BOOST_AUTO_TEST_CASE(generate_create_table_command_5)
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << bulkLoader.parsingResults().numLines() << L" lines, "
                                              << bulkLoader.parsingResults().numMalformedLines() << L" malformed lines, "
                                              << bulkLoader.parsingResults().columns().size() << L" columns" << FUNCTION_FILE_LINE;
-    bulkLoader.load();
+    auto rejectedRecords = bulkLoader.load();
+    if (rejectedRecords.value_or(0) > 0) {
+        BOOST_LOG_SEV(gLogger, bltrivial::trace) << L"Rejected " << rejectedRecords.value() << L" records.";
+    }
 }
 
 BOOST_AUTO_TEST_CASE(generate_create_table_command_7)
@@ -984,7 +1002,10 @@ BOOST_AUTO_TEST_CASE(generate_create_table_command_7)
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << bulkLoader.parsingResults().numLines() << L" lines, "
                                              << bulkLoader.parsingResults().numMalformedLines() << L" malformed lines, "
                                              << bulkLoader.parsingResults().columns().size() << L" columns" << FUNCTION_FILE_LINE;
-    bulkLoader.load();
+    auto rejectedRecords = bulkLoader.load();
+    if (rejectedRecords.value_or(0) > 0) {
+        BOOST_LOG_SEV(gLogger, bltrivial::trace) << L"Rejected " << rejectedRecords.value() << L" records.";
+    }
 }
 
 BOOST_AUTO_TEST_CASE(generate_create_table_command_russian_UTF8)
@@ -997,7 +1018,10 @@ BOOST_AUTO_TEST_CASE(generate_create_table_command_russian_UTF8)
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << bulkLoader.parsingResults().numLines() << L" lines, "
                                              << bulkLoader.parsingResults().numMalformedLines() << L" malformed lines, "
                                              << bulkLoader.parsingResults().columns().size() << L" columns" << FUNCTION_FILE_LINE;
-    bulkLoader.load();
+    auto rejectedRecords = bulkLoader.load();
+    if (rejectedRecords.value_or(0) > 0) {
+        BOOST_LOG_SEV(gLogger, bltrivial::trace) << L"Rejected " << rejectedRecords.value() << L" records.";
+    }
 }
 
 BOOST_AUTO_TEST_CASE(generate_create_table_command_russian_UTF8_2)
@@ -1010,7 +1034,10 @@ BOOST_AUTO_TEST_CASE(generate_create_table_command_russian_UTF8_2)
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << bulkLoader.parsingResults().numLines() << L" lines, "
                                              << bulkLoader.parsingResults().numMalformedLines() << L" malformed lines, "
                                              << bulkLoader.parsingResults().columns().size() << L" columns" << FUNCTION_FILE_LINE;
-    bulkLoader.load();
+    auto rejectedRecords = bulkLoader.load();
+    if (rejectedRecords.value_or(0) > 0) {
+        BOOST_LOG_SEV(gLogger, bltrivial::trace) << L"Rejected " << rejectedRecords.value() << L" records.";
+    }
 }
 
 BOOST_AUTO_TEST_SUITE_END();
