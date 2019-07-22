@@ -898,7 +898,6 @@ BOOST_AUTO_TEST_CASE(generate_create_table_command_1)
                                              << bulkLoader.parsingResults().columns().size() << L" columns" << FUNCTION_FILE_LINE;
     bulkLoader.setConnectionParameters<std::initializer_list<ConnectionParameter>>({ { L"uid", L"monetdb" }, { L"pwd", L"monetdb" } });
     bulkLoader.setConnectionParameters<std::vector<ConnectionParameter>>({ { L"Host", L"localhost" } });
-    bulkLoader.load(L"Parsing Results 1");
     auto rejectedRecords = bulkLoader.load();
     if (rejectedRecords.value_or(0) > 0) {
         BOOST_LOG_SEV(gLogger, bltrivial::trace) << L"Rejected " << rejectedRecords.value() << L" records.";
