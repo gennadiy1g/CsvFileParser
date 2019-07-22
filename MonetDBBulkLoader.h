@@ -20,4 +20,5 @@ public:
     virtual std::wstring generateDropTableCommand(const std::wstring_view table) const;
     virtual std::wstring generateCreateTableCommand(const std::wstring_view table) const;
     virtual std::wstring generateCopyIntoCommand(const std::wstring_view table) const;
+    virtual std::optional<std::size_t> rejectedRecords(const nanodbc::connection& connecion) const;
 };
