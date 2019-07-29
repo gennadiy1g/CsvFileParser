@@ -5,7 +5,7 @@
 class MonetDBBulkLoader : public BulkLoader {
 
 public:
-    MonetDBBulkLoader(const bfs::path& inputFile); // Constructor
+    explicit MonetDBBulkLoader(const bfs::path& inputFile); // Constructor
     virtual ~MonetDBBulkLoader() = default; // Defaulted virtual destructor
 
     // Disallow assignment and pass-by-value.
@@ -16,9 +16,9 @@ public:
     MonetDBBulkLoader(MonetDBBulkLoader&& src) = default;
     MonetDBBulkLoader& operator=(MonetDBBulkLoader&& rhs) = default;
 
-    virtual void loadOnClient(std::string_view host, int port, std::string_view database, std::string_view table, std::string_view user, std::string_view password) const {};
-    virtual std::wstring generateDropTableCommand(const std::wstring_view table) const;
-    virtual std::wstring generateCreateTableCommand(const std::wstring_view table) const;
-    virtual std::wstring generateCopyIntoCommand(const std::wstring_view table) const;
-    virtual std::optional<std::size_t> getRejectedRecords(nanodbc::connection& connection) const;
+    virtual void loadOnClient(std::string_view host, int port, std::string_view database, std::string_view table, std::string_view user, std::string_view password) const override {};
+    virtual std::wstring generateDropTableCommand(const std::wstring_view table) const override;
+    virtual std::wstring generateCreateTableCommand(const std::wstring_view table) const override;
+    virtual std::wstring generateCopyIntoCommand(const std::wstring_view table) const override;
+    virtual std::optional<std::size_t> getRejectedRecords(nanodbc::connection& connection) const override;
 };

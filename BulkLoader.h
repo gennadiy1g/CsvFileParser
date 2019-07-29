@@ -20,7 +20,7 @@ typedef std::pair<std::wstring, std::wstring> ConnectionParameter;
 class BulkLoader {
 
 public:
-    BulkLoader(const bfs::path& inputFile); // Constructor
+    explicit BulkLoader(const bfs::path& inputFile); // Constructor
     virtual ~BulkLoader() = default; // Defaulted virtual destructor
 
     void parse(wchar_t separator, wchar_t quote);
@@ -37,8 +37,8 @@ public:
 
 protected:
     bfs::path mInputFile;
-    wchar_t mSeparator;
-    wchar_t mQuote;
+    wchar_t mSeparator { L',' };
+    wchar_t mQuote { L'"' };
     ParsingResults mParsingResults;
     std::vector<ConnectionParameter> mConnectionParameters;
 };

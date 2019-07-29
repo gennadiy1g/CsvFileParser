@@ -209,8 +209,8 @@ private:
 
     bfs::path mInputFile;
 
-    std::atomic_bool mReaderLoopIsDone;
-    std::atomic_bool mCharSetConversionError;
+    std::atomic_bool mReaderLoopIsDone { false };
+    std::atomic_bool mCharSetConversionError { false };
 
     std::vector<ParserBuffer> mBuffers;
 
