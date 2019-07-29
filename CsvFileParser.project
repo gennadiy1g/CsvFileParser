@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<CodeLite_Project Name="CsvFileParser-cmake" Version="10.0.0" InternalType="Console">
+<CodeLite_Project Name="CsvFileParser" Version="10.0.0" InternalType="Console">
   <VirtualDirectory Name="nanodbc">
     <File Name="../nanodbc-2.12.4/src/nanodbc.h"/>
     <File Name="../nanodbc-2.12.4/src/nanodbc.cpp"/>
