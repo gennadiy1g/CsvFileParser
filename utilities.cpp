@@ -17,6 +17,10 @@ void initLocalization()
     // convert strings to narrow
     // instead of C++ on some platforms
     std::ios_base::sync_with_stdio(false);
+
+    // Use the new global locale for future wide character output
+    // https://en.cppreference.com/w/cpp/locale/locale
+    std::wcout.imbue(std::locale());
 }
 
 void initLogging()
