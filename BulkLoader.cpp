@@ -21,7 +21,7 @@ void BulkLoader::parse(wchar_t separator, wchar_t quote)
 
 std::optional<std::size_t> BulkLoader::load(std::wstring_view table) const
 {
-    std::wstring tableTrim { getTableName(table) };
+    auto tableTrim { getTableName(table) };
     assert(tableTrim != L"");
 
     auto& gLogger = GlobalLogger::get();
@@ -30,15 +30,15 @@ std::optional<std::size_t> BulkLoader::load(std::wstring_view table) const
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << connectionString;
     nanodbc::connection connection(boost::locale::conv::utf_to_utf<char16_t>(connectionString));
 
-    auto dropCommand(generateDropTableCommand(tableTrim));
+    auto dropCommand { generateDropTableCommand(tableTrim) };
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << dropCommand;
     nanodbc::execute(connection, boost::locale::conv::utf_to_utf<char16_t>(dropCommand));
 
-    auto createCommand(generateCreateTableCommand(tableTrim));
+    auto createCommand { generateCreateTableCommand(tableTrim) };
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << createCommand;
     nanodbc::execute(connection, boost::locale::conv::utf_to_utf<char16_t>(createCommand));
 
-    auto copyCommand(generateCopyIntoCommand(tableTrim));
+    auto copyCommand { generateCopyIntoCommand(tableTrim) };
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << copyCommand;
     nanodbc::execute(connection, boost::locale::conv::utf_to_utf<char16_t>(copyCommand));
 
