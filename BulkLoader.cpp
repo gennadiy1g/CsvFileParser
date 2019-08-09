@@ -21,11 +21,7 @@ void BulkLoader::parse(wchar_t separator, wchar_t quote)
 
 std::optional<std::size_t> BulkLoader::load(std::wstring_view table) const
 {
-    std::wstring tableTrim(table);
-    boost::trim(tableTrim);
-    if (tableTrim == L"") {
-        tableTrim = boost::trim_copy(mInputFile.stem().wstring());
-    }
+    std::wstring tableTrim { getTableName(table) };
     assert(tableTrim != L"");
 
     auto& gLogger = GlobalLogger::get();
@@ -66,3 +62,13 @@ std::optional<std::size_t> BulkLoader::getRejectedRecords(nanodbc::connection& c
 {
     return std::nullopt;
 };
+
+std::wstring BulkLoader::getTableName(const std::wstring_view table) const
+{
+    std::wstring tableTrim(table);
+    boost::trim(tableTrim);
+    if (tableTrim == L"") {
+        tableTrim = boost::trim_copy(mInputFile.stem().wstring());
+    }
+    return tableTrim;
+}
