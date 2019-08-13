@@ -16,10 +16,27 @@ MonetDBBulkLoader::MonetDBBulkLoader(const bfs::path& inputFile)
 
 std::wstring MonetDBBulkLoader::generateCopyIntoCommand(const std::wstring_view table) const
 {
+    auto escapeSequence = [](wchar_t separator) -> std::wstring {
+        switch (separator) {
+        case L'\'':
+            return L"\\'";
+        case L'\n':
+            return L"\\n";
+        case L'\r':
+            return L"\\r";
+        case L'\t':
+            return L"\\t";
+        case L'\v':
+            return L"\\v";
+        default:
+            return std::wstring(1, separator);
+        }
+    };
+
     std::wostringstream buf(L"COPY ", std::ios_base::ate);
     buf << mParsingResults.numLines() << L" OFFSET 2 RECORDS INTO " << std::quoted(table)
         << L" FROM " << std::quoted(mInputFile.wstring(), L'\'')
-        << L" USING DELIMITERS '" << mSeparator << L"','\\n','" << mQuote << L"\'  NULL AS \'\' LOCKED BEST EFFORT";
+        << L" USING DELIMITERS '" << escapeSequence(mSeparator) << L"','\\n','" << escapeSequence(mQuote) << L"\'  NULL AS \'\' LOCKED BEST EFFORT";
     return buf.str();
 }
 
