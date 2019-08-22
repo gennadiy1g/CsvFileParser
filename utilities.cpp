@@ -1,7 +1,9 @@
+#include <boost/filesystem.hpp>
 #include <boost/locale.hpp>
 
 #include "log.h"
 
+namespace bfs = boost::filesystem;
 namespace blocale = boost::locale;
 
 void initLocalization()
@@ -26,7 +28,11 @@ void initLocalization()
 void initLogging()
 {
     blog::add_file_log(
+#ifdef NDEBUG
+        blkeywords::file_name = bfs::path(bfs::temp_directory_path() / "BulkLoadCsv.log"),
+#else
         blkeywords::file_name = "trace.log",
+#endif
         blkeywords::format = (blexpressions::stream
             << blexpressions::attr<unsigned int>("LineID") << ' ' << bltrivial::severity << ' '
             << blexpressions::format_date_time<boost::posix_time::ptime>("TimeStamp", " %Y-%m-%d %H:%M:%S.%f ")
