@@ -47,13 +47,13 @@ std::optional<std::size_t> BulkLoader::load(std::wstring_view table) const
 
 std::wstring BulkLoader::getConnectionString() const
 {
-    std::map<std::wstring, std::wstring> connectionParameters;
+    std::map<ConnectionParameterName, std::wstring> connectionParameters;
     for (const auto& param : mConnectionParameters) {
-        connectionParameters[boost::to_upper_copy(param.first)] = param.second;
+        connectionParameters[param.first] = param.second;
     }
     std::wostringstream connectionString;
     for (const auto& param : connectionParameters) {
-        connectionString << param.first << L'=' << param.second << L';';
+        connectionString << int(param.first) << L'=' << param.second << L';';
     }
     return connectionString.str();
 }

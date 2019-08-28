@@ -15,7 +15,15 @@ namespace bfs = boost::filesystem;
 
 using namespace std::literals;
 
-typedef std::pair<std::wstring, std::wstring> ConnectionParameter;
+enum class ConnectionParameterName {
+    Driver,
+    Host,
+    Port,
+    User,
+    Password
+};
+
+typedef std::pair<ConnectionParameterName, std::wstring> ConnectionParameter;
 
 class BulkLoader {
 
