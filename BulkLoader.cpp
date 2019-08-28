@@ -32,11 +32,6 @@ std::wstring BulkLoader::getConnectionString() const
     return connectionString.str();
 }
 
-std::optional<std::size_t> BulkLoader::getRejectedRecords(nanodbc::connection& connection) const
-{
-    return std::nullopt;
-};
-
 std::wstring BulkLoader::getTableName(const std::wstring_view table) const
 {
     std::wstring tableTrim(table);

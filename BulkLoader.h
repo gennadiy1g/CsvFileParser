@@ -41,7 +41,7 @@ public:
     virtual std::wstring generateDropTableCommand(const std::wstring_view table) const = 0;
     virtual std::wstring generateCreateTableCommand(const std::wstring_view table) const = 0;
     virtual std::wstring generateCopyIntoCommand(const std::wstring_view table) const = 0;
-    virtual std::optional<std::size_t> getRejectedRecords(nanodbc::connection& connection) const;
+    virtual std::optional<std::size_t> getRejectedRecords(nanodbc::connection& connection) const = 0;
 
 protected:
     bfs::path mInputFile;
