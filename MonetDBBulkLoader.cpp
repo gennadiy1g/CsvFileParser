@@ -7,6 +7,7 @@
 using namespace std::string_literals;
 
 #include "MonetDBBulkLoader.h"
+#include "log.h"
 
 MonetDBBulkLoader::MonetDBBulkLoader(const bfs::path& inputFile)
     : BulkLoader(inputFile)
@@ -116,7 +117,38 @@ NanodbcMonetDBBulkLoader::NanodbcMonetDBBulkLoader(const bfs::path& inputFile)
 {
 }
 
+std::optional<std::size_t> NanodbcMonetDBBulkLoader::load(std::wstring_view table) const
+{
+    auto tableTrim { getTableName(table) };
+    assert(tableTrim != L"");
+
+    auto& gLogger = GlobalLogger::get();
+
+    auto connectionString = getConnectionString();
+    BOOST_LOG_SEV(gLogger, bltrivial::trace) << connectionString;
+    nanodbc::connection connection(boost::locale::conv::utf_to_utf<char16_t>(connectionString));
+
+    auto dropCommand { generateDropTableCommand(tableTrim) };
+    BOOST_LOG_SEV(gLogger, bltrivial::trace) << dropCommand;
+    nanodbc::execute(connection, boost::locale::conv::utf_to_utf<char16_t>(dropCommand));
+
+    auto createCommand { generateCreateTableCommand(tableTrim) };
+    BOOST_LOG_SEV(gLogger, bltrivial::trace) << createCommand;
+    nanodbc::execute(connection, boost::locale::conv::utf_to_utf<char16_t>(createCommand));
+
+    auto copyCommand { generateCopyIntoCommand(tableTrim) };
+    BOOST_LOG_SEV(gLogger, bltrivial::trace) << copyCommand;
+    nanodbc::execute(connection, boost::locale::conv::utf_to_utf<char16_t>(copyCommand));
+
+    return getRejectedRecords(connection);
+}
+
 MclientMonetDBBulkLoader::MclientMonetDBBulkLoader(const bfs::path& inputFile)
     : MonetDBBulkLoader(inputFile)
 {
+}
+
+std::optional<std::size_t> MclientMonetDBBulkLoader::load(std::wstring_view table) const
+{
+    return std::nullopt;
 }

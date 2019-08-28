@@ -19,32 +19,6 @@ void BulkLoader::parse(wchar_t separator, wchar_t quote)
     mParsingResults = parser.parse(separator, quote, L'\\');
 }
 
-std::optional<std::size_t> BulkLoader::load(std::wstring_view table) const
-{
-    auto tableTrim { getTableName(table) };
-    assert(tableTrim != L"");
-
-    auto& gLogger = GlobalLogger::get();
-
-    auto connectionString = getConnectionString();
-    BOOST_LOG_SEV(gLogger, bltrivial::trace) << connectionString;
-    nanodbc::connection connection(boost::locale::conv::utf_to_utf<char16_t>(connectionString));
-
-    auto dropCommand { generateDropTableCommand(tableTrim) };
-    BOOST_LOG_SEV(gLogger, bltrivial::trace) << dropCommand;
-    nanodbc::execute(connection, boost::locale::conv::utf_to_utf<char16_t>(dropCommand));
-
-    auto createCommand { generateCreateTableCommand(tableTrim) };
-    BOOST_LOG_SEV(gLogger, bltrivial::trace) << createCommand;
-    nanodbc::execute(connection, boost::locale::conv::utf_to_utf<char16_t>(createCommand));
-
-    auto copyCommand { generateCopyIntoCommand(tableTrim) };
-    BOOST_LOG_SEV(gLogger, bltrivial::trace) << copyCommand;
-    nanodbc::execute(connection, boost::locale::conv::utf_to_utf<char16_t>(copyCommand));
-
-    return getRejectedRecords(connection);
-}
-
 std::wstring BulkLoader::getConnectionString() const
 {
     std::map<ConnectionParameterName, std::wstring> connectionParameters;

@@ -32,8 +32,7 @@ public:
     virtual ~BulkLoader() = default; // Defaulted virtual destructor
 
     void parse(wchar_t separator, wchar_t quote);
-    std::optional<std::size_t> load(std::wstring_view table = L""sv) const;
-    virtual void loadOnClient(std::string_view host, int port, std::string_view database, std::string_view table, std::string_view user, std::string_view password) const = 0;
+    virtual std::optional<std::size_t> load(std::wstring_view table = L""sv) const = 0;
     const ParsingResults& parsingResults() const { return mParsingResults; };
     template <typename T>
     void setConnectionParameters(const T& connectionParameters);
