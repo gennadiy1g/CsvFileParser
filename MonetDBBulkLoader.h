@@ -22,3 +22,31 @@ public:
     virtual std::wstring generateCopyIntoCommand(const std::wstring_view table) const override;
     virtual std::optional<std::size_t> getRejectedRecords(nanodbc::connection& connection) const override;
 };
+
+class NanodbcMonetDBBulkLoader : public MonetDBBulkLoader {
+public:
+    explicit NanodbcMonetDBBulkLoader(const bfs::path& inputFile); // Constructor
+    virtual ~NanodbcMonetDBBulkLoader() = default; // Defaulted virtual destructor
+
+    // Disallow assignment and pass-by-value.
+    NanodbcMonetDBBulkLoader(const NanodbcMonetDBBulkLoader& src) = delete;
+    NanodbcMonetDBBulkLoader& operator=(const NanodbcMonetDBBulkLoader& rhs) = delete;
+
+    // Explicitly default move constructor and move assignment operator.
+    NanodbcMonetDBBulkLoader(NanodbcMonetDBBulkLoader&& src) = default;
+    NanodbcMonetDBBulkLoader& operator=(NanodbcMonetDBBulkLoader&& rhs) = default;
+};
+
+class MclientMonetDBBulkLoader : public MonetDBBulkLoader {
+public:
+    explicit MclientMonetDBBulkLoader(const bfs::path& inputFile); // Constructor
+    virtual ~MclientMonetDBBulkLoader() = default; // Defaulted virtual destructor
+
+    // Disallow assignment and pass-by-value.
+    MclientMonetDBBulkLoader(const MclientMonetDBBulkLoader& src) = delete;
+    MclientMonetDBBulkLoader& operator=(const MclientMonetDBBulkLoader& rhs) = delete;
+
+    // Explicitly default move constructor and move assignment operator.
+    MclientMonetDBBulkLoader(MclientMonetDBBulkLoader&& src) = default;
+    MclientMonetDBBulkLoader& operator=(MclientMonetDBBulkLoader&& rhs) = default;
+};

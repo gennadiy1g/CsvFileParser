@@ -109,3 +109,13 @@ std::optional<std::size_t> MonetDBBulkLoader::getRejectedRecords(nanodbc::connec
     results.next();
     return results.get<std::size_t>(0);
 }
+
+NanodbcMonetDBBulkLoader::NanodbcMonetDBBulkLoader(const bfs::path& inputFile)
+    : MonetDBBulkLoader(inputFile)
+{
+}
+
+MclientMonetDBBulkLoader::MclientMonetDBBulkLoader(const bfs::path& inputFile)
+    : MonetDBBulkLoader(inputFile)
+{
+}
