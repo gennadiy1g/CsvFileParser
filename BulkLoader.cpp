@@ -19,19 +19,6 @@ void BulkLoader::parse(wchar_t separator, wchar_t quote)
     mParsingResults = parser.parse(separator, quote, L'\\');
 }
 
-std::wstring BulkLoader::getConnectionString() const
-{
-    std::map<ConnectionParameterName, std::wstring> connectionParameters;
-    for (const auto& param : mConnectionParameters) {
-        connectionParameters[param.first] = param.second;
-    }
-    std::wostringstream connectionString;
-    for (const auto& param : connectionParameters) {
-        connectionString << int(param.first) << L'=' << param.second << L';';
-    }
-    return connectionString.str();
-}
-
 std::wstring BulkLoader::getTableName(const std::wstring_view table) const
 {
     std::wstring tableTrim(table);

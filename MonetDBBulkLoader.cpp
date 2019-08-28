@@ -115,6 +115,19 @@ NanodbcMonetDBBulkLoader::NanodbcMonetDBBulkLoader(const bfs::path& inputFile)
 {
 }
 
+std::wstring NanodbcMonetDBBulkLoader::getConnectionString() const
+{
+    std::map<ConnectionParameterName, std::wstring> connectionParameters;
+    for (const auto& param : mConnectionParameters) {
+        connectionParameters[param.first] = param.second;
+    }
+    std::wostringstream connectionString;
+    for (const auto& param : connectionParameters) {
+        connectionString << int(param.first) << L'=' << param.second << L';';
+    }
+    return connectionString.str();
+}
+
 std::optional<std::size_t> NanodbcMonetDBBulkLoader::load(std::wstring_view table) const
 {
     auto tableTrim { getTableName(table) };
