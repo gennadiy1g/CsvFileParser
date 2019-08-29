@@ -34,10 +34,10 @@ public:
     NanodbcMonetDBBulkLoader(NanodbcMonetDBBulkLoader&& src) = default;
     NanodbcMonetDBBulkLoader& operator=(NanodbcMonetDBBulkLoader&& rhs) = default;
 
-    std::wstring getConnectionString() const;
     virtual std::optional<std::size_t> load(std::wstring_view table = L""sv) const override;
 
 private:
+    std::wstring getConnectionString() const;
     virtual std::optional<std::size_t> getRejectedRecords(nanodbc::connection& connection) const;
 };
 
