@@ -121,9 +121,33 @@ std::wstring NanodbcMonetDBBulkLoader::getConnectionString() const
     for (const auto& param : mConnectionParameters) {
         connectionParameters[param.first] = param.second;
     }
+
+    auto toString = [](ConnectionParameterName connectionParameterName) {
+        switch (connectionParameterName) {
+        case ConnectionParameterName::Driver:
+            return L"DRIVER";
+            break;
+        case ConnectionParameterName::Host:
+            return L"HOST";
+            break;
+        case ConnectionParameterName::Port:
+            return L"PORT";
+            break;
+        case ConnectionParameterName::User:
+            return L"UID";
+            break;
+        case ConnectionParameterName::Password:
+            return L"PWD";
+            break;
+        default:
+            throw std::logic_error("Unknown instance of enum class ConnectionParameterName!");
+            break;
+        }
+    };
+
     std::wostringstream connectionString;
     for (const auto& param : connectionParameters) {
-        connectionString << int(param.first) << L'=' << param.second << L';';
+        connectionString << toString(param.first) << L'=' << param.second << L';';
     }
     return connectionString.str();
 }
