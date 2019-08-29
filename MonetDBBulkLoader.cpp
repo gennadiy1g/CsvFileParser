@@ -147,7 +147,7 @@ std::wstring NanodbcMonetDBBulkLoader::getConnectionString() const
 std::optional<std::size_t> NanodbcMonetDBBulkLoader::getRejectedRecords(nanodbc::connection& connection) const
 {
     nanodbc::result results;
-    results = nanodbc::execute(connection, u"SELECT COUNT(*) FROM sys.rejects");
+    results = nanodbc::execute(connection, boost::locale::conv::utf_to_utf<char16_t>(generateSelectNumberOfRejectedRecordsCommand()));
     results.next();
     return results.get<std::size_t>(0);
 }
