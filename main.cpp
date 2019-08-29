@@ -891,13 +891,14 @@ BOOST_AUTO_TEST_CASE(generate_create_table_command_1)
     const std::wstring sourceFile(LR"^(C:\Users\genna_000\Documents\Experiments\test data\parsing_results_1.csv)^");
     auto& gLogger = GlobalLogger::get();
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << sourceFile << FUNCTION_FILE_LINE;
-    MonetDBBulkLoader bulkLoader(sourceFile);
+    NanodbcMonetDBBulkLoader bulkLoader(sourceFile);
     bulkLoader.parse(L',', L'"');
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << bulkLoader.parsingResults().numLines() << L" lines, "
                                              << bulkLoader.parsingResults().numMalformedLines() << L" malformed lines, "
                                              << bulkLoader.parsingResults().columns().size() << L" columns" << FUNCTION_FILE_LINE;
-    bulkLoader.setConnectionParameters<std::initializer_list<ConnectionParameter>>({ { L"uid", L"monetdb" }, { L"pwd", L"monetdb" } });
-    bulkLoader.setConnectionParameters<std::vector<ConnectionParameter>>({ { L"Host", L"localhost" } });
+    bulkLoader.setConnectionParameters<std::initializer_list<ConnectionParameter>>({ { ConnectionParameterName::User, L"monetdb" },
+        { ConnectionParameterName::Password, L"monetdb" } });
+    bulkLoader.setConnectionParameters<std::vector<ConnectionParameter>>({ { ConnectionParameterName::Host, L"localhost" } });
     auto rejectedRecords = bulkLoader.load();
     if (rejectedRecords.value_or(0) > 0) {
         BOOST_LOG_SEV(gLogger, bltrivial::trace) << L"Rejected " << rejectedRecords.value() << L" records.";
@@ -910,14 +911,14 @@ BOOST_AUTO_TEST_CASE(generate_create_table_command_2)
     const std::wstring sourceFile(LR"^(C:\Users\genna_000\Documents\Experiments\test data\parsing_results_2.csv)^");
     auto& gLogger = GlobalLogger::get();
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << sourceFile << FUNCTION_FILE_LINE;
-    MonetDBBulkLoader bulkLoader(sourceFile);
+    NanodbcMonetDBBulkLoader bulkLoader(sourceFile);
     bulkLoader.parse(L',', L'"');
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << bulkLoader.parsingResults().numLines() << L" lines, "
                                              << bulkLoader.parsingResults().numMalformedLines() << L" malformed lines, "
                                              << bulkLoader.parsingResults().columns().size() << L" columns" << FUNCTION_FILE_LINE;
     int port { 50000 };
     std::vector<ConnectionParameter> connectionParameters;
-    connectionParameters.push_back(std::make_pair(L"Port", std::to_wstring(port)));
+    connectionParameters.push_back(std::make_pair(ConnectionParameterName::Port, std::to_wstring(port)));
     bulkLoader.setConnectionParameters(connectionParameters);
     auto rejectedRecords = bulkLoader.load();
     if (rejectedRecords.value_or(0) > 0) {
@@ -930,7 +931,7 @@ BOOST_AUTO_TEST_CASE(generate_create_table_command_3)
     const std::wstring sourceFile(LR"^(C:\Users\genna_000\Documents\Experiments\test data\parsing_results_3.csv)^");
     auto& gLogger = GlobalLogger::get();
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << sourceFile << FUNCTION_FILE_LINE;
-    MonetDBBulkLoader bulkLoader(sourceFile);
+    NanodbcMonetDBBulkLoader bulkLoader(sourceFile);
     bulkLoader.parse(L'\t', L'"');
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << bulkLoader.parsingResults().numLines() << L" lines, "
                                              << bulkLoader.parsingResults().numMalformedLines() << L" malformed lines, "
@@ -946,7 +947,7 @@ BOOST_AUTO_TEST_CASE(generate_create_table_command_3_missing)
     const std::wstring sourceFile(LR"^(C:\Users\genna_000\Documents\Experiments\test data\parsing_results_3_missing.csv)^");
     auto& gLogger = GlobalLogger::get();
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << sourceFile << FUNCTION_FILE_LINE;
-    MonetDBBulkLoader bulkLoader(sourceFile);
+    NanodbcMonetDBBulkLoader bulkLoader(sourceFile);
     bulkLoader.parse(L'\t', L'"');
     BOOST_TEST(bulkLoader.parsingResults().numMalformedLines() == 4);
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << bulkLoader.parsingResults().numLines() << L" lines, "
@@ -963,7 +964,7 @@ BOOST_AUTO_TEST_CASE(generate_create_table_command_4)
     const std::wstring sourceFile(LR"^(C:\Users\genna_000\Documents\Experiments\test data\parsing_results_4.csv)^");
     auto& gLogger = GlobalLogger::get();
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << sourceFile << FUNCTION_FILE_LINE;
-    MonetDBBulkLoader bulkLoader(sourceFile);
+    NanodbcMonetDBBulkLoader bulkLoader(sourceFile);
     bulkLoader.parse(L',', L'"');
     BOOST_TEST(bulkLoader.parsingResults().numMalformedLines() == 3);
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << bulkLoader.parsingResults().numLines() << L" lines, "
@@ -980,7 +981,7 @@ BOOST_AUTO_TEST_CASE(generate_create_table_command_5)
     const std::wstring sourceFile(LR"^(C:\Users\genna_000\Documents\Experiments\test data\parsing_results_5.csv)^");
     auto& gLogger = GlobalLogger::get();
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << sourceFile << FUNCTION_FILE_LINE;
-    MonetDBBulkLoader bulkLoader(sourceFile);
+    NanodbcMonetDBBulkLoader bulkLoader(sourceFile);
     bulkLoader.parse(L',', L'"');
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << bulkLoader.parsingResults().numLines() << L" lines, "
                                              << bulkLoader.parsingResults().numMalformedLines() << L" malformed lines, "
@@ -996,7 +997,7 @@ BOOST_AUTO_TEST_CASE(generate_create_table_command_7)
     const std::wstring sourceFile(LR"^(C:\Users\genna_000\Documents\Experiments\test data\parsing_results_7.csv)^");
     auto& gLogger = GlobalLogger::get();
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << sourceFile << FUNCTION_FILE_LINE;
-    MonetDBBulkLoader bulkLoader(sourceFile);
+    NanodbcMonetDBBulkLoader bulkLoader(sourceFile);
     bulkLoader.parse(L',', L'"');
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << bulkLoader.parsingResults().numLines() << L" lines, "
                                              << bulkLoader.parsingResults().numMalformedLines() << L" malformed lines, "
@@ -1012,7 +1013,7 @@ BOOST_AUTO_TEST_CASE(generate_create_table_command_russian_UTF8)
     const std::wstring sourceFile(LR"^(C:\Users\genna_000\Documents\Experiments\test data\russian_UTF-8.csv)^");
     auto& gLogger = GlobalLogger::get();
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << sourceFile << FUNCTION_FILE_LINE;
-    MonetDBBulkLoader bulkLoader(sourceFile);
+    NanodbcMonetDBBulkLoader bulkLoader(sourceFile);
     bulkLoader.parse(L',', L'"');
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << bulkLoader.parsingResults().numLines() << L" lines, "
                                              << bulkLoader.parsingResults().numMalformedLines() << L" malformed lines, "
@@ -1028,7 +1029,7 @@ BOOST_AUTO_TEST_CASE(generate_create_table_command_russian_UTF8_2)
     const std::wstring sourceFile(LR"^(C:\Users\genna_000\Documents\Experiments\test data\russian_UTF-8_2.csv)^");
     auto& gLogger = GlobalLogger::get();
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << sourceFile << FUNCTION_FILE_LINE;
-    MonetDBBulkLoader bulkLoader(sourceFile);
+    NanodbcMonetDBBulkLoader bulkLoader(sourceFile);
     bulkLoader.parse(L',', L'"');
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << bulkLoader.parsingResults().numLines() << L" lines, "
                                              << bulkLoader.parsingResults().numMalformedLines() << L" malformed lines, "
