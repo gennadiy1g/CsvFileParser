@@ -102,14 +102,6 @@ std::wstring MonetDBBulkLoader::generateDropTableCommand(const std::wstring_view
     return buf.str();
 }
 
-std::optional<std::size_t> MonetDBBulkLoader::getRejectedRecords(nanodbc::connection& connection) const
-{
-    nanodbc::result results;
-    results = nanodbc::execute(connection, u"SELECT COUNT(*) FROM sys.rejects");
-    results.next();
-    return results.get<std::size_t>(0);
-}
-
 NanodbcMonetDBBulkLoader::NanodbcMonetDBBulkLoader(const bfs::path& inputFile)
     : MonetDBBulkLoader(inputFile)
 {
@@ -150,6 +142,14 @@ std::wstring NanodbcMonetDBBulkLoader::getConnectionString() const
         connectionString << toString(param.first) << L'=' << param.second << L';';
     }
     return connectionString.str();
+}
+
+std::optional<std::size_t> NanodbcMonetDBBulkLoader::getRejectedRecords(nanodbc::connection& connection) const
+{
+    nanodbc::result results;
+    results = nanodbc::execute(connection, u"SELECT COUNT(*) FROM sys.rejects");
+    results.next();
+    return results.get<std::size_t>(0);
 }
 
 std::optional<std::size_t> NanodbcMonetDBBulkLoader::load(std::wstring_view table) const

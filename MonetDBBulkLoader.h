@@ -19,7 +19,6 @@ public:
     virtual std::wstring generateDropTableCommand(const std::wstring_view table) const override;
     virtual std::wstring generateCreateTableCommand(const std::wstring_view table) const override;
     virtual std::wstring generateCopyIntoCommand(const std::wstring_view table) const override;
-    virtual std::optional<std::size_t> getRejectedRecords(nanodbc::connection& connection) const override;
 };
 
 class NanodbcMonetDBBulkLoader : public MonetDBBulkLoader {
@@ -37,6 +36,9 @@ public:
 
     std::wstring getConnectionString() const;
     virtual std::optional<std::size_t> load(std::wstring_view table = L""sv) const override;
+
+private:
+    virtual std::optional<std::size_t> getRejectedRecords(nanodbc::connection& connection) const;
 };
 
 class MclientMonetDBBulkLoader : public MonetDBBulkLoader {
