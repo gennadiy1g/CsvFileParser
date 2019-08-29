@@ -51,13 +51,13 @@ BOOST_AUTO_TEST_SUITE(CsvFileParser_parse);
 
 BOOST_AUTO_TEST_CASE(ZX0training_UTF8)
 {
-    CsvFileParser parser(LR"^(C:\Users\genna_000\Documents\Experiments\test data\ZX0training_UTF-8.csv)^");
+    CsvFileParser parser(LR"^(C:\Users\genna_000\Documents\BulkLoadCsv\test data\ZX0training_UTF-8.csv)^");
     BOOST_REQUIRE_NO_THROW(parser.parse(L',', L'"', L'\\'));
 }
 
 BOOST_AUTO_TEST_CASE(russian_UTF8)
 {
-    CsvFileParser parser(LR"^(C:\Users\genna_000\Documents\Experiments\test data\russian_UTF-8.csv)^");
+    CsvFileParser parser(LR"^(C:\Users\genna_000\Documents\BulkLoadCsv\test data\russian_UTF-8.csv)^");
     BOOST_REQUIRE_NO_THROW(parser.parse(L',', L'"', L'\\'));
 }
 
@@ -68,7 +68,7 @@ BOOST_AUTO_TEST_CASE(ZX0training_CP863)
     };
 
     // Processing of this file causes an exception to be thrown
-    CsvFileParser parser(LR"^(C:\Users\genna_000\Documents\Experiments\test data\ZX0training_CP-863.csv)^");
+    CsvFileParser parser(LR"^(C:\Users\genna_000\Documents\BulkLoadCsv\test data\ZX0training_CP-863.csv)^");
     BOOST_REQUIRE_EXCEPTION(parser.parse(L',', L'"', L'\\'), std::runtime_error, pred);
 }
 
@@ -430,7 +430,7 @@ BOOST_AUTO_TEST_SUITE(parsing_results);
 
 BOOST_AUTO_TEST_CASE(parsing_results_1)
 {
-    CsvFileParser parser(LR"^(C:\Users\genna_000\Documents\Experiments\test data\parsing_results_1.csv)^");
+    CsvFileParser parser(LR"^(C:\Users\genna_000\Documents\BulkLoadCsv\test data\parsing_results_1.csv)^");
     auto parsingResults = parser.parse(L',', L'"', L'\\');
     BOOST_TEST(parsingResults.numLines() == 10);
     BOOST_TEST(parsingResults.numMalformedLines() == 0);
@@ -487,7 +487,7 @@ BOOST_AUTO_TEST_CASE(parsing_results_1)
 
 BOOST_AUTO_TEST_CASE(parsing_results_2)
 {
-    CsvFileParser parser(LR"^(C:\Users\genna_000\Documents\Experiments\test data\parsing_results_2.csv)^");
+    CsvFileParser parser(LR"^(C:\Users\genna_000\Documents\BulkLoadCsv\test data\parsing_results_2.csv)^");
     auto parsingResults = parser.parse(L',', L'"', L'\\');
     BOOST_TEST(parsingResults.numLines() == 20);
     BOOST_TEST(parsingResults.numMalformedLines() == 0);
@@ -545,7 +545,7 @@ BOOST_AUTO_TEST_CASE(parsing_results_2)
 
 BOOST_AUTO_TEST_CASE(parsing_results_3)
 {
-    CsvFileParser parser(LR"^(C:\Users\genna_000\Documents\Experiments\test data\parsing_results_3.csv)^");
+    CsvFileParser parser(LR"^(C:\Users\genna_000\Documents\BulkLoadCsv\test data\parsing_results_3.csv)^");
     auto parsingResults = parser.parse(L'\t', L'"', L'\\');
     BOOST_TEST(parsingResults.numLines() == 65);
     BOOST_TEST(parsingResults.numMalformedLines() == 3);
@@ -603,7 +603,7 @@ BOOST_AUTO_TEST_CASE(parsing_results_3)
 
 BOOST_AUTO_TEST_CASE(parsing_results_4)
 {
-    CsvFileParser parser(LR"^(C:\Users\genna_000\Documents\Experiments\test data\parsing_results_4.csv)^");
+    CsvFileParser parser(LR"^(C:\Users\genna_000\Documents\BulkLoadCsv\test data\parsing_results_4.csv)^");
     auto parsingResults = parser.parse(L',', L'"', L'\\');
     BOOST_TEST(parsingResults.numLines() == 66);
     BOOST_TEST(parsingResults.numMalformedLines() == 3);
@@ -655,7 +655,7 @@ BOOST_AUTO_TEST_CASE(parsing_results_4)
 
 BOOST_AUTO_TEST_CASE(parsing_results_5)
 {
-    CsvFileParser parser(LR"^(C:\Users\genna_000\Documents\Experiments\test data\parsing_results_5.csv)^");
+    CsvFileParser parser(LR"^(C:\Users\genna_000\Documents\BulkLoadCsv\test data\parsing_results_5.csv)^");
     auto parsingResults = parser.parse(L',', L'"', L'\\');
     BOOST_TEST(parsingResults.numLines() == 66);
     BOOST_TEST(parsingResults.numMalformedLines() == 4);
@@ -713,7 +713,7 @@ BOOST_AUTO_TEST_CASE(parsing_results_5)
 
 BOOST_AUTO_TEST_CASE(parsing_results_6)
 {
-    CsvFileParser parser(LR"^(C:\Users\genna_000\Documents\Experiments\test data\parsing_results_6.csv)^");
+    CsvFileParser parser(LR"^(C:\Users\genna_000\Documents\BulkLoadCsv\test data\parsing_results_6.csv)^");
     auto parsingResults = parser.parse(L',', L'"', L'\\');
     BOOST_TEST(parsingResults.numLines() == 66);
     BOOST_TEST(parsingResults.numMalformedLines() == 4);
@@ -771,7 +771,7 @@ BOOST_AUTO_TEST_CASE(parsing_results_6)
 
 BOOST_AUTO_TEST_CASE(parsing_results_7)
 {
-    CsvFileParser parser(LR"^(C:\Users\genna_000\Documents\Experiments\test data\parsing_results_7.csv)^");
+    CsvFileParser parser(LR"^(C:\Users\genna_000\Documents\BulkLoadCsv\test data\parsing_results_7.csv)^");
     auto parsingResults = parser.parse(L',', L'"', L'\\');
     BOOST_TEST(parsingResults.numLines() == 66);
     BOOST_TEST(parsingResults.numMalformedLines() == 4);
@@ -829,7 +829,7 @@ BOOST_AUTO_TEST_CASE(parsing_results_7)
 
 BOOST_AUTO_TEST_CASE(parsing_results_bare_headers)
 {
-    CsvFileParser parser(LR"^(C:\Users\genna_000\Documents\Experiments\test data\bare_headers.csv)^");
+    CsvFileParser parser(LR"^(C:\Users\genna_000\Documents\BulkLoadCsv\test data\bare_headers.csv)^");
     auto parsingResults = parser.parse(L'\t', L'"', L'\\');
     BOOST_TEST(parsingResults.numLines() == 0);
     BOOST_TEST(parsingResults.numMalformedLines() == 0);
@@ -846,7 +846,7 @@ BOOST_AUTO_TEST_CASE(parsing_results_bare_headers)
 
 BOOST_AUTO_TEST_CASE(parsing_results_boolean)
 {
-    CsvFileParser parser(LR"^(C:\Users\genna_000\Documents\Experiments\test data\boolean.csv)^");
+    CsvFileParser parser(LR"^(C:\Users\genna_000\Documents\BulkLoadCsv\test data\boolean.csv)^");
     auto parsingResults = parser.parse(L' ', L'"', L'\\');
     BOOST_TEST(parsingResults.numLines() == 4);
     BOOST_TEST(parsingResults.numMalformedLines() == 0);
@@ -888,7 +888,7 @@ BOOST_AUTO_TEST_SUITE(generate_create_table_command);
 
 BOOST_AUTO_TEST_CASE(generate_create_table_command_1)
 {
-    const std::wstring sourceFile(LR"^(C:\Users\genna_000\Documents\Experiments\test data\parsing_results_1.csv)^");
+    const std::wstring sourceFile(LR"^(C:\Users\genna_000\Documents\BulkLoadCsv\test data\parsing_results_1.csv)^");
     auto& gLogger = GlobalLogger::get();
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << sourceFile << FUNCTION_FILE_LINE;
     NanodbcMonetDBBulkLoader bulkLoader(sourceFile);
@@ -908,7 +908,7 @@ BOOST_AUTO_TEST_CASE(generate_create_table_command_1)
 
 BOOST_AUTO_TEST_CASE(generate_create_table_command_2)
 {
-    const std::wstring sourceFile(LR"^(C:\Users\genna_000\Documents\Experiments\test data\parsing_results_2.csv)^");
+    const std::wstring sourceFile(LR"^(C:\Users\genna_000\Documents\BulkLoadCsv\test data\parsing_results_2.csv)^");
     auto& gLogger = GlobalLogger::get();
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << sourceFile << FUNCTION_FILE_LINE;
     NanodbcMonetDBBulkLoader bulkLoader(sourceFile);
@@ -928,7 +928,7 @@ BOOST_AUTO_TEST_CASE(generate_create_table_command_2)
 
 BOOST_AUTO_TEST_CASE(generate_create_table_command_3)
 {
-    const std::wstring sourceFile(LR"^(C:\Users\genna_000\Documents\Experiments\test data\parsing_results_3.csv)^");
+    const std::wstring sourceFile(LR"^(C:\Users\genna_000\Documents\BulkLoadCsv\test data\parsing_results_3.csv)^");
     auto& gLogger = GlobalLogger::get();
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << sourceFile << FUNCTION_FILE_LINE;
     NanodbcMonetDBBulkLoader bulkLoader(sourceFile);
@@ -944,7 +944,7 @@ BOOST_AUTO_TEST_CASE(generate_create_table_command_3)
 
 BOOST_AUTO_TEST_CASE(generate_create_table_command_3_missing)
 {
-    const std::wstring sourceFile(LR"^(C:\Users\genna_000\Documents\Experiments\test data\parsing_results_3_missing.csv)^");
+    const std::wstring sourceFile(LR"^(C:\Users\genna_000\Documents\BulkLoadCsv\test data\parsing_results_3_missing.csv)^");
     auto& gLogger = GlobalLogger::get();
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << sourceFile << FUNCTION_FILE_LINE;
     NanodbcMonetDBBulkLoader bulkLoader(sourceFile);
@@ -961,7 +961,7 @@ BOOST_AUTO_TEST_CASE(generate_create_table_command_3_missing)
 
 BOOST_AUTO_TEST_CASE(generate_create_table_command_4)
 {
-    const std::wstring sourceFile(LR"^(C:\Users\genna_000\Documents\Experiments\test data\parsing_results_4.csv)^");
+    const std::wstring sourceFile(LR"^(C:\Users\genna_000\Documents\BulkLoadCsv\test data\parsing_results_4.csv)^");
     auto& gLogger = GlobalLogger::get();
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << sourceFile << FUNCTION_FILE_LINE;
     NanodbcMonetDBBulkLoader bulkLoader(sourceFile);
@@ -978,7 +978,7 @@ BOOST_AUTO_TEST_CASE(generate_create_table_command_4)
 
 BOOST_AUTO_TEST_CASE(generate_create_table_command_5)
 {
-    const std::wstring sourceFile(LR"^(C:\Users\genna_000\Documents\Experiments\test data\parsing_results_5.csv)^");
+    const std::wstring sourceFile(LR"^(C:\Users\genna_000\Documents\BulkLoadCsv\test data\parsing_results_5.csv)^");
     auto& gLogger = GlobalLogger::get();
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << sourceFile << FUNCTION_FILE_LINE;
     NanodbcMonetDBBulkLoader bulkLoader(sourceFile);
@@ -994,7 +994,7 @@ BOOST_AUTO_TEST_CASE(generate_create_table_command_5)
 
 BOOST_AUTO_TEST_CASE(generate_create_table_command_7)
 {
-    const std::wstring sourceFile(LR"^(C:\Users\genna_000\Documents\Experiments\test data\parsing_results_7.csv)^");
+    const std::wstring sourceFile(LR"^(C:\Users\genna_000\Documents\BulkLoadCsv\test data\parsing_results_7.csv)^");
     auto& gLogger = GlobalLogger::get();
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << sourceFile << FUNCTION_FILE_LINE;
     NanodbcMonetDBBulkLoader bulkLoader(sourceFile);
@@ -1010,7 +1010,7 @@ BOOST_AUTO_TEST_CASE(generate_create_table_command_7)
 
 BOOST_AUTO_TEST_CASE(generate_create_table_command_russian_UTF8)
 {
-    const std::wstring sourceFile(LR"^(C:\Users\genna_000\Documents\Experiments\test data\russian_UTF-8.csv)^");
+    const std::wstring sourceFile(LR"^(C:\Users\genna_000\Documents\BulkLoadCsv\test data\russian_UTF-8.csv)^");
     auto& gLogger = GlobalLogger::get();
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << sourceFile << FUNCTION_FILE_LINE;
     NanodbcMonetDBBulkLoader bulkLoader(sourceFile);
@@ -1026,7 +1026,7 @@ BOOST_AUTO_TEST_CASE(generate_create_table_command_russian_UTF8)
 
 BOOST_AUTO_TEST_CASE(generate_create_table_command_russian_UTF8_2)
 {
-    const std::wstring sourceFile(LR"^(C:\Users\genna_000\Documents\Experiments\test data\russian_UTF-8_2.csv)^");
+    const std::wstring sourceFile(LR"^(C:\Users\genna_000\Documents\BulkLoadCsv\test data\russian_UTF-8_2.csv)^");
     auto& gLogger = GlobalLogger::get();
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << sourceFile << FUNCTION_FILE_LINE;
     NanodbcMonetDBBulkLoader bulkLoader(sourceFile);
