@@ -191,11 +191,32 @@ std::optional<std::size_t> MclientMonetDBBulkLoader::load(std::wstring_view tabl
 {
     bfs::path uniquePath = bfs::unique_path();
 
-    bfs::path sqlScriptPath = bfs::temp_directory_path() / bfs::path("mclient-");
-    sqlScriptPath += uniquePath;
-    sqlScriptPath += ".sql";
+    bfs::path sqlScript = bfs::temp_directory_path() / bfs::path("mclient-");
+    sqlScript += uniquePath;
+    sqlScript.replace_extension("sql");
     auto& gLogger = GlobalLogger::get();
-    BOOST_LOG_SEV(gLogger, bltrivial::trace) << sqlScriptPath << FUNCTION_FILE_LINE;
+    BOOST_LOG_SEV(gLogger, bltrivial::trace) << sqlScript << FUNCTION_FILE_LINE;
+
+    std::wstring user, password;
+    for (const auto& param : mConnectionParameters) {
+        if (param.first == ConnectionParameterName::User) {
+            user = param.second;
+        } else if (param.first == ConnectionParameterName::Password) {
+            password = param.second;
+        }
+    }
+
+    bfs::path customDotMonetDBFile;
+    bool needCustomDotMonetDBFile = ((user == password) && (user == L"monetdb"s));
+    if (needCustomDotMonetDBFile) {
+        customDotMonetDBFile = bfs::temp_directory_path() / bfs::path(".monetdb-");
+        customDotMonetDBFile += uniquePath;
+        BOOST_LOG_SEV(gLogger, bltrivial::trace) << customDotMonetDBFile << FUNCTION_FILE_LINE;
+    }
+
+#ifdef NDEBUG
+    bfs::remove(sqlScript);
+#endif
 
     return std::nullopt;
 }
