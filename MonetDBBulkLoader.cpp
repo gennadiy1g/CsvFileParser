@@ -111,6 +111,8 @@ NanodbcMonetDBBulkLoader::NanodbcMonetDBBulkLoader(const bfs::path& inputFile)
 
 std::wstring NanodbcMonetDBBulkLoader::getConnectionString() const
 {
+    // Overwrite default connection parameters, which are added by the constructor at the beginning of the vector mConnectionParameters,
+    // with user specified connection parameters, which are added by the main function at the end of the vector mConnectionParameters.
     std::map<ConnectionParameterName, std::wstring> connectionParameters;
     for (const auto& param : mConnectionParameters) {
         connectionParameters[param.first] = param.second;
