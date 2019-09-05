@@ -189,14 +189,27 @@ MclientMonetDBBulkLoader::MclientMonetDBBulkLoader(const bfs::path& inputFile)
 
 std::optional<std::size_t> MclientMonetDBBulkLoader::load(std::wstring_view table) const
 {
-    bfs::path uniquePath = bfs::unique_path();
+    auto tableTrim { getTableName(table) };
+    assert(tableTrim != L"");
 
-    bfs::path sqlScript = bfs::temp_directory_path() / bfs::path("mclient-");
+    auto& gLogger = GlobalLogger::get();
+
+    bfs::path uniquePath { bfs::unique_path() };
+
+    // Write SQL commands into a script file
+    bfs::path sqlScript { bfs::temp_directory_path() / bfs::path("mclient-") };
     sqlScript += uniquePath;
     sqlScript.replace_extension("sql");
-    auto& gLogger = GlobalLogger::get();
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << sqlScript << FUNCTION_FILE_LINE;
+    {
+        bfs::wofstream fs(sqlScript);
+        fs << generateDropTableCommand(tableTrim) << L";\n";
+        fs << generateCreateTableCommand(tableTrim) << L";\n";
+        fs << generateCopyIntoCommand(tableTrim) << L";\n";
+        fs << generateSelectNumberOfRejectedRecordsCommand() << L";\n";
+    }
 
+    // Get user name and password from mConnectionParameters
     std::wstring user, password;
     for (const auto& param : mConnectionParameters) {
         if (param.first == ConnectionParameterName::User) {
@@ -206,16 +219,21 @@ std::optional<std::size_t> MclientMonetDBBulkLoader::load(std::wstring_view tabl
         }
     }
 
-    bfs::path customDotMonetDBFile;
-    bool needCustomDotMonetDBFile = ((user == password) && (user == L"monetdb"s));
+    // If user name and password are not default, write them into a custom .monetdb file
+    bfs::path custDotMonetdbFile;
+    bool needCustomDotMonetDBFile { !((user == password) && (user == L"monetdb"s)) };
     if (needCustomDotMonetDBFile) {
-        customDotMonetDBFile = bfs::temp_directory_path() / bfs::path(".monetdb-");
-        customDotMonetDBFile += uniquePath;
-        BOOST_LOG_SEV(gLogger, bltrivial::trace) << customDotMonetDBFile << FUNCTION_FILE_LINE;
+        custDotMonetdbFile = bfs::temp_directory_path() / bfs::path(".monetdb-");
+        custDotMonetdbFile += uniquePath;
+        BOOST_LOG_SEV(gLogger, bltrivial::trace) << custDotMonetdbFile << FUNCTION_FILE_LINE;
+        bfs::wofstream fs(custDotMonetdbFile);
+        fs << L"user=" << user << L'\n';
+        fs << L"password=" << password << L'\n';
     }
 
 #ifdef NDEBUG
     bfs::remove(sqlScript);
+    bfs::remove(custDotMonetdbFile);
 #endif
 
     return std::nullopt;
