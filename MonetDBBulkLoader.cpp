@@ -162,19 +162,19 @@ std::optional<std::size_t> NanodbcMonetDBBulkLoader::load(std::wstring_view tabl
     auto& gLogger = GlobalLogger::get();
 
     auto connectionString = getConnectionString();
-    BOOST_LOG_SEV(gLogger, bltrivial::trace) << connectionString;
+    BOOST_LOG_SEV(gLogger, bltrivial::trace) << connectionString << FUNCTION_FILE_LINE;
     nanodbc::connection connection(boost::locale::conv::utf_to_utf<char16_t>(connectionString));
 
     auto dropCommand { generateDropTableCommand(tableTrim) };
-    BOOST_LOG_SEV(gLogger, bltrivial::trace) << dropCommand;
+    BOOST_LOG_SEV(gLogger, bltrivial::trace) << dropCommand << FUNCTION_FILE_LINE;
     nanodbc::execute(connection, boost::locale::conv::utf_to_utf<char16_t>(dropCommand));
 
     auto createCommand { generateCreateTableCommand(tableTrim) };
-    BOOST_LOG_SEV(gLogger, bltrivial::trace) << createCommand;
+    BOOST_LOG_SEV(gLogger, bltrivial::trace) << createCommand << FUNCTION_FILE_LINE;
     nanodbc::execute(connection, boost::locale::conv::utf_to_utf<char16_t>(createCommand));
 
     auto copyCommand { generateCopyIntoCommand(tableTrim) };
-    BOOST_LOG_SEV(gLogger, bltrivial::trace) << copyCommand;
+    BOOST_LOG_SEV(gLogger, bltrivial::trace) << copyCommand << FUNCTION_FILE_LINE;
     nanodbc::execute(connection, boost::locale::conv::utf_to_utf<char16_t>(copyCommand));
 
     return getRejectedRecords(connection);
