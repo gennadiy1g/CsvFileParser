@@ -187,5 +187,13 @@ MclientMonetDBBulkLoader::MclientMonetDBBulkLoader(const bfs::path& inputFile)
 
 std::optional<std::size_t> MclientMonetDBBulkLoader::load(std::wstring_view table) const
 {
+    bfs::path uniquePath = bfs::unique_path();
+
+    bfs::path sqlScriptPath = bfs::temp_directory_path() / bfs::path("mclient-");
+    sqlScriptPath += uniquePath;
+    sqlScriptPath += ".sql";
+    auto& gLogger = GlobalLogger::get();
+    BOOST_LOG_SEV(gLogger, bltrivial::trace) << sqlScriptPath << FUNCTION_FILE_LINE;
+
     return std::nullopt;
 }
