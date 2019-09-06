@@ -5,12 +5,12 @@
 #include <sstream>
 #include <string>
 
+#include "MonetDBBulkLoader.h"
+#include "log.h"
+
 using namespace std::string_literals;
 
 namespace bp = boost::process;
-
-#include "MonetDBBulkLoader.h"
-#include "log.h"
 
 MonetDBBulkLoader::MonetDBBulkLoader(const bfs::path& inputFile)
     : BulkLoader(inputFile)
