@@ -191,18 +191,16 @@ MclientMonetDBBulkLoader::MclientMonetDBBulkLoader(const bfs::path& inputFile)
 
 std::optional<std::size_t> MclientMonetDBBulkLoader::load(std::wstring_view table) const
 {
-    auto tableTrim { getTableName(table) };
-    assert(tableTrim != L"");
-
-    auto& gLogger = GlobalLogger::get();
-
     bfs::path uniquePath { bfs::unique_path() };
 
     // Write SQL commands into a script file
     bfs::path sqlScript { bfs::temp_directory_path() / bfs::path("mclient-") };
     sqlScript += uniquePath;
     sqlScript.replace_extension("sql");
+    auto& gLogger = GlobalLogger::get();
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << sqlScript << FUNCTION_FILE_LINE;
+    auto tableTrim { getTableName(table) };
+    assert(tableTrim != L"");
     {
         bfs::wofstream fs(sqlScript);
         fs << generateDropTableCommand(tableTrim) << L";\n";
@@ -218,21 +216,28 @@ std::optional<std::size_t> MclientMonetDBBulkLoader::load(std::wstring_view tabl
         connectionParameters[param.first] = param.second;
     }
 
-    // Get user name and password from mConnectionParameters
-    auto user = connectionParameters.at(ConnectionParameterName::User);
-    auto password = connectionParameters.at(ConnectionParameterName::Password);
+    std::string dotMonetdbFile { "C:\\Program Files\\MonetDB\\MonetDB5\\etc\\.monetdb" }; // TODO: take from a config file
 
     // If user name and password are not default, write them into a custom .monetdb file
-    bfs::path custDotMonetdbFile;
-    bool needCustomDotMonetDBFile { !((user == password) && (user == L"monetdb"s)) };
-    if (needCustomDotMonetDBFile) {
+    auto user = connectionParameters.at(ConnectionParameterName::User);
+    auto password = connectionParameters.at(ConnectionParameterName::Password);
+    if (!((user == password) && (user == L"monetdb"s))) {
+        bfs::path custDotMonetdbFile;
         custDotMonetdbFile = bfs::temp_directory_path() / bfs::path(".monetdb-");
         custDotMonetdbFile += uniquePath;
         BOOST_LOG_SEV(gLogger, bltrivial::trace) << custDotMonetdbFile << FUNCTION_FILE_LINE;
         bfs::wofstream fs(custDotMonetdbFile);
         fs << L"user=" << user << L'\n';
         fs << L"password=" << password << L'\n';
+        dotMonetdbFile = blocale::conv::utf_to_utf<char>(custDotMonetdbFile.native());
     }
+
+    std::ostringstream commandLine;
+    commandLine << "\"C:\\Program Files\\MonetDB\\MonetDB5\\bin\\mclient.exe\""; // TODO: take from a config file
+    commandLine << " --host=" << blocale::conv::utf_to_utf<char>(connectionParameters.at(ConnectionParameterName::Host));
+    commandLine << " --port=" << blocale::conv::utf_to_utf<char>(connectionParameters.at(ConnectionParameterName::Port));
+    commandLine << " --format=csv " << sqlScript;
+    BOOST_LOG_SEV(gLogger, bltrivial::trace) << commandLine.str() << FUNCTION_FILE_LINE;
 
 #ifdef NDEBUG
     bfs::remove(sqlScript);
