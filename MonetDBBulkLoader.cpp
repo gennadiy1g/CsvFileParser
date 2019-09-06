@@ -211,15 +211,16 @@ std::optional<std::size_t> MclientMonetDBBulkLoader::load(std::wstring_view tabl
         fs << generateSelectNumberOfRejectedRecordsCommand() << L";\n";
     }
 
-    // Get user name and password from mConnectionParameters
-    std::wstring user, password;
+    // Overwrite default connection parameters, which are added by the constructor at the beginning of the vector mConnectionParameters,
+    // with user specified connection parameters, which are added by the main function at the end of the vector mConnectionParameters.
+    std::map<ConnectionParameterName, std::wstring> connectionParameters;
     for (const auto& param : mConnectionParameters) {
-        if (param.first == ConnectionParameterName::User) {
-            user = param.second;
-        } else if (param.first == ConnectionParameterName::Password) {
-            password = param.second;
-        }
+        connectionParameters[param.first] = param.second;
     }
+
+    // Get user name and password from mConnectionParameters
+    auto user = connectionParameters.at(ConnectionParameterName::User);
+    auto password = connectionParameters.at(ConnectionParameterName::Password);
 
     // If user name and password are not default, write them into a custom .monetdb file
     bfs::path custDotMonetdbFile;
