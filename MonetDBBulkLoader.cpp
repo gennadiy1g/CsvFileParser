@@ -246,12 +246,12 @@ std::optional<std::size_t> MclientMonetDBBulkLoader::load(std::wstring_view tabl
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << mclientCommand.str() << FUNCTION_FILE_LINE;
 
     // Run mclient
-    bp::ipstream inputPipeStream;
-    bp::child mclientProcess(mclientCommand.str(), bp::env["DOTMONETDBFILE"] = dotMonetdbFile, bp::std_out > inputPipeStream);
+    bp::ipstream pipeStream;
+    bp::child mclientProcess(mclientCommand.str(), bp::env["DOTMONETDBFILE"] = dotMonetdbFile, bp::std_out > pipeStream);
     std::vector<std::string> lines;
     std::string line;
 
-    while (mclientProcess.running() && std::getline(inputPipeStream, line)) {
+    while (mclientProcess.running() && std::getline(pipeStream, line)) {
         lines.push_back(boost::trim_copy(line));
     }
 
