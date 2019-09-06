@@ -884,9 +884,9 @@ BOOST_AUTO_TEST_CASE(parsing_results_boolean)
 
 BOOST_AUTO_TEST_SUITE_END();
 
-BOOST_AUTO_TEST_SUITE(generate_create_table_command);
+BOOST_AUTO_TEST_SUITE(NanodbcMonetDBBulkLoader_all);
 
-BOOST_AUTO_TEST_CASE(generate_create_table_command_1)
+BOOST_AUTO_TEST_CASE(NanodbcMonetDBBulkLoader_parsing_results_1)
 {
     const std::wstring sourceFile(LR"^(C:\Users\genna_000\Documents\BulkLoadCsv\test data\parsing_results_1.csv)^");
     auto& gLogger = GlobalLogger::get();
@@ -906,7 +906,7 @@ BOOST_AUTO_TEST_CASE(generate_create_table_command_1)
     bulkLoader.load(L"Разбор результатов 1");
 }
 
-BOOST_AUTO_TEST_CASE(generate_create_table_command_2)
+BOOST_AUTO_TEST_CASE(NanodbcMonetDBBulkLoader_parsing_results_2)
 {
     const std::wstring sourceFile(LR"^(C:\Users\genna_000\Documents\BulkLoadCsv\test data\parsing_results_2.csv)^");
     auto& gLogger = GlobalLogger::get();
@@ -926,7 +926,7 @@ BOOST_AUTO_TEST_CASE(generate_create_table_command_2)
     }
 }
 
-BOOST_AUTO_TEST_CASE(generate_create_table_command_3)
+BOOST_AUTO_TEST_CASE(NanodbcMonetDBBulkLoader_parsing_results_3)
 {
     const std::wstring sourceFile(LR"^(C:\Users\genna_000\Documents\BulkLoadCsv\test data\parsing_results_3.csv)^");
     auto& gLogger = GlobalLogger::get();
@@ -942,7 +942,7 @@ BOOST_AUTO_TEST_CASE(generate_create_table_command_3)
     }
 }
 
-BOOST_AUTO_TEST_CASE(generate_create_table_command_3_missing)
+BOOST_AUTO_TEST_CASE(NanodbcMonetDBBulkLoader_parsing_results_3_missing)
 {
     const std::wstring sourceFile(LR"^(C:\Users\genna_000\Documents\BulkLoadCsv\test data\parsing_results_3_missing.csv)^");
     auto& gLogger = GlobalLogger::get();
@@ -959,7 +959,7 @@ BOOST_AUTO_TEST_CASE(generate_create_table_command_3_missing)
     }
 }
 
-BOOST_AUTO_TEST_CASE(generate_create_table_command_4)
+BOOST_AUTO_TEST_CASE(NanodbcMonetDBBulkLoader_parsing_results_4)
 {
     const std::wstring sourceFile(LR"^(C:\Users\genna_000\Documents\BulkLoadCsv\test data\parsing_results_4.csv)^");
     auto& gLogger = GlobalLogger::get();
@@ -976,7 +976,7 @@ BOOST_AUTO_TEST_CASE(generate_create_table_command_4)
     }
 }
 
-BOOST_AUTO_TEST_CASE(generate_create_table_command_5)
+BOOST_AUTO_TEST_CASE(NanodbcMonetDBBulkLoader_parsing_results_5)
 {
     const std::wstring sourceFile(LR"^(C:\Users\genna_000\Documents\BulkLoadCsv\test data\parsing_results_5.csv)^");
     auto& gLogger = GlobalLogger::get();
@@ -992,7 +992,7 @@ BOOST_AUTO_TEST_CASE(generate_create_table_command_5)
     }
 }
 
-BOOST_AUTO_TEST_CASE(generate_create_table_command_7)
+BOOST_AUTO_TEST_CASE(NanodbcMonetDBBulkLoader_parsing_results_7)
 {
     const std::wstring sourceFile(LR"^(C:\Users\genna_000\Documents\BulkLoadCsv\test data\parsing_results_7.csv)^");
     auto& gLogger = GlobalLogger::get();
@@ -1008,7 +1008,7 @@ BOOST_AUTO_TEST_CASE(generate_create_table_command_7)
     }
 }
 
-BOOST_AUTO_TEST_CASE(generate_create_table_command_russian_UTF8)
+BOOST_AUTO_TEST_CASE(NanodbcMonetDBBulkLoader_russian_UTF_8)
 {
     const std::wstring sourceFile(LR"^(C:\Users\genna_000\Documents\BulkLoadCsv\test data\russian_UTF-8.csv)^");
     auto& gLogger = GlobalLogger::get();
@@ -1024,7 +1024,7 @@ BOOST_AUTO_TEST_CASE(generate_create_table_command_russian_UTF8)
     }
 }
 
-BOOST_AUTO_TEST_CASE(generate_create_table_command_russian_UTF8_2)
+BOOST_AUTO_TEST_CASE(NanodbcMonetDBBulkLoader_russian_UTF_8_2)
 {
     const std::wstring sourceFile(LR"^(C:\Users\genna_000\Documents\BulkLoadCsv\test data\russian_UTF-8_2.csv)^");
     auto& gLogger = GlobalLogger::get();
