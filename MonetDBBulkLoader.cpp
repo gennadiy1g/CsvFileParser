@@ -229,9 +229,11 @@ std::optional<std::size_t> MclientMonetDBBulkLoader::load(std::wstring_view tabl
         custDotMonetdbFile = bfs::temp_directory_path() / bfs::path(".monetdb-");
         custDotMonetdbFile += uniquePath;
         BOOST_LOG_SEV(gLogger, bltrivial::trace) << custDotMonetdbFile << FUNCTION_FILE_LINE;
-        bfs::wofstream fs(custDotMonetdbFile);
-        fs << L"user=" << user << L'\n';
-        fs << L"password=" << password << L'\n';
+        {
+            bfs::wofstream fs(custDotMonetdbFile);
+            fs << L"user=" << user << L'\n';
+            fs << L"password=" << password << L'\n';
+        }
         dotMonetdbFile = blocale::conv::utf_to_utf<char>(custDotMonetdbFile.native());
     }
 
