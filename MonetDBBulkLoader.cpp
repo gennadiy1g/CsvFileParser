@@ -197,6 +197,7 @@ std::optional<std::size_t> MclientMonetDBBulkLoader::load(std::wstring_view tabl
     bfs::path uniquePath { bfs::unique_path() };
 
     // Write SQL commands into a script file
+
     bfs::path sqlScript { bfs::temp_directory_path() / bfs::path("mclient-") };
     sqlScript += uniquePath;
     sqlScript.replace_extension("sql");
@@ -214,6 +215,7 @@ std::optional<std::size_t> MclientMonetDBBulkLoader::load(std::wstring_view tabl
 
     // Overwrite default connection parameters, which are added by the constructor at the beginning of the vector mConnectionParameters,
     // with user specified connection parameters, which are added by the main function at the end of the vector mConnectionParameters.
+
     std::map<ConnectionParameterName, std::wstring> connectionParameters;
     for (const auto& param : mConnectionParameters) {
         connectionParameters[param.first] = param.second;
@@ -222,6 +224,7 @@ std::optional<std::size_t> MclientMonetDBBulkLoader::load(std::wstring_view tabl
     std::string dotMonetdbFile { "C:\\Program Files\\MonetDB\\MonetDB5\\etc\\.monetdb" }; // TODO: take from a config file
 
     // If user name and password are not default, write them into a custom .monetdb file
+
     auto user = connectionParameters.at(ConnectionParameterName::User);
     auto password = connectionParameters.at(ConnectionParameterName::Password);
     if (!((user == DefaultUserPassword) && (password == DefaultUserPassword))) {
@@ -238,6 +241,7 @@ std::optional<std::size_t> MclientMonetDBBulkLoader::load(std::wstring_view tabl
     }
 
     // Generate command to run mclient
+
     std::ostringstream mclientCommand;
     mclientCommand << "\"C:\\Program Files\\MonetDB\\MonetDB5\\bin\\mclient.exe\""; // TODO: take from a config file
     mclientCommand << " --host=" << blocale::conv::utf_to_utf<char>(connectionParameters.at(ConnectionParameterName::Host));
@@ -246,10 +250,12 @@ std::optional<std::size_t> MclientMonetDBBulkLoader::load(std::wstring_view tabl
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << mclientCommand.str() << FUNCTION_FILE_LINE;
 
     // Run mclient
+
     bp::ipstream pipeStream;
-    bp::child mclientProcess(mclientCommand.str(), bp::env["DOTMONETDBFILE"] = dotMonetdbFile, bp::std_out > pipeStream);
     std::vector<std::string> lines;
     std::string line;
+
+    bp::child mclientProcess(mclientCommand.str(), bp::env["DOTMONETDBFILE"] = dotMonetdbFile, bp::std_out > pipeStream);
 
     while (mclientProcess.running() && std::getline(pipeStream, line)) {
         lines.push_back(boost::trim_copy(line));
@@ -257,12 +263,16 @@ std::optional<std::size_t> MclientMonetDBBulkLoader::load(std::wstring_view tabl
 
     mclientProcess.wait();
 
+    // Get number of records, rejected by the server
+
     std::optional<std::size_t> rejected;
     if (lines.size() > 0) {
         rejected = boost::lexical_cast<std::size_t>(lines[lines.size() - 1]);
     }
 
 #ifdef NDEBUG
+    // Delete temporary files
+
     bfs::remove(sqlScript);
     bfs::remove(custDotMonetdbFile);
 #endif
