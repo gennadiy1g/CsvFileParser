@@ -60,4 +60,5 @@ public:
     MclientMonetDBBulkLoader& operator=(MclientMonetDBBulkLoader&& rhs) = default;
 
     virtual std::optional<std::size_t> load(std::wstring_view table = L""sv) const override;
+    virtual std::wstring generateCopyIntoCommand(const std::wstring_view table) const override;
 };

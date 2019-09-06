@@ -251,3 +251,8 @@ std::optional<std::size_t> MclientMonetDBBulkLoader::load(std::wstring_view tabl
 
     return std::nullopt;
 }
+
+std::wstring MclientMonetDBBulkLoader::generateCopyIntoCommand(const std::wstring_view table) const
+{
+    return boost::ireplace_first_copy(MonetDBBulkLoader::generateCopyIntoCommand(table), "USING", "ON CLIENT USING");
+}
