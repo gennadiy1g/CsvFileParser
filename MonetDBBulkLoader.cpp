@@ -265,9 +265,9 @@ std::optional<std::size_t> MclientMonetDBBulkLoader::load(std::wstring_view tabl
 
     // Get number of records, rejected by the server
 
-    std::optional<std::size_t> rejected;
+    std::optional<std::size_t> rejectedRecords;
     if (lines.size() > 0) {
-        rejected = boost::lexical_cast<std::size_t>(lines[lines.size() - 1]);
+        rejectedRecords = boost::lexical_cast<std::size_t>(lines[lines.size() - 1]);
     }
 
 #ifdef NDEBUG
@@ -277,7 +277,7 @@ std::optional<std::size_t> MclientMonetDBBulkLoader::load(std::wstring_view tabl
     bfs::remove(custDotMonetdbFile);
 #endif
 
-    return rejected;
+    return rejectedRecords;
 }
 
 std::wstring MclientMonetDBBulkLoader::generateCopyIntoCommand(const std::wstring_view table) const
