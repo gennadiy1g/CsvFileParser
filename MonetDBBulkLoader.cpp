@@ -1,10 +1,13 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/filesystem.hpp>
+#include <boost/process.hpp>
 #include <iomanip>
 #include <sstream>
 #include <string>
 
 using namespace std::string_literals;
+
+namespace bp = boost::process;
 
 #include "MonetDBBulkLoader.h"
 #include "log.h"
