@@ -257,12 +257,17 @@ std::optional<std::size_t> MclientMonetDBBulkLoader::load(std::wstring_view tabl
 
     mclientProcess.wait();
 
+    std::optional<std::size_t> rejected;
+    if (lines.size() > 0) {
+        rejected = boost::lexical_cast<std::size_t>(lines[lines.size() - 1]);
+    }
+
 #ifdef NDEBUG
     bfs::remove(sqlScript);
     bfs::remove(custDotMonetdbFile);
 #endif
 
-    return std::nullopt;
+    return rejected;
 }
 
 std::wstring MclientMonetDBBulkLoader::generateCopyIntoCommand(const std::wstring_view table) const
