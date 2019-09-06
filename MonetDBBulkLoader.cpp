@@ -245,6 +245,18 @@ std::optional<std::size_t> MclientMonetDBBulkLoader::load(std::wstring_view tabl
     mclientCommand << " --format=csv " << sqlScript;
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << mclientCommand.str() << FUNCTION_FILE_LINE;
 
+    // Run mclient
+    bp::ipstream inputPipeStream;
+    bp::child mclientProcess(mclientCommand.str(), bp::env["DOTMONETDBFILE"] = dotMonetdbFile, bp::std_out > inputPipeStream);
+    std::vector<std::string> lines;
+    std::string line;
+
+    while (mclientProcess.running() && std::getline(inputPipeStream, line)) {
+        lines.push_back(boost::trim_copy(line));
+    }
+
+    mclientProcess.wait();
+
 #ifdef NDEBUG
     bfs::remove(sqlScript);
     bfs::remove(custDotMonetdbFile);
