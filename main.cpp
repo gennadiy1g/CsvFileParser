@@ -896,8 +896,8 @@ BOOST_AUTO_TEST_CASE(generate_create_table_command_1)
     BOOST_LOG_SEV(gLogger, bltrivial::trace) << bulkLoader.parsingResults().numLines() << L" lines, "
                                              << bulkLoader.parsingResults().numMalformedLines() << L" malformed lines, "
                                              << bulkLoader.parsingResults().columns().size() << L" columns" << FUNCTION_FILE_LINE;
-    bulkLoader.setConnectionParameters<std::initializer_list<ConnectionParameter>>({ { ConnectionParameterName::User, L"monetdb" },
-        { ConnectionParameterName::Password, L"monetdb" } });
+    bulkLoader.setConnectionParameters<std::initializer_list<ConnectionParameter>>({ { ConnectionParameterName::User, MonetDBBulkLoader::DefaultUserPassword },
+        { ConnectionParameterName::Password, MonetDBBulkLoader::DefaultUserPassword } });
     bulkLoader.setConnectionParameters<std::vector<ConnectionParameter>>({ { ConnectionParameterName::Host, L"localhost" } });
     auto rejectedRecords = bulkLoader.load();
     if (rejectedRecords.value_or(0) > 0) {

@@ -20,6 +20,8 @@ public:
     virtual std::wstring generateCreateTableCommand(const std::wstring_view table) const override;
     virtual std::wstring generateCopyIntoCommand(const std::wstring_view table) const override;
 
+    static const inline wchar_t* DefaultUserPassword { L"monetdb" };
+
 protected:
     std::wstring generateSelectNumberOfRejectedRecordsCommand() const { return L"SELECT COUNT(*) FROM sys.rejects"; };
 };

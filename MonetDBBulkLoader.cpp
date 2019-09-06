@@ -106,7 +106,7 @@ NanodbcMonetDBBulkLoader::NanodbcMonetDBBulkLoader(const bfs::path& inputFile)
     : MonetDBBulkLoader(inputFile)
 {
     mConnectionParameters = { { ConnectionParameterName::Driver, L"MonetDB ODBC Driver" }, { ConnectionParameterName::Host, L"127.0.0.1" },
-        { ConnectionParameterName::Port, L"50000" }, { ConnectionParameterName::User, L"monetdb" }, { ConnectionParameterName::Password, L"monetdb" } };
+        { ConnectionParameterName::Port, L"50000" }, { ConnectionParameterName::User, DefaultUserPassword }, { ConnectionParameterName::Password, DefaultUserPassword } };
 }
 
 std::wstring NanodbcMonetDBBulkLoader::getConnectionString() const
@@ -186,7 +186,7 @@ MclientMonetDBBulkLoader::MclientMonetDBBulkLoader(const bfs::path& inputFile)
     : MonetDBBulkLoader(inputFile)
 {
     mConnectionParameters = { { ConnectionParameterName::Host, L"127.0.0.1" }, { ConnectionParameterName::Port, L"50000" },
-        { ConnectionParameterName::User, L"monetdb" }, { ConnectionParameterName::Password, L"monetdb" } };
+        { ConnectionParameterName::User, DefaultUserPassword }, { ConnectionParameterName::Password, DefaultUserPassword } };
 }
 
 std::optional<std::size_t> MclientMonetDBBulkLoader::load(std::wstring_view table) const
@@ -221,7 +221,7 @@ std::optional<std::size_t> MclientMonetDBBulkLoader::load(std::wstring_view tabl
     // If user name and password are not default, write them into a custom .monetdb file
     auto user = connectionParameters.at(ConnectionParameterName::User);
     auto password = connectionParameters.at(ConnectionParameterName::Password);
-    if (!((user == password) && (user == L"monetdb"s))) {
+    if (!((user == DefaultUserPassword) && (password == DefaultUserPassword))) {
         bfs::path custDotMonetdbFile;
         custDotMonetdbFile = bfs::temp_directory_path() / bfs::path(".monetdb-");
         custDotMonetdbFile += uniquePath;
