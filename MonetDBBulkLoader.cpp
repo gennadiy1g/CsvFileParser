@@ -185,8 +185,8 @@ std::optional<std::size_t> NanodbcMonetDBBulkLoader::load(std::wstring_view tabl
 MclientMonetDBBulkLoader::MclientMonetDBBulkLoader(const bfs::path& inputFile)
     : MonetDBBulkLoader(inputFile)
 {
-    mConnectionParameters = { { ConnectionParameterName::Port, L"50000" }, { ConnectionParameterName::User, L"monetdb" },
-        { ConnectionParameterName::Password, L"monetdb" } };
+    mConnectionParameters = { { ConnectionParameterName::Host, L"127.0.0.1" }, { ConnectionParameterName::Port, L"50000" },
+        { ConnectionParameterName::User, L"monetdb" }, { ConnectionParameterName::Password, L"monetdb" } };
 }
 
 std::optional<std::size_t> MclientMonetDBBulkLoader::load(std::wstring_view table) const
