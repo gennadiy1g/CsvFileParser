@@ -205,11 +205,11 @@ std::optional<std::size_t> MclientMonetDBBulkLoader::load(std::wstring_view tabl
     auto tableTrim { getTableName(table) };
     assert(tableTrim != L"");
     {
-        bfs::wofstream fs(sqlScript);
-        fs << generateDropTableCommand(tableTrim) << L";\n";
-        fs << generateCreateTableCommand(tableTrim) << L";\n";
-        fs << generateCopyIntoCommand(tableTrim) << L";\n";
-        fs << generateSelectNumberOfRejectedRecordsCommand() << L";\n";
+        bfs::wofstream fileStream(sqlScript);
+        fileStream << generateDropTableCommand(tableTrim) << L";\n";
+        fileStream << generateCreateTableCommand(tableTrim) << L";\n";
+        fileStream << generateCopyIntoCommand(tableTrim) << L";\n";
+        fileStream << generateSelectNumberOfRejectedRecordsCommand() << L";\n";
     }
 
     // Overwrite default connection parameters, which are added by the constructor at the beginning of the vector mConnectionParameters,
@@ -230,9 +230,9 @@ std::optional<std::size_t> MclientMonetDBBulkLoader::load(std::wstring_view tabl
         custDotMonetdbFile += uniquePath;
         BOOST_LOG_SEV(gLogger, bltrivial::trace) << custDotMonetdbFile << FUNCTION_FILE_LINE;
         {
-            bfs::wofstream fs(custDotMonetdbFile);
-            fs << L"user=" << user << L'\n';
-            fs << L"password=" << password << L'\n';
+            bfs::wofstream fileStream(custDotMonetdbFile);
+            fileStream << L"user=" << user << L'\n';
+            fileStream << L"password=" << password << L'\n';
         }
         dotMonetdbFile = blocale::conv::utf_to_utf<char>(custDotMonetdbFile.native());
     }
