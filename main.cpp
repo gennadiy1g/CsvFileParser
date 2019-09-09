@@ -903,6 +903,8 @@ BOOST_AUTO_TEST_CASE(NanodbcMonetDBBulkLoader_parsing_results_1)
     if (rejectedRecords.value_or(0) > 0) {
         BOOST_LOG_SEV(gLogger, bltrivial::trace) << L"Rejected " << rejectedRecords.value() << L" records.";
     }
+    // Requires --set mapi_open=true in the C:\Program Files\MonetDB\MonetDB5\M5server.bat
+    bulkLoader.setConnectionParameters<std::vector<ConnectionParameter>>({ { ConnectionParameterName::Host, L"DELL-XPS-8700" } });
     bulkLoader.load(L"Разбор результатов 1");
 }
 
