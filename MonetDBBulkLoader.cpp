@@ -227,8 +227,8 @@ std::optional<std::size_t> MclientMonetDBBulkLoader::load(std::wstring_view tabl
 
     auto user = connectionParameters.at(ConnectionParameterName::User);
     auto password = connectionParameters.at(ConnectionParameterName::Password);
+    bfs::path custDotMonetdbFile;
     if (!((user == DefaultUserPassword) && (password == DefaultUserPassword))) {
-        bfs::path custDotMonetdbFile;
         custDotMonetdbFile = bfs::temp_directory_path() / bfs::path(".monetdb-");
         custDotMonetdbFile += uniquePath;
         BOOST_LOG_SEV(gLogger, bltrivial::trace) << custDotMonetdbFile << FUNCTION_FILE_LINE;
@@ -274,7 +274,9 @@ std::optional<std::size_t> MclientMonetDBBulkLoader::load(std::wstring_view tabl
     // Delete temporary files
 
     bfs::remove(sqlScript);
-    bfs::remove(custDotMonetdbFile);
+    if (bfs::exists(custDotMonetdbFile)) {
+        bfs::remove(custDotMonetdbFile);
+    }
 #endif
 
     return rejectedRecords;
