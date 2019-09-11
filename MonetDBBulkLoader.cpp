@@ -243,7 +243,7 @@ std::optional<std::size_t> MclientMonetDBBulkLoader::load(std::wstring_view tabl
     // Generate command to run mclient
 
     std::ostringstream mclientCommand;
-    mclientCommand << "\"C:\\Program Files\\MonetDB\\MonetDB5\\bin\\mclient.exe\""; // TODO: take from a config file
+    mclientCommand << "\"C:\\Program Files\\MonetDB\\MonetDB5\\mclient.bat\""; // TODO: take from a config file
     mclientCommand << " --host=" << blocale::conv::utf_to_utf<char>(connectionParameters.at(ConnectionParameterName::Host));
     mclientCommand << " --port=" << blocale::conv::utf_to_utf<char>(connectionParameters.at(ConnectionParameterName::Port));
     mclientCommand << " --format=csv " << sqlScript;
