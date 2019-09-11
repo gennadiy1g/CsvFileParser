@@ -276,11 +276,15 @@ std::optional<std::size_t> MclientMonetDBBulkLoader::load(std::wstring_view tabl
         throw std::runtime_error("mclient exit code is not 0");
     }
 
-    // Get number of records, rejected by the server
-
-    std::optional<std::size_t> rejectedRecords;
-    if (lines.size() > 0) {
-        rejectedRecords = boost::lexical_cast<std::size_t>(lines[lines.size() - 1]);
+    std::optional<std::size_t> rejectedRecords; // number of records, rejected by the server
+    if (lines.size()) {
+        try {
+            rejectedRecords = boost::lexical_cast<std::size_t>(lines[lines.size() - 1]);
+        } catch (const std::exception& e) {
+            throw std::runtime_error("mclient has not returned number of records, rejected by the server");
+        }
+    } else {
+        throw std::runtime_error("mclient has not returned anything");
     }
 
 #ifdef NDEBUG
