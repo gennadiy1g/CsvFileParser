@@ -262,6 +262,10 @@ std::optional<std::size_t> MclientMonetDBBulkLoader::load(std::wstring_view tabl
     }
 
     mclient.wait();
+    int mclientResult = mclient.exit_code();
+    if (mclientResult) {
+        throw std::runtime_error("mclient error");
+    }
 
     // Get number of records, rejected by the server
 
