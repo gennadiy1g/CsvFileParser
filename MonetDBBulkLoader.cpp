@@ -222,6 +222,9 @@ std::optional<std::size_t> MclientMonetDBBulkLoader::load(std::wstring_view tabl
     }
 
     std::string dotMonetdbFile { "C:\\Program Files\\MonetDB\\MonetDB5\\etc\\.monetdb" }; // TODO: take from a config file
+    if (!bfs::exists(dotMonetdbFile)) {
+        throw std::runtime_error("File \""s + dotMonetdbFile + "\" does not exist"s);
+    }
 
     // If user name and password are not default, write them into a custom .monetdb file
 
