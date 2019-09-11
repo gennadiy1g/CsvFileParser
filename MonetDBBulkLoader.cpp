@@ -255,13 +255,13 @@ std::optional<std::size_t> MclientMonetDBBulkLoader::load(std::wstring_view tabl
     std::vector<std::string> lines;
     std::string line;
 
-    bp::child mclientProcess(mclientCommand.str(), bp::env["DOTMONETDBFILE"] = dotMonetdbFile, bp::std_out > pipeStream);
+    bp::child mclient(mclientCommand.str(), bp::env["DOTMONETDBFILE"] = dotMonetdbFile, bp::std_out > pipeStream);
 
-    while (mclientProcess.running() && std::getline(pipeStream, line)) {
+    while (mclient.running() && std::getline(pipeStream, line)) {
         lines.push_back(boost::trim_copy(line));
     }
 
-    mclientProcess.wait();
+    mclient.wait();
 
     // Get number of records, rejected by the server
 
