@@ -266,6 +266,7 @@ std::optional<std::size_t> MclientMonetDBBulkLoader::load(std::wstring_view tabl
 
     mclient.wait();
     int mclientExitCode = mclient.exit_code();
+    BOOST_LOG_SEV(gLogger, bltrivial::trace) << mclientExitCode << FUNCTION_FILE_LINE;
 
     for (auto line : lines) {
         BOOST_LOG_SEV(gLogger, bltrivial::trace) << line << FUNCTION_FILE_LINE;
