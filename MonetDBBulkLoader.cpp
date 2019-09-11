@@ -265,14 +265,14 @@ std::optional<std::size_t> MclientMonetDBBulkLoader::load(std::wstring_view tabl
     }
 
     mclient.wait();
-    int mclientResult = mclient.exit_code();
+    int mclientExitCode = mclient.exit_code();
 
     for (auto line : lines) {
         BOOST_LOG_SEV(gLogger, bltrivial::trace) << line << FUNCTION_FILE_LINE;
     }
 
-    if (mclientResult) {
-        throw std::runtime_error("mclient error");
+    if (mclientExitCode) {
+        throw std::runtime_error("mclient exit code is not 0");
     }
 
     // Get number of records, rejected by the server
