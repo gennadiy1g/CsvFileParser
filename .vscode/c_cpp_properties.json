@@ -3,11 +3,9 @@
         {
             "name": "Win32",
             "includePath": [
-                "${workspaceFolder}\\../**",
-                "C:\\MinGW\\include/**",
-                "C:\\MinGW\\lib\\gcc\\x86_64-w64-mingw32\\8.2.0\\include/**",
-                "C:\\MinGW\\lib\\gcc\\x86_64-w64-mingw32\\8.2.0\\include-fixed/**",
-                "C:\\MinGW\\x86_64-w64-mingw32\\include/**"
+                "${workspaceFolder}/**",
+                "C:/MinGW/include/**",
+                "C:/MinGW/include/freetype2/**"
             ],
             "defines": [
                 "_DEBUG",
